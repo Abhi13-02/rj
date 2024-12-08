@@ -62,7 +62,7 @@ export default function Home() {
   return (
     <main className="min-h-screen p-8">
       <div className="max-w-2xl mx-auto">
-        <h1 className="text-3xl font-bold mb-8">Image Upload to R2</h1>
+        <h1 className="text-3xl font-bold mb-8">Image Upload to R2 || Maybe</h1>
         <div className="space-y-4">
           <div className="border-2 border-dashed border-gray-300 rounded-lg p-6">
             <input

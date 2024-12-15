@@ -2,6 +2,7 @@ import React from 'react'
 
 function page() {
   return (
+    
     <div>
       <h1>Home</h1>
       <h2 className="text-2xl font-bold mb-4">Welcome to Our Store</h2>

@@ -15,4 +15,4 @@ const WishlistSchema: Schema = new Schema(
   { timestamps: true }
 );
 
-export default mongoose.models.Wishlist || mongoose.model<IWishlist>('Wishlist', WishlistSchema);
+export default mongoose.models?.Wishlist || mongoose.model<IWishlist>('Wishlist', WishlistSchema);

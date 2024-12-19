@@ -2,7 +2,7 @@
 import mongoose, { Schema, Document } from 'mongoose';
 import { IUser } from './User';
 
-interface OrderItem {
+export interface OrderItem {
   productId: string;
   name: string;
   price: number;

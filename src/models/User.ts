@@ -46,6 +46,7 @@ const UserSchema: Schema = new Schema(
   {
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
+    image : { type: String, required: false },
     addresses: { type: [AddressSchema], default: [], required: false },
     yourOrders: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Order' }],
     cart: { type: mongoose.Schema.Types.ObjectId, ref: 'Cart' },

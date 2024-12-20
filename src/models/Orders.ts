@@ -42,7 +42,7 @@ const OrderSchema: Schema = new Schema(
       enum: ['pending', 'shipped', 'delivered', 'cancelled'],
       default: 'pending',
     },
-    paymentMethod: { type: String, enum: ['cashondelivery', 'Razorpay'], required: true },
+    paymentMethod: { type: String, enum: ['COD', 'Prepaid'], required: true },
   },
   { timestamps: true }
 );

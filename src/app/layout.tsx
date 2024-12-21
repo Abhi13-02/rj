@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import SignIn from "@/components/authComp/signInButton";
 import { SessionProvider } from "next-auth/react";
+import { AppProvider } from "@/context/index";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -31,24 +32,26 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className="min-h-screen flex flex-col">
-      <header className="bg-gray-800 text-white py-4">
-        <nav className="container mx-auto flex justify-between items-center">
-          <h1 className="text-xl font-bold">E-Commerce</h1>
-          <div className="space-x-4">
-            <SignIn />
-            <button className="bg-green-500 px-4 py-2 rounded">Signup</button>
-            <button className="bg-yellow-500 px-4 py-2 rounded">Cart</button>
+        <AppProvider>
+          <div className="min-h-screen flex flex-col">
+            <header className="bg-gray-800 text-white py-4">
+              <nav className="container mx-auto flex justify-between items-center">
+                <h1 className="text-xl font-bold">E-Commerce</h1>
+                <div className="space-x-4">
+                  <SignIn />
+                  <button className="bg-green-500 px-4 py-2 rounded">Signup</button>
+                  <button className="bg-yellow-500 px-4 py-2 rounded">Cart</button>
+                </div>
+              </nav>
+            </header>
+            <main className="flex-grow container mx-auto py-8">
+              {children}
+            </main>
+            <footer className="bg-gray-800 text-white py-4 text-center">
+              &copy; 2024 E-Commerce App. All rights reserved.
+            </footer>
           </div>
-        </nav>
-      </header>
-      <main className="flex-grow container mx-auto py-8">
-        {children}
-      </main>
-      <footer className="bg-gray-800 text-white py-4 text-center">
-        &copy; 2024 E-Commerce App. All rights reserved.
-      </footer>
-    </div>
+        </AppProvider>
       </body>
       </SessionProvider>
     </html>

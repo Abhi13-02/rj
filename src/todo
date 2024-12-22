@@ -1,1 +1,3 @@
 1) make all the relevant routes protected
+
+2) i have added dummy data to the store order object but please fill them correctly with proper info and the weight for each order will be there for each product so we have to somehow get the weights for each product and multiply by the quantity for each order item and sum up for all order items.

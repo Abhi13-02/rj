@@ -17,9 +17,25 @@ const PaymentPage: React.FC = () => {
 
   const router = useRouter();
 
-  const handleFinish = () => {
+  const handleFinish =async () => {
     if (paymentMethod === "COD") {
       updatePaymentMethod("COD");
+
+      //POST request for the shiprocket API
+      const entireState = useOrderStore.getState();
+      console.log(entireState);
+      const response = await fetch("/api/ship/createOrder", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(entireState),
+      });
+
+      console.log(response);
+      if(!response.ok){
+        throw new Error("Failed to create order");
+      }
       alert("Order placed successfully with COD!");
       router.push("/dashboard");
     } else {

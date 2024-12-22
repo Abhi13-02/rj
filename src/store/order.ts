@@ -121,6 +121,7 @@ const useOrderStore = create<OrderStore>(
         order_items: items,
         order_id: orderId,
         order_date: orderDate,
+        sub_total:state.sub_total+items.reduce((total, item) => total + parseFloat(item.selling_price) * item.units, 0),
       })),
 
     addAddress: (billingDetails, shippingDetails) =>

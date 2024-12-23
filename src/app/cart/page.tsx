@@ -5,16 +5,18 @@ import { CartItem } from "@/models/Cart";
 import { useSession } from "next-auth/react";
 import useOrderStore from "@/store/order";
 import { useRouter } from "next/navigation";
+import useDBOrderStore from "@/store/dbOrders";
+import { OrderItem } from "@/models/Orders";
 
-interface OrderItem {
-  name: string;
-  sku: string;
-  units: number;
-  selling_price: string;
-  discount: string;
-  tax: string;
-  hsn: number;
-}
+// interface OrderItem {
+//   name: string;
+//   sku: string;
+//   units: number;
+//   selling_price: string;
+//   discount: string;
+//   tax: string;
+//   hsn: number;
+// }
 
 const CartPage = () => {
   const router = useRouter();
@@ -22,6 +24,10 @@ const CartPage = () => {
   const [loading, setLoading] = useState(true);
   const { data: session } = useSession();
   const addOrderItems = useOrderStore((state) => state.addOrderItems);
+
+  const setItems = useDBOrderStore((state) => state.setItems); // Move hook call to the component body
+  let orderItems: OrderItem[] = useDBOrderStore((state) => state.items);
+  let totalAmount: number = useDBOrderStore((state) => state.totalAmount);
 
   useEffect(() => {
     if (session?.user?.id) {
@@ -33,6 +39,8 @@ const CartPage = () => {
     try {
       const response = await fetch(`/api/showCart?userId=${session?.user?.id}`);
       const data = await response.json();
+      console.log("Cart data:", data);
+      
       setCartItems(data.items);
       setLoading(false);
     } catch (error) {
@@ -53,12 +61,14 @@ const CartPage = () => {
       });
       const updatedCart = await response.json();
       setCartItems(updatedCart.items);
+      console.log("Updated cart:", updatedCart);
+      
     } catch (error) {
       console.error("Error updating quantity:", error);
     }
   };
 
-  const deleteCartItem = async (productId: any, quantity: number) => {
+  const deleteCartItem = async (productId: any, quantity: number, size: string) => {
     try {
       const response = await fetch(`/api/showCart`, {
         method: "DELETE",
@@ -67,6 +77,7 @@ const CartPage = () => {
           userId: session?.user?.id,
           productId,
           quantity,
+          size
         }),
       });
       const updatedCart = await response.json();
@@ -109,6 +120,31 @@ const CartPage = () => {
     const entireState = useOrderStore.getState();
     console.log(entireState);
     // Navigate to the address page
+
+    /*
+     _id?: mongoose.Types.ObjectId;
+      productId: string;
+      image: string[];
+      name: string;
+      price: number;
+      quantity: number;
+      size: string;
+    */
+    
+    const items: OrderItem[] = orderItems;
+    cartItems.forEach((item) => {
+      items.push({
+        name: item.name,
+        productId: item.productId,
+        quantity: item.quantity,
+        size: item.size,
+        images: item.image,
+        price: item.price
+      });
+    })
+
+    const total =  totalAmount + cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+    setItems(items, total);
     router.push("/ordering/address");
   };
 
@@ -134,7 +170,7 @@ const CartPage = () => {
             >
               <div className="flex items-center">
                 <img
-                  src={item.image}
+                  src={item.image[0]}
                   alt={item.name}
                   className="w-16 h-16 object-cover mr-4"
                 />
@@ -163,7 +199,7 @@ const CartPage = () => {
                   +
                 </button>
                 <button
-                  onClick={() => deleteCartItem(item.productId, item.quantity)}
+                  onClick={() => deleteCartItem(item.productId, item.quantity, item.size)}
                   className="ml-4 text-red-600"
                 >
                   Remove

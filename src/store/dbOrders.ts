@@ -87,4 +87,8 @@ const useDBOrderStore = create<OrderState>((set) => ({
     })),
 }));
 
+if (typeof window !== "undefined") {
+  (window as any).useDBOrderStore = useDBOrderStore;
+}
+
 export default useDBOrderStore;

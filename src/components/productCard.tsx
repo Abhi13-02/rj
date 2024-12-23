@@ -3,16 +3,14 @@ import { IProduct } from '@/models/Products';
 import { useSession } from 'next-auth/react';
 import useDBOrderStore from "@/store/dbOrders";
 import { OrderItem } from "@/models/Orders";
+import Link from 'next/link';
 
+const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
+  const { data: session } = useSession();
+  // const setItems = useDBOrderStore((state) => state.setItems); // Move hook call to the component body
+  // let orderItems: OrderItem[] = useDBOrderStore((state) => state.items);
+  // let totalAmount: number = useDBOrderStore((state) => state.totalAmount);
 
-const ProductCard: React.FC < {product: IProduct}  > = ( {product} ) => {
-
-  const addItemsToOrder = (items: OrderItem[], totalAmount: number) => {
-      const setItems = useDBOrderStore((state) => state.setItems);
-      setItems(items, totalAmount);
-  };
-  
-  const {data : session} = useSession ();
   const [quantity, setQuantity] = useState(1);
   const [size, setSize] = useState('');
   const [isPanelOpen, setIsPanelOpen] = useState(false);
@@ -31,43 +29,63 @@ const ProductCard: React.FC < {product: IProduct}  > = ( {product} ) => {
     setIsPanelOpen(true); // Open the size selection panel
   };
 
-  const handleConfirmSize = async() => {
+  const handleConfirmSize = async () => {
     if (!size) {
       alert('Please select a size before proceeding.');
       return;
     }
     setIsPanelOpen(false); // Close the size selection panel
 
-    // console.log(session?.user?.id);
-    
     // Add the product to the cart
-    const response = await fetch(`/api/addCartItems`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({userId: session?.user?.id, image: product.images[0], productId: product._id, name: product.title, price: (product.discountedPrice?product.discountedPrice:product.price), quantity, size }),
-    })
     
+    const response = await fetch(`/api/addCartItems`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userId: session?.user?.id,
+        image: product.images,
+        productId: product._id,
+        name: product.title,
+        price: product.discountedPrice || product.price,
+        quantity,
+        size,
+      }),
+    });
+
     if (!response.ok) {
-        throw new Error('Failed to add product to cart');
-    }
-    else{
-        console.log('Product added to cart successfully');
-        alert(`Added ${quantity} ${product.title}(s) of size ${size} to cart!`);
+      throw new Error('Failed to add product to cart');
+    } else {
+      console.log('Product added to cart successfully');
+      alert(`Added ${quantity} ${product.title}(s) of size ${size} to cart!`);
+
+      // const items: OrderItem[] = orderItems;
+      // items.push({
+      //   productId: product._id.toString(),
+      //   name: product.title,
+      //   price: product.discountedPrice || product.price,
+      //   quantity,
+      //   size,
+      //   images: [product.images[0]],
+      // });
+      // const total =  totalAmount + (product.discountedPrice || product.price) * quantity;
+      // setItems(items, total); 
     }
   };
 
   return (
     <div className="product-card border rounded-lg p-4 shadow-md max-w-sm relative">
       {/* Product Image */}
-      <div className="image-container">
-        <img
-          src={product.images[0]}
-          alt={product.title}
-          className="w-full h-48 object-cover rounded-md"
-        />
-      </div>
+      <Link href={`/product/${product._id.toString()}`}>
+        <div className="image-container">
+          <img
+            src={product.images[0]}
+            alt={product.title}
+            className="w-full h-48 object-cover rounded-md"
+          />
+        </div>
+      </Link>
 
       {/* Product Name */}
       <h2 className="product-name text-lg font-semibold mt-4">{product.title}</h2>
@@ -84,7 +102,6 @@ const ProductCard: React.FC < {product: IProduct}  > = ( {product} ) => {
         )}
       </div>
 
-     
       {/* Add to Cart Button */}
       <button
         onClick={handleAddToCart}
@@ -116,19 +133,19 @@ const ProductCard: React.FC < {product: IProduct}  > = ( {product} ) => {
 
             {/* Quantity Controls */}
             <div className="quantity-controls flex items-center mt-4">
-                <button
+              <button
                 onClick={handleDecrease}
                 className="px-2 py-1 border rounded-l-md bg-gray-100 hover:bg-gray-200"
-                >
+              >
                 -
-                </button>
-                <span className="px-4 py-1 border-t border-b">{quantity}</span>
-                <button
+              </button>
+              <span className="px-4 py-1 border-t border-b">{quantity}</span>
+              <button
                 onClick={handleIncrease}
                 className="px-2 py-1 border rounded-r-md bg-gray-100 hover:bg-gray-200"
-                >
+              >
                 +
-                </button>
+              </button>
             </div>
 
             <button

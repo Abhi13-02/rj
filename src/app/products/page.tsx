@@ -4,6 +4,7 @@ import React, { useEffect } from "react";
 import { IProduct } from "@/models/Products";
 import useProductStore from "@/store/productState"; // Import the product store
 import ProductCard from "@/components/productCard"; // Import the ProductCard component
+import Link from "next/link";
 
 const fetchProducts = async (): Promise<IProduct[]> => {
   const res = await fetch(`api/getAllProducts`, {
@@ -44,7 +45,9 @@ const ProductPage = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 px-4">
         {products.map((product) => (
           <div key={product._id.toString()} className="product-card-container">
-            <ProductCard product = {product} />
+            <Link href={`/product/${product._id.toString()}`}>
+              <ProductCard product = {product} />
+            </Link>
           </div>
         ))}
       </div>

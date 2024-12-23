@@ -38,7 +38,7 @@ const ProductCard: React.FC < {product: IProduct}  > = ( {product} ) => {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({userId: session?.user?.id, image: product.images[0], productId: product._id, name: product.title, price: (product.discountedPrice?product.discountedPrice:product.price)*quantity, quantity, size }),
+        body: JSON.stringify({userId: session?.user?.id, image: product.images[0], productId: product._id, name: product.title, price: (product.discountedPrice?product.discountedPrice:product.price), quantity, size }),
     })
     
     if (!response.ok) {

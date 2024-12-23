@@ -43,7 +43,6 @@ const PaymentPage: React.FC = () => {
 
       alert("Order placed successfully with COD!");
 
-
       // router.push("/dashboard");
     }
      else {

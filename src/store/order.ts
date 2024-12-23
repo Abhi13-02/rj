@@ -65,7 +65,7 @@ interface OrderState {
 }
 
 interface OrderActions {
-  addOrderItems: (items: OrderItem[], orderId: string, orderDate: string) => void;
+  addOrderItems: (items: OrderItem[], orderId: string, orderDate: string, total: number) => void;
   addAddress: (billingDetails: Partial<AddressDetails>, shippingDetails?: Partial<AddressDetails>) => void;
   updatePaymentMethod: (method: string) => void;
   updateDimensions: (length: number, breadth: number, height: number, weight: number) => void;
@@ -74,12 +74,12 @@ interface OrderActions {
 type OrderStore = OrderState & OrderActions;
 
 const useOrderStore = create<OrderStore>(
-  zukeper((set) => ({
+  zukeper((set: any) => ({
     // Initial state
     order_id: "",
     order_date: "",
-    pickup_location: "work",
-    channel_id: "",
+    pickup_location: "Home",
+    channel_id: "5899362",
     comment: "",
     billing_customer_name: "dummy",
     billing_last_name: "dummy",
@@ -115,30 +115,30 @@ const useOrderStore = create<OrderStore>(
     weight: 0.9,
 
     // Actions
-    addOrderItems: (items, orderId, orderDate) =>
-      set((state) => ({
+    addOrderItems: (items : OrderItem[] , orderId : string, orderDate: string, total: number) =>
+      set((state: OrderState) => ({
         ...state,
         order_items: items,
         order_id: orderId,
         order_date: orderDate,
-        sub_total:state.sub_total+items.reduce((total, item) => total + parseFloat(item.selling_price) * item.units, 0),
+        sub_total: total,
       })),
 
-    addAddress: (billingDetails, shippingDetails) =>
-      set((state) => ({
+    addAddress: (billingDetails: Partial<AddressDetails> , shippingDetails: Partial<AddressDetails>) =>
+      set((state : OrderState) => ({
         ...state,
         ...billingDetails,
         ...(state.shipping_is_billing ? billingDetails : shippingDetails),
       })),
 
-    updatePaymentMethod: (method) =>
-      set((state) => ({
+    updatePaymentMethod: (method: string) =>
+      set((state: OrderState) => ({
         ...state,
         payment_method: method,
       })),
 
-    updateDimensions: (length, breadth, height, weight) =>
-      set((state) => ({
+    updateDimensions: (length: number, breadth: number, height: number, weight: number) =>
+      set((state: OrderState) => ({
         ...state,
         length,
         breadth,

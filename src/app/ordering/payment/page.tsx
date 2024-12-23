@@ -4,18 +4,21 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import useOrderStore from "@/store/order";
 import CheckoutButton from "@/components/payments/checkoutButton";
+import { useSession } from "next-auth/react";
 
 const PaymentPage: React.FC = () => {
   const [paymentMethod, setPaymentMethod] = useState("");
-  const updatePaymentMethod = useOrderStore((state) => state.updatePaymentMethod);
+  const {data : session} = useSession();
+  const updatePaymentMethod = useOrderStore((state: any) => state.updatePaymentMethod);
 
-  const sub_total = useOrderStore((state) => state.sub_total);
-  const shipping_charges = useOrderStore((state) => state.shipping_charges);
+  const sub_total = useOrderStore((state:any) => state.sub_total);
+  const shipping_charges = useOrderStore((state:any) => state.shipping_charges);
 
   const totalAmount = sub_total + shipping_charges;
   
 
   const router = useRouter();
+
 
   const handleFinish =async () => {
     if (paymentMethod === "COD") {
@@ -33,14 +36,20 @@ const PaymentPage: React.FC = () => {
       });
 
       console.log(response);
+
+
       if(!response.ok){
         throw new Error("Failed to create order");
       }
       alert("Order placed successfully with COD!");
+
+
       router.push("/dashboard");
-    } else {
+    }
+     else {
       alert("Please select a payment method!");
     }
+
   };
 
   return (

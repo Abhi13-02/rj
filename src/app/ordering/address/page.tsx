@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -12,7 +12,6 @@ const AddressPage: React.FC = () => {
     customer_name: "",
     last_name: "",
     address: "",
-    address_2: "",
     city: "",
     pincode: "",
     state: "",
@@ -28,26 +27,72 @@ const AddressPage: React.FC = () => {
 
   const handleProceed = () => {
     addAddress(billingDetails);
+    
     router.push("/ordering/payment");
   };
 
   return (
-    <div>
-      <h1>Enter Address</h1>
-      <form>
-        <input name="customer_name" placeholder="First Name" onChange={handleInputChange} />
-        <input name="last_name" placeholder="Last Name" onChange={handleInputChange} />
-        <input name="address" placeholder="Address Line 1" onChange={handleInputChange} />
-        <input name="address_2" placeholder="Address Line 2" onChange={handleInputChange} />
-        <input name="city" placeholder="City" onChange={handleInputChange} />
-        <input name="pincode" placeholder="Pincode" onChange={handleInputChange} />
-        <input name="state" placeholder="State" onChange={handleInputChange} />
-        <input name="email" placeholder="Email" onChange={handleInputChange} />
-        <input name="phone" placeholder="Phone" onChange={handleInputChange} />
-        <button type="button" onClick={handleProceed}>
-          Proceed to Payment
-        </button>
-      </form>
+    <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">
+      <div className="w-full max-w-lg bg-gray-800 p-6 rounded-lg shadow-lg">
+        <h1 className="text-2xl font-bold mb-6 text-center">Enter Address</h1>
+        <form className="space-y-4">
+          <input
+            name="customer_name"
+            placeholder="First Name"
+            onChange={handleInputChange}
+            className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input
+            name="last_name"
+            placeholder="Last Name"
+            onChange={handleInputChange}
+            className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input
+            name="address"
+            placeholder="Address Line 1"
+            onChange={handleInputChange}
+            className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input
+            name="city"
+            placeholder="City"
+            onChange={handleInputChange}
+            className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input
+            name="pincode"
+            placeholder="Pincode"
+            onChange={handleInputChange}
+            className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input
+            name="state"
+            placeholder="State"
+            onChange={handleInputChange}
+            className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input
+            name="email"
+            placeholder="Email"
+            onChange={handleInputChange}
+            className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <input
+            name="phone"
+            placeholder="Phone"
+            onChange={handleInputChange}
+            className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <button
+            type="button"
+            onClick={handleProceed}
+            className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            Proceed to Payment
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

@@ -6,7 +6,8 @@ export interface ISizeStock {
 }
 
 export interface IProduct extends Document {
-  name: string;
+  _id: mongoose.Types.ObjectId;
+  title: string;
   description: string;
   price: number;
   discountedPrice?: number;

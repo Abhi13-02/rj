@@ -1,47 +1,50 @@
-"use client"
+"use client";
 
-import React from "react";
-import { useRouter } from "next/navigation";
-import useOrderStore from "@/store/order";
+import React, { useEffect } from "react";
+import { IProduct } from "@/models/Products";
+import useProductStore from "@/store/productState"; // Import the product store
+import ProductCard from "@/components/productCard"; // Import the ProductCard component
 
-const products = [
-  { id: "prod1", name: "Kunai", price: 900, sku: "chakra123", hsn: 441122 },
-  { id: "prod2", name: "Shuriken", price: 500, sku: "chakra456", hsn: 441123 },
-  { id: "prod3", name: "Exploding Tag", price: 200, sku: "chakra789", hsn: 441124 },
-];
+const fetchProducts = async (): Promise<IProduct[]> => {
+  const res = await fetch(`api/getAllProducts`, {
+    next: { revalidate: 600 }, // ISR: Revalidate every 60 seconds
+  });
 
-const ProductPage: React.FC = () => {
-  const router = useRouter();
-  const addOrderItems = useOrderStore((state) => state.addOrderItems);
+  if (!res.ok) {
+    throw new Error("Failed to fetch products");
+  }
 
-  const handleBuy = (product: typeof products[0]) => {
-    // Create an order item
-    const orderItem = {
-      name: product.name,
-      sku: product.sku,
-      units: 1,
-      selling_price: product.price.toString(),
-      discount: "",
-      tax: "",
-      hsn: product.hsn,
+  const data = await res.json();
+  return data; 
+};
+
+const ProductPage = () => {
+  const { products, setProducts } = useProductStore();
+
+  useEffect(() => {
+    // Fetch products and update Zustand state
+    const fetchAndSetProducts = async () => {
+      try {
+        const fetchedProducts = await fetchProducts();
+        setProducts(fetchedProducts);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
     };
 
-    // Add order item to store
-    addOrderItems([orderItem], "ORD123", new Date().toISOString());
-
-    // Navigate to the address page
-    router.push("/ordering/address");
-  };
+    // Fetch products only if the store is empty
+    if (products.length === 0) {
+      fetchAndSetProducts();
+    }
+  }, [products, setProducts]);
 
   return (
     <div>
-      <h1>Products</h1>
-      <div style={{ display: "flex", gap: "20px" }}>
+      <h1 className="text-3xl font-bold mb-8 text-center">Products</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 px-4">
         {products.map((product) => (
-          <div key={product.id} style={{ border: "1px solid #ddd", padding: "10px" }}>
-            <h2>{product.name}</h2>
-            <p>Price: ₹{product.price}</p>
-            <button onClick={() => handleBuy(product)}>Buy</button>
+          <div key={product._id.toString()} className="product-card-container">
+            <ProductCard product = {product} />
           </div>
         ))}
       </div>

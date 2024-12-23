@@ -1,9 +1,17 @@
 import React, { useState } from 'react';
 import { IProduct } from '@/models/Products';
 import { useSession } from 'next-auth/react';
+import useDBOrderStore from "@/store/dbOrders";
+import { OrderItem } from "@/models/Orders";
 
 
 const ProductCard: React.FC < {product: IProduct}  > = ( {product} ) => {
+
+  const addItemsToOrder = (items: OrderItem[], totalAmount: number) => {
+      const setItems = useDBOrderStore((state) => state.setItems);
+      setItems(items, totalAmount);
+  };
+  
   const {data : session} = useSession ();
   const [quantity, setQuantity] = useState(1);
   const [size, setSize] = useState('');

@@ -2,8 +2,9 @@
 
 import React, { useEffect } from "react";
 import { IProduct } from "@/models/Products";
-import useProductStore from "@/store/productState"; // Import the product store
-import ProductCard from "@/components/productCard"; // Import the ProductCard component
+import useProductStore from "@/store/productState"; 
+import ProductCard from "@/components/productCard"; 
+
 
 const fetchProducts = async (): Promise<IProduct[]> => {
   const res = await fetch(`api/getAllProducts`, {

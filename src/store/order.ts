@@ -75,7 +75,6 @@ type OrderStore = OrderState & OrderActions;
 
 const useOrderStore = create<OrderStore>(
   zukeper((set: any) => ({
-    // Initial state
     order_id: "",
     order_date: "",
     pickup_location: "Home",
@@ -148,7 +147,6 @@ const useOrderStore = create<OrderStore>(
   }))
 );
 
-// Attach store to `window` for debugging purposes
 if (typeof window !== "undefined") {
   (window as any).useOrderStore = useOrderStore;
 }

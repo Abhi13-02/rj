@@ -2,12 +2,13 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
 export interface CartItem {
+  _id?: mongoose.Types.ObjectId;
   productId: string;
+  image: string;
   name: string;
   price: number;
   quantity: number;
   size: string;
-  color: string;
 }
 
 export interface ICart extends Document {
@@ -17,12 +18,13 @@ export interface ICart extends Document {
   updatedAt: Date;
 }
 
-const CartItemSchema: Schema = new Schema({
+export const CartItemSchema: Schema = new Schema({
   productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
+  image: { type: String, required: true },
+  name: { type: String, required: true },
   price: { type: Number, required: true },
   quantity: { type: Number, required: true },
   size: { type: String, required: true },
-  color: { type: String, required: true },
 });
 
 const CartSchema: Schema = new Schema(

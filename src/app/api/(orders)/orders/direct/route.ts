@@ -4,6 +4,7 @@ import User from '@/models/User';
 import Orders, { OrderItem } from '@/models/Orders';
 import Products from '@/models/Products';
 import dbConnect from '@/libs/dbConnect';
+import { IProduct } from '@/models/Products';
 
 export async function POST(req: NextRequest) {
   await dbConnect();
@@ -16,8 +17,8 @@ export async function POST(req: NextRequest) {
     const orderItems = [];
 
     for (const item of items) {
-      const product = await Products.findById(item.productId);
-      if (!product || product.stock < item.quantity) {
+      const product = await Products.findById(item.productId) as IProduct;
+      if (!product || product.sizes.some(size => size.size === item.size && size.stock < item.quantity)) {
         return NextResponse.json(
           { error: `Product ${item.productId} is out of stock` },
           { status: 400 }
@@ -27,13 +28,12 @@ export async function POST(req: NextRequest) {
       orderItems.push({
         productId: product._id,
         name: product.title,
-        price: product.price,
+        price: (product.discountedPrice ? product.discountedPrice : product.price)*item.quantity,
         quantity: item.quantity,
         size: item.size,
-        color: item.color,
       });
 
-      totalAmount += product.price * item.quantity;
+      totalAmount = product.price ;
     }
 
     // Create the order

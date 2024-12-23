@@ -8,7 +8,6 @@ export interface OrderItem {
   price: number;
   quantity: number;
   size: string;
-  color: string;
 }
 
 export interface IOrder extends Document {

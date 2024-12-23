@@ -6,9 +6,9 @@ import { NextRequest, NextResponse } from "next/server";
 // POST add an item to the cart
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const { userId, productId, price, quantity, size, color } = body;
+  const { userId, productId, name, price, quantity, size, image } = body;
 
-  if (!userId || !productId || !price || !quantity || !size || !color) {
+  if (!userId || !productId || !price || !quantity || !size || !name || !image) { 
     return NextResponse.json(
       { error: "All fields are required" },
       { status: 400 }
@@ -27,21 +27,23 @@ export async function POST(req: NextRequest) {
     const existingItemIndex = cart.items.findIndex(
       (item: CartItem) =>
         item.productId.toString() === productId &&
-        item.size === size &&
-        item.color === color
+        item.size === size 
     );
+
+    // console.log("hiiii",existingItemIndex,cart);
+
 
     if (existingItemIndex >= 0) {
       // Update the quantity if the item exists
       cart.items[existingItemIndex].quantity += quantity;
     } else {
       // Add a new item if it doesn't exist
-      cart.items.push({ productId, price, quantity, size, color });
+      cart.items.push({ name, productId, price, quantity, size, image });
     }
 
     // Recalculate total amount
     cart.totalAmount = cart.items.reduce(
-      (total: number, item: CartItem) => total + item.price * item.quantity,
+      (total: number, item: CartItem) => total + item.price ,
       0
     );
 

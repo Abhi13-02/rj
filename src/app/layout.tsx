@@ -3,7 +3,8 @@ import localFont from "next/font/local";
 import "./globals.css";
 import SignIn from "@/components/authComp/signInButton";
 import { SessionProvider } from "next-auth/react";
-import { AppProvider } from "@/context/index";
+import Link from "next/link";
+
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -32,7 +33,6 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <AppProvider>
           <div className="min-h-screen flex flex-col">
             <header className="bg-gray-800 text-white py-4">
               <nav className="container mx-auto flex justify-between items-center">
@@ -40,7 +40,8 @@ export default function RootLayout({
                 <div className="space-x-4">
                   <SignIn />
                   <button className="bg-green-500 px-4 py-2 rounded">Signup</button>
-                  <button className="bg-yellow-500 px-4 py-2 rounded">Cart</button>
+
+                  <Link href="/cart" className="bg-yellow-500 px-4 py-2 rounded">Cart</Link>
                 </div>
               </nav>
             </header>
@@ -51,7 +52,6 @@ export default function RootLayout({
               &copy; 2024 E-Commerce App. All rights reserved.
             </footer>
           </div>
-        </AppProvider>
       </body>
       </SessionProvider>
     </html>

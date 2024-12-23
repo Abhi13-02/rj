@@ -1,5 +1,7 @@
 1) make all the relevant routes protected
 
-2) i have added dummy data to the store order object but please fill them correctly with proper info and the weight for each order will be there for each product so we have to somehow get the weights for each product and multiply by the quantity for each order item and sum up for all order items.
+3) some issue with the updation of price in the cart when we remove or update.
 
-3) some issue with the updation of price in the cart when we eremove or update.
+4) dbOrders, change the make order api for database, create another global state, update the details from the products page, when we create the order after confirming the shiprocket order then we are going to add info from that global state to the api request body.
+
+5) all same product but diffrent sizes deketed in cart

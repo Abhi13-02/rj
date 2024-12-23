@@ -131,7 +131,7 @@ export async function PUT(req: NextRequest) {
 // DELETE: Remove a cart item
 export async function DELETE(req: NextRequest) {
   const body = await req.json();
-  const { userId, productId, quantity } = body;
+  const { userId, productId, quantity, size } = body;
 
   if (!userId || !productId) {
     return NextResponse.json(
@@ -151,7 +151,7 @@ export async function DELETE(req: NextRequest) {
     }
 
     // Filter out the product to delete
-    cart.items = cart.items.filter((item: any) => item.productId.toString() !== productId && item.quantity !== quantity);
+    cart.items = cart.items.filter((item: any) => item.productId.toString() !== productId && item.quantity !== quantity && item.size !== size);
 
     cart.totalAmount = cart.items.reduce((total: number, item: any) => {
       return total + item.price * item.quantity;

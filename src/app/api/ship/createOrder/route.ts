@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
     console.log(shippingDetails);
     
     const response = await makeShiprocketRequest('/v1/external/orders/create/adhoc', 'POST', shippingDetails);
-    console.log("hi",response);
+    console.log("shipRocketOrder created",response);
     
     // console.log('Order created successfully:', response);
     return NextResponse.json(response, { status: 200 });

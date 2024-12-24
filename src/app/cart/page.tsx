@@ -127,7 +127,7 @@ const CartPage = () => {
     */
     
     const items: OrderItem[] = orderItems;
-    console.log("hiiiii",cartItems)
+    console.log("cartItems are:",cartItems)
     cartItems.forEach((item) => {
       items.push({
         name: item.name,
@@ -147,7 +147,7 @@ const CartPage = () => {
   };
 
   const calculateTotal = () => {
-    return cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+    return cartItems?.reduce((total, item) => total + item.price * item.quantity, 0);
   };
 
   if (loading) return <div>Loading...</div>;
@@ -156,8 +156,8 @@ const CartPage = () => {
     <div className="cart-page flex flex-col md:flex-row p-4">
       <div className="cart-items flex-1">
         <h1 className="text-2xl font-bold mb-4">Your Cart</h1>
-        {cartItems?.length === 0 ? (
-          <p>Your cart is empty!</p>
+        {cartItems?.length === 0 || !cartItems ? (
+          <p className="text-gray-600">Your cart is empty!</p>
         ) : (
           cartItems?.map((item) => (
             <div

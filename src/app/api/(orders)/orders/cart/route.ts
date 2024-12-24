@@ -15,10 +15,6 @@ export async function POST(req: NextRequest) {
     // Find the user's cart
     const userCart = await Cart.findOne({ userId }).populate('items.productId');
 
-    if (!userCart || userCart.items.length === 0) {
-      return NextResponse.json({ error: 'Cart is empty' }, { status: 400 });
-    }
-
     if(!paymentMethod) {
       return NextResponse.json({ error: ' payment method are required' }, { status: 400 });
     }
@@ -29,7 +25,7 @@ export async function POST(req: NextRequest) {
     const productSizes = item.productId.sizes as { size: string; stock: number }[];
     if (item.quantity > productSizes.filter((size ) => size.size === item.size)[0].stock) {
       messages.push(
-        `Insufficient stock for ${item.productId.title}. Available: ${item.productId.sizes[item.size].stock}, Requested: ${item.quantity}`
+        `Insufficient stock for ${item.productId.title}. Available: ${productSizes.filter((size ) => size.size === item.size)[0].stock}, Requested: ${item.quantity}`
       );
      }
     }

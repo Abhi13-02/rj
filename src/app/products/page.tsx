@@ -177,7 +177,8 @@ const ProductPage = () => {
       }
     };
 
-    if (products.length === 0) {
+    //TODO: Remove this 1 and replace with ISR. the products are not loding when i come first
+    if (products.length === 0 ) {
       fetchAndSetProducts();
     }
   }, [products, setProducts]);

@@ -42,7 +42,7 @@ const AddressPage: React.FC = () => {
     // });
     // console.log(response);
     
-    console.log(useDBOrderStore.getState());
+    console.log("added adress to dbOrder",useDBOrderStore.getState());
     
     router.push("/ordering/payment");
   };

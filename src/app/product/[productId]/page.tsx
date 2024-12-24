@@ -5,6 +5,9 @@ import { useRouter, useParams } from "next/navigation";
 import { IProduct } from "@/models/Products";
 import { useSession } from "next-auth/react";
 import useOrderStore from "@/store/order";
+import useDBOrderStore from "@/store/dbOrders";
+import { OrderItem } from "@/models/Orders";
+import { set } from "mongoose";
 
 const ProductPage = () => {
   const router = useRouter();
@@ -16,6 +19,9 @@ const ProductPage = () => {
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
   const addOrderItems = useOrderStore((state) => state.addOrderItems);
+  const setItems = useDBOrderStore((state) => state.setItems);
+  let orderItems: OrderItem[] = useDBOrderStore((state) => state.items);
+  let totalAmount: number = useDBOrderStore((state) => state.totalAmount);
 
   useEffect(() => {
     if (productId) {
@@ -79,6 +85,30 @@ const ProductPage = () => {
   };
 
   const handleBuyNow = async () => {
+
+    // Add the product to the cart
+    const response = await fetch(`/api/addCartItems`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId: session?.user?.id,
+        image: product.images[0],
+        productId: product._id,
+        name: product.title,
+        price: product.discountedPrice
+          ? product.discountedPrice
+          : product.price,
+        quantity,
+        size: selectedSize,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to add product to cart");
+    }
+
     const newOrderItems = [{
       name: product.title,
       sku: product.title+selectedSize,
@@ -108,9 +138,21 @@ const ProductPage = () => {
       quantity * (product.discountedPrice ? product.discountedPrice : product.price)
     );
 
-    const entireState = useOrderStore.getState();
-    console.log(entireState);
-    // Navigate to the address page
+    console.log(useOrderStore.getState());
+
+    const items: OrderItem[] = orderItems;
+
+    items.push({
+      name: product.title,
+      productId: product._id.toString(),
+      quantity: quantity,
+      size: selectedSize,
+      images: product.images,
+      price: product.discountedPrice ? product.discountedPrice : product.price
+    });
+
+    setItems(items, quantity * (product.discountedPrice ? product.discountedPrice : product.price));
+
     router.push("/ordering/address");
   }
 

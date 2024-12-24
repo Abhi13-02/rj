@@ -2,8 +2,12 @@
 
 "use client";
 import useDBOrderStore from "@/store/dbOrders";
+import useOrderStore from "@/store/order";
+import { set } from "mongoose";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Script from "next/script";
+import { use } from "react";
 
 declare global {
   interface Window {
@@ -17,13 +21,18 @@ interface CheckoutButtonProps {
 
 export default function CheckoutButton({ amount }: CheckoutButtonProps) {
   const router = useRouter();
-
+  const { data: session } = useSession();
+  const setShiprocketOrderId = useDBOrderStore((state) => state.setShiprocketOrderId);
+  const setUserId = useDBOrderStore((state) => state.setUserId);
   const resetDBOrder = useDBOrderStore((state: any) => state.resetOrder);
-  const dbOrderState = useDBOrderStore.getState();
-
+  const resetOrder = useOrderStore((state: any) => state.resetOrder); 
+  const updatePaymentMethod = useOrderStore(
+    (state: any) => state.updatePaymentMethod
+  );
   const setDBPaymentMethod = useDBOrderStore(
     (state: any) => state.setPaymentMethod
   );
+
   const handlePayment = async () => {
     try {
       // Step 1: Create an order on the server
@@ -49,6 +58,7 @@ export default function CheckoutButton({ amount }: CheckoutButtonProps) {
         name: "Your Store",
         description: "Test Transaction",
         order_id: order.id, // Razorpay order ID from server
+
         handler: async function (response: any) {
           // Step 3: Verify payment on the server
           const verifyResponse = await fetch("/api/payment/verify", {
@@ -64,25 +74,49 @@ export default function CheckoutButton({ amount }: CheckoutButtonProps) {
           const verifyData = await verifyResponse.json();
           if (verifyResponse.ok) {
             alert("Payment successful");
-            setDBPaymentMethod("razorpay");
-            // router.push("/dashboard");
+            setDBPaymentMethod("Prepaid");
+            updatePaymentMethod("Prepaid");
+            
+            //////creating shiprocketorder/////////
+            const response = await fetch("/api/ship/createOrder", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(useOrderStore.getState()),
+            });
+      
+            const data = await response.json();
+            console.log(data);
+      
+            if(!response.ok){
+              throw new Error("Failed to create shiprockrtOrder");
+            }
+      
+            alert("Order placed successfully with razorpay!");
 
             ////////DB connection here after correctly handeling address///////////
-            /*
-       const response2 = await fetch("/api/orders/cart",{
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify(dbOrderState),
-       });
 
-       const data2 = await response2.json();
-       console.log(data2);
+            setUserId(session?.user?.id as string);
+            setShiprocketOrderId(data.order_id);
+            
+            const response2 = await fetch("/api/orders/cart",{
+              method:"POST",
+              headers:{"Content-Type":"application/json"},
+              body:JSON.stringify(useDBOrderStore.getState()),
+            });
 
-       if(!response2.ok){
-        throw new Error("Failed to create order");
-       }
-      */
+            const data2 = await response2.json();
+            console.log(data2);
 
+            if(!response2.ok){
+              throw new Error("Failed to create dbOrder");
+            }
+
+            resetDBOrder();
+            resetOrder();
+
+            router.push("/yourOrders");
             console.log("Payment Verified:", verifyData);
           } else {
             alert("Payment verification failed");

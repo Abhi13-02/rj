@@ -10,10 +10,12 @@ import useDBOrderStore from "@/store/dbOrders";
 const PaymentPage: React.FC = () => {
   const [paymentMethod, setPaymentMethod] = useState("");
   const {data : session} = useSession();
-  const updatePaymentMethod = useOrderStore((state: any) => state.updatePaymentMethod);
-  const setDBPaymentMethod = useDBOrderStore((state: any) => state.setPaymentMethod);
-  const setShiprocketOrderId = useDBOrderStore((state: any) => state.setShiprocketOrderId);
-  const resetDBOrder = useDBOrderStore((state: any) => state.resetOrder);
+  const updatePaymentMethod = useOrderStore((state) => state.updatePaymentMethod);
+  const setDBPaymentMethod = useDBOrderStore((state) => state.setPaymentMethod);
+  const setShiprocketOrderId = useDBOrderStore((state) => state.setShiprocketOrderId);
+  const setUserId = useDBOrderStore((state) => state.setUserId);
+  const resetDBOrder = useDBOrderStore((state) => state.resetOrder);
+  const resetOrder = useOrderStore((state) => state.resetOrder);
 
   const sub_total = useOrderStore((state:any) => state.sub_total);
   const shipping_charges = useOrderStore((state:any) => state.shipping_charges);
@@ -23,6 +25,8 @@ const PaymentPage: React.FC = () => {
 
   const router = useRouter();
 
+  // console.log("hiiiiiiii",useDBOrderStore.getState());
+
 
   const handleFinish =async () => {
     if (paymentMethod === "COD") {
@@ -30,6 +34,7 @@ const PaymentPage: React.FC = () => {
 
       const entireState = useOrderStore.getState();
       const dbOrderState = useDBOrderStore.getState();
+
       const response = await fetch("/api/ship/createOrder", {
         method: "POST",
         headers: {
@@ -48,13 +53,17 @@ const PaymentPage: React.FC = () => {
       alert("Order placed successfully with COD!");
       setDBPaymentMethod(paymentMethod);
       setShiprocketOrderId(data.order_id);
-      // router.push("/dashboard");
+      setUserId(session?.user?.id as string);
+       
+      console.log(useDBOrderStore.getState());
+    
+
       ////////DB connection here after correctly handeling address///////////
-      /*
+      
        const response2 = await fetch("/api/orders/cart",{
         method:"POST",
         headers:{"Content-Type":"application/json"},
-        body:JSON.stringify(dbOrderState),
+        body:JSON.stringify(useDBOrderStore.getState()),
        });
 
        const data2 = await response2.json();
@@ -63,8 +72,12 @@ const PaymentPage: React.FC = () => {
        if(!response2.ok){
         throw new Error("Failed to create order");
        }
-      */
+      
       resetDBOrder();
+      resetOrder();
+
+      router.push("/yourOrders");
+
     }
      else {
       alert("Please select a payment method!");

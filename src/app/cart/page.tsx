@@ -8,15 +8,6 @@ import { useRouter } from "next/navigation";
 import useDBOrderStore from "@/store/dbOrders";
 import { OrderItem } from "@/models/Orders";
 
-// interface OrderItem {
-//   name: string;
-//   sku: string;
-//   units: number;
-//   selling_price: string;
-//   discount: string;
-//   tax: string;
-//   hsn: number;
-// }
 
 const CartPage = () => {
   const router = useRouter();
@@ -42,13 +33,14 @@ const CartPage = () => {
       console.log("Cart data:", data);
       
       setCartItems(data.items);
+
       setLoading(false);
     } catch (error) {
       console.error("Error fetching cart:", error);
     }
   };
 
-  const updateQuantity = async (productId: any, quantity: number) => {
+  const updateQuantity = async (productId: any, quantity: number, size: string) => {
     try {
       const response = await fetch("/api/showCart", {
         method: "PUT",
@@ -57,6 +49,7 @@ const CartPage = () => {
           productId,
           quantity,
           userId: session?.user?.id,
+          size,
         }),
       });
       const updatedCart = await response.json();
@@ -82,6 +75,7 @@ const CartPage = () => {
       });
       const updatedCart = await response.json();
       setCartItems(updatedCart.items);
+      console.log("Updated cart:", updatedCart);
     } catch (error) {
       console.error("Error deleting cart item:", error);
     }
@@ -97,6 +91,7 @@ const CartPage = () => {
       tax: "0",
       hsn: 0,
     }));
+     
 
     const now = new Date();
     const formattedDate = new Intl.DateTimeFormat("en-CA", {
@@ -118,7 +113,7 @@ const CartPage = () => {
     );
 
     const entireState = useOrderStore.getState();
-    console.log(entireState);
+    
     // Navigate to the address page
 
     /*
@@ -132,6 +127,7 @@ const CartPage = () => {
     */
     
     const items: OrderItem[] = orderItems;
+    console.log("hiiiii",cartItems)
     cartItems.forEach((item) => {
       items.push({
         name: item.name,
@@ -144,14 +140,14 @@ const CartPage = () => {
     })
 
     const total =  totalAmount + cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+
+    // the DBorder items and its total have been pushed.
     setItems(items, total);
     router.push("/ordering/address");
   };
 
   const calculateTotal = () => {
-    return cartItems
-      .reduce((total, item) => total + item.price * item.quantity, 0)
-      .toFixed(2);
+    return cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
   };
 
   if (loading) return <div>Loading...</div>;
@@ -168,21 +164,24 @@ const CartPage = () => {
               key={item._id?.toString()}
               className="cart-item flex items-center justify-between mb-4 border p-2 rounded"
             >
+              
               <div className="flex items-center">
                 <img
                   src={item.image[0]}
                   alt={item.name}
                   className="w-16 h-16 object-cover mr-4"
                 />
-                <div>
-                  <h2 className="text-lg font-semibold">{item.name}</h2>
+                <div className="flex justify-center items-center gap-5">
+                  <h2 className="text-lg font-semibold ">{item.name}</h2>
+                  <p>Size: {item.size}</p>
                   <p>${item.price}</p>
                 </div>
               </div>
+
               <div className="flex items-center">
                 <button
                   onClick={() =>
-                    updateQuantity(item.productId, item.quantity - 1)
+                    updateQuantity(item.productId, item.quantity - 1, item.size)
                   }
                   className="px-2 py-1 border bg-gray-200 rounded-l"
                   disabled={item.quantity <= 1}
@@ -192,7 +191,7 @@ const CartPage = () => {
                 <span className="px-4 py-1">{item.quantity}</span>
                 <button
                   onClick={() =>
-                    updateQuantity(item.productId, item.quantity + 1)
+                    updateQuantity(item.productId, item.quantity + 1, item.size)
                   }
                   className="px-2 py-1 border bg-gray-200 rounded-r"
                 >
@@ -214,7 +213,7 @@ const CartPage = () => {
         <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
         <div className="mb-4">
           <p className="text-lg">
-            Total: <span className="font-bold">${calculateTotal()}</span>
+            Total: <span className="font-bold">₹{calculateTotal()}</span>
           </p>
         </div>
         <button

@@ -18,7 +18,7 @@ const fetchProducts = async (): Promise<IProduct[]> => {
   return data;
 };
 
-const FilterPanel = ({ onApplyFilters}) => {
+const FilterPanel = ({ onApplyFilters} : { onApplyFilters: (filters: any) => void }) => {
   const [priceRange, setPriceRange] = useState([0, 10000]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);

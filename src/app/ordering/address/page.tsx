@@ -3,12 +3,15 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import useOrderStore from "@/store/order";
+import useDBOrderStore from "@/store/dbOrders";
+import { ShippingAddress } from "@/store/dbOrders";
 
 const AddressPage: React.FC = () => {
   const router = useRouter();
   const addAddress = useOrderStore((state) => state.addAddress);
+  const setShippingAddress = useDBOrderStore((state) => state.setShippingAddress);
 
-  const [billingDetails, setBillingDetails] = useState({
+  const [billingDetails, setBillingDetails] = useState<ShippingAddress> ({
     customer_name: "",
     last_name: "",
     address: "",
@@ -27,6 +30,19 @@ const AddressPage: React.FC = () => {
 
   const handleProceed = () => {
     addAddress(billingDetails);
+    setShippingAddress( billingDetails );
+
+    //////for adding address to db////
+    // const response = fetch("/api/userAdress", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify(billingDetails),
+    // });
+    // console.log(response);
+    
+    console.log(useDBOrderStore.getState());
     
     router.push("/ordering/payment");
   };

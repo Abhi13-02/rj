@@ -14,7 +14,8 @@ export interface IOrder extends Document {
   userId: IUser['_id'];
   items: OrderItem[];
   totalAmount: number;
-  shippingAddress: IUser['addresses'][0];
+  shippingAddress: IUser['addresse'];
+  shiprocketOrderId: string;
   status: 'pending' | 'shipped' | 'delivered' | 'cancelled';
   paymentMethod: 'COD' | 'Prepaid';
   createdAt: Date;
@@ -36,6 +37,7 @@ const OrderSchema: Schema = new Schema(
     items: [OrderItemSchema],
     totalAmount: { type: Number, required: true },
     shippingAddress: { type: Object, required: true },
+    shiprocketOrderId: { type: String, required: true },
     status: {
       type: String,
       enum: ['pending', 'shipped', 'delivered', 'cancelled'],

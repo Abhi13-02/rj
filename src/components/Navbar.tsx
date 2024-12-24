@@ -105,7 +105,7 @@ const Navbar = () => {
                                 {menu.dropdown.map((item, idx) => (
                                     <li key={idx}>
                                         <Link
-                                            href="#"
+                                            href="/products"
                                             className="block px-4 py-2 hover:bg-[#fdbc67] rounded"
                                         >
                                             {item}
@@ -120,7 +120,7 @@ const Navbar = () => {
 
             {/* Utility Icons */}
             <div className="hidden lg:flex gap-4">
-                <Link href="#">
+                <Link href="/cart">
                     <svg
                         width="30"
                         height="30"
@@ -136,6 +136,7 @@ const Navbar = () => {
                             strokeLinejoin="round"
                         />
                     </svg>
+                    <button className="text-white p-3 bg-orange-400">cart</button>
                 </Link>
                 {/* Add more icons if necessary */}
             </div>

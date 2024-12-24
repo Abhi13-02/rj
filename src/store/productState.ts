@@ -12,4 +12,8 @@ const useProductStore = create<ProductState>((set) => ({
   setProducts: (products) => set(() => ({ products })),
 }));
 
+if (typeof window !== "undefined") {
+  (window as any).useProductsStore = useProductStore;
+}
+
 export default useProductStore;

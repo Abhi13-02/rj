@@ -3,8 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import SignIn from "@/components/authComp/signInButton";
 import { SessionProvider } from "next-auth/react";
-import Link from "next/link";
-
+import Navbar from "../components/Navbar"
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -15,6 +14,12 @@ const geistMono = localFont({
   src: "./fonts/GeistMonoVF.woff",
   variable: "--font-geist-mono",
   weight: "100 900",
+});
+
+const playFair = localFont({
+  src: "./fonts/PlayfairDisplay-Regular.ttf",
+  variable: "--font-playfair-display",
+  weight: "400 400",
 });
 
 export const metadata: Metadata = {
@@ -30,29 +35,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <SessionProvider >
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-          <div className="min-h-screen flex flex-col">
-            <header className="bg-gray-800 text-white py-4">
-              <nav className="container mx-auto flex justify-between items-center">
-                <h1 className="text-xl font-bold">E-Commerce</h1>
-                <div className="space-x-4">
-                  <SignIn />
-                  <button className="bg-green-500 px-4 py-2 rounded">Signup</button>
-
-                  <Link href="/cart" className="bg-yellow-500 px-4 py-2 rounded">Cart</Link>
-                </div>
-              </nav>
-            </header>
-            <main className="flex-grow container mx-auto py-8">
-              {children}
-            </main>
-            <footer className="bg-gray-800 text-white py-4 text-center">
-              &copy; 2024 E-Commerce App. All rights reserved.
-            </footer>
-          </div>
-      </body>
+        <body
+          className={`${playFair.variable} ${playFair.variable} antialiased`}
+        >
+          <Navbar/>
+          {children}
+        </body>
       </SessionProvider>
     </html>
   );

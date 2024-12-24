@@ -25,6 +25,7 @@ export default function CheckoutButton({ amount }: CheckoutButtonProps) {
   const setShiprocketOrderId = useDBOrderStore((state) => state.setShiprocketOrderId);
   const setUserId = useDBOrderStore((state) => state.setUserId);
   const resetDBOrder = useDBOrderStore((state: any) => state.resetOrder);
+  const resetOrder = useOrderStore((state: any) => state.resetOrder); 
   const updatePaymentMethod = useOrderStore(
     (state: any) => state.updatePaymentMethod
   );
@@ -113,6 +114,9 @@ export default function CheckoutButton({ amount }: CheckoutButtonProps) {
             }
 
             resetDBOrder();
+            resetOrder();
+
+            router.push("/yourOrders");
             console.log("Payment Verified:", verifyData);
           } else {
             alert("Payment verification failed");

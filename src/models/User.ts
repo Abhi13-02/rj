@@ -1,20 +1,26 @@
 // models/User.ts
 import mongoose, { Schema, Document } from 'mongoose';
 
-interface Address {
-  street: string;
+export interface ShippingAddress {
+  customer_name: string;
+  last_name: string;
+  address: string;
   city: string;
+  pincode: string;
   state: string;
-  postalCode: string;
   country: string;
-  phoneNumber: string;
+  email: string;
+  phone: string;
 }
 
 export interface IUser extends Document {
   name: string;
   email: string;
   password: string;
-  addresses: Address[];
+  addresse: ShippingAddress;
+  yourOrders: mongoose.Types.ObjectId[];
+  cart: mongoose.Types.ObjectId;
+  wishlist: mongoose.Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -33,7 +39,7 @@ const UserSchema: Schema = new Schema(
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     image : { type: String, required: false },
-    addresses: { type: [AddressSchema], default: [], required: false },
+    address: { type: AddressSchema, required: false },
     yourOrders: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Order' }],
     cart: { type: mongoose.Schema.Types.ObjectId, ref: 'Cart' },
     wishlist: { type: mongoose.Schema.Types.ObjectId, ref: 'Wishlist' }

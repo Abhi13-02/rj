@@ -66,7 +66,7 @@ const ProductPage = () => {
           ? product.discountedPrice
           : product.price,
         quantity,
-        selectedSize,
+        size: selectedSize,
       }),
     });
 

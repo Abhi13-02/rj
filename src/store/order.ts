@@ -69,6 +69,7 @@ interface OrderActions {
   addAddress: (billingDetails: Partial<AddressDetails>, shippingDetails?: Partial<AddressDetails>) => void;
   updatePaymentMethod: (method: string) => void;
   updateDimensions: (length: number, breadth: number, height: number, weight: number) => void;
+  resetOrder: () => void;
 }
 
 type OrderStore = OrderState & OrderActions;
@@ -151,6 +152,18 @@ const useOrderStore = create<OrderStore>(
         height,
         weight,
       })),
+
+     resetOrder: () =>
+        set(() => ({
+          userId: '',
+          items: [],
+          totalAmount: 0,
+          shippingAddress: null,
+          paymentMethod: null,
+          shiprocketOrderId: null,
+          status: 'pending',
+        }))
+
   }))
 );
 

@@ -4,19 +4,8 @@ import React, { useEffect, useState } from "react";
 import { IProduct } from "@/models/Products";
 import useProductStore from "@/store/productState";
 import ProductCard from "@/components/productCard";
+import { useParams } from "next/navigation";
 
-// const fetchProducts = async (): Promise<IProduct[]> => {
-//   const res = await fetch(`api/getAllProducts`, {
-//     next: { revalidate: 600 }, // ISR: Revalidate every 600 seconds
-//   });
-
-//   if (!res.ok) {
-//     throw new Error("Failed to fetch products");
-//   }
-
-//   const data = await res.json();
-//   return data;
-// };
 
 const FilterPanel = ({
   onApplyFilters,
@@ -24,7 +13,6 @@ const FilterPanel = ({
   onApplyFilters: (filters: any) => void;
 }) => {
   const [priceRange, setPriceRange] = useState([0, 10000]);
-  const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
@@ -48,7 +36,6 @@ const FilterPanel = ({
   const handleApplyFilters = () => {
     onApplyFilters({
       priceRange,
-      selectedCategory,
       selectedTags,
       selectedSizes,
       selectedColors,
@@ -87,23 +74,6 @@ const FilterPanel = ({
             Apply
           </button>
         </div>
-      </div>
-
-      {/* Category Filter */}
-      <div className="mb-6">
-        <h3 className="font-medium text-gray-600 mb-2">Category</h3>
-        <select
-          value={selectedCategory}
-          onChange={(e) => setSelectedCategory(e.target.value)}
-          className="border rounded-lg p-2 w-full text-sm"
-        >
-          <option value="">All</option>
-          <option value="kurti">Kurti</option>
-          <option value="shirt">Shirt</option>
-          <option value="saree">Saree</option>
-          <option value="salwar">Salwar</option>
-          <option value="dupatta">Dupatta</option>
-        </select>
       </div>
 
       {/* Tags Filter */}
@@ -169,10 +139,10 @@ const ProductPage = () => {
   const { fetchProducts } = useProductStore();
   const [products, setProducts] = useState<IProduct[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<IProduct[]>([]);
+  const { category } = useParams() as { category: string };
 
   const applyFilters = ({
     priceRange,
-    selectedCategory,
     selectedTags,
     selectedSizes,
     selectedColors,
@@ -183,13 +153,11 @@ const ProductPage = () => {
     selectedSizes: string[];
     selectedColors: string[];
   }) => {
-    console.log("Applying filters:", { priceRange, selectedCategory, selectedTags, selectedSizes, selectedColors });
+    console.log("Applying filters:", { priceRange, selectedTags, selectedSizes, selectedColors });
     const filtered = products.filter((product: IProduct) => {
       const price = product.discountedPrice ?? product.price;
       const inPriceRange = price >= priceRange[0] && price <= priceRange[1];
-      const matchesCategory = selectedCategory
-        ? product.category.toLowerCase() === selectedCategory.toLowerCase()
-        : true;
+      const matchesCategory = product.category.toLowerCase() === category.toLowerCase();
       const matchesTags = selectedTags.length > 0
         ? selectedTags.every((tag) => product.tags?.includes(tag))
         : true;
@@ -218,7 +186,6 @@ const ProductPage = () => {
     const initializeProducts = async () => {
       await fetchProducts(); // Wait for the products to be fetched
       setProducts(useProductStore.getState().products); // Apply initial products as filtered products
-      setFilteredProducts(useProductStore.getState().products);
     };
     initializeProducts();
   }, []); 
@@ -226,6 +193,24 @@ const ProductPage = () => {
   useEffect(() => {
     console.log("filteredProducts:", filteredProducts);
   }, [filteredProducts]);
+
+  useEffect(() => {
+    const applyFilters = ({
+        selectedCategory
+      }: {
+        selectedCategory: string
+      }) => {
+        const filtered = products.filter((product: IProduct) => {
+          const matchesCategory = selectedCategory
+            ? product.category.toLowerCase() === selectedCategory.toLowerCase()
+            : true;
+
+          return matchesCategory ;
+        });
+        setFilteredProducts(filtered);
+      };
+      applyFilters({selectedCategory: category});
+  }, [products]);
 
   return (
     <div>

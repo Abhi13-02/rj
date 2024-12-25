@@ -1,19 +1,45 @@
-import mongoose from 'mongoose';
 import { create } from 'zustand';
+import { QueryClient } from '@tanstack/react-query';
 import { IProduct } from '@/models/Products';
 
+// Initialize the React Query client
+const queryClient = new QueryClient();
+
+// Define the Zustand store
 interface ProductState {
   products: IProduct[];
-  setProducts: (products: IProduct[]) => void;
+  fetchProducts: () => Promise<void>;
 }
 
 const useProductStore = create<ProductState>((set) => ({
   products: [],
-  setProducts: (products) => set(() => ({ products })),
-}));
+  fetchProducts: async () => {
+    const queryKey = ['products'];
 
-if (typeof window !== "undefined") {
-  (window as any).useProductsStore = useProductStore;
-}
+    // Check if products are already cached
+    const cachedData = queryClient.getQueryData<IProduct[]>(queryKey);
+    if (cachedData) {
+      set(() => ({ products: cachedData }));
+      return;
+    }
+
+    // Fetch products if not cached
+    const data = await queryClient.fetchQuery({
+      queryKey,
+      queryFn: async (): Promise<IProduct[]> => {
+        const response = await fetch('/api/getAllProducts');
+        if (!response.ok) {
+          throw new Error('Failed to fetch products');
+        }
+        return response.json();
+      },
+    });
+
+    console.log(data);
+
+    // Update the Zustand store
+    set(() => ({ products: data }));
+  },
+}));
 
 export default useProductStore;

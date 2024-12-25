@@ -11,14 +11,19 @@ import HamburgerMenu from "./HamburgerMenu";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import SignInButton from "./authComp/signInButton";
-
+import useProductStore from "@/store/productState";
+import { IProduct } from "@/models/Products";
 
 const playFair = Playfair_Display({ subsets: ["latin"], weight: "400" });
 
 const Navbar = () => {
-    let {data : session} = useSession();
+    let { data: session } = useSession();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [searchActive, setSearchActive] = useState(false); // Search bar visibility
+    const [searchQuery, setSearchQuery] = useState(""); // Search input
+    const [searchResults, setSearchResults] = useState<IProduct[]>([]); // Fetched results
     const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+    const products = useProductStore((state) => state.products);
 
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -27,6 +32,28 @@ const Navbar = () => {
             setOpenDropdown(null); // Close if it's already open
         } else {
             setOpenDropdown(label); // Open the selected dropdown
+        }
+    };
+
+    const handleSearchIconClick = () => {
+        setSearchActive((prev) => !prev);
+        setSearchQuery(""); // Clear search query when opening/closing
+        setSearchResults([]); // Clear results when toggling
+    };
+
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const query = e.target.value;
+        setSearchQuery(query);
+
+        // Simulate fetching search results
+        if (query) {
+            const simulatedResults = products;
+            const filteredResults = simulatedResults.filter((product) =>
+                product.title.toLowerCase().includes(query.toLowerCase())
+            );
+            setSearchResults(filteredResults);
+        } else {
+            setSearchResults([]);
         }
     };
 
@@ -42,83 +69,84 @@ const Navbar = () => {
 
             {/* Logo */}
             <div className={`text-2xl font-bold text-white ${playFair.className}`}>
-                <Link href="/">
-                    RJ TRADITIONAL
-                </Link>
+                <Link href="/">RJ TRADITIONAL</Link>
             </div>
 
-
             {/* Navigation Links */}
-            <nav
-                className={`absolute lg:static top-20 left-0 w-full lg:w-auto lg:flex bg-pink-700 lg:bg-transparent flex-col lg:flex-row lg:items-center transition-all ${isMenuOpen ? "block" : "hidden"
-                    }`}
-            >
+            <nav className={`absolute lg:static top-20 left-0 w-full lg:w-auto lg:flex bg-black lg:bg-transparent flex-col lg:flex-row lg:items-center transition-all ${isMenuOpen ? "block" : "hidden"}`} >
                 <ul className="flex flex-col lg:flex-row gap-6 p-2">
                         <li className="relative group">
-                            <Link href="/products">
-                                <button className="text-white flex items-center">
-                                    ALL
-                                </button>
+                            <Link href = {`/products`}>
+                                <button className="text-white flex items-center">All</button>
                             </Link>
                         </li>
-                        <li className="relative group">
-                            <Link href="/products">
-                                <button className="text-white flex items-center">
-                                    SAREES
-                                </button>
+                    {["SAREE", "LENGHA", "SALWAR & KAMEEZ", "KURTI", "DUPATTA"].map((item) => (
+                        <li key={item} className="relative group">
+                            <Link href = {`/products/${item.toLowerCase()}`}>
+                                <button className="text-white flex items-center">{item}</button>
                             </Link>
                         </li>
-                        <li className="relative group">
-                            <Link href="/products">
-                                <button className="text-white flex items-center">
-                                    LENGHA
-                                </button>
-                            </Link>
-                        </li>
-                        <li className="relative group">
-                            <Link href="/products">
-                                <button className="text-white flex items-center">
-                                    SALWAR & KAMEEZ
-                                </button>
-                            </Link>
-                        </li>
-                        <li className="relative group">
-                            <Link href="/products">
-                                <button className="text-white flex items-center">
-                                    KURTI
-                                </button>
-                            </Link>
-                        </li>
-                        <li className="relative group">
-                            <Link href="/products">
-                                <button className="text-white flex items-center">
-                                    DUPATTA
-                                </button>
-                            </Link>
-                        </li>
+                    ))}
                 </ul>
             </nav>
 
             {/* Utility Icons */}
-            <div className="hidden lg:flex gap-6 items-center justify-center">
+            <div className="hidden lg:flex gap-6 items-center justify-center relative">
                 <div>
-                 <BsSearch size={30} className="text-white cursor-pointer font-light"/>
+                    <BsSearch
+                        size={30}
+                        className="text-white cursor-pointer font-light"
+                        onClick={handleSearchIconClick}
+                    />
                 </div>
-                <Link href="/wishlist">
-                  <CiHeart size={40} className="text-white cursor-pointer font-light" />
+                <Link href="/cart">
+                    <FiShoppingBag size={30} className="text-white cursor-pointer font-light" />
                 </Link>
                 {session ? (
-                    <Link href="/profile">
-                    <BsPersonCircle size={30} className="text-white cursor-pointer font-light" />
-                  </Link>
-                ):<SignInButton/>}
-                {/* <Link href="/profile">
-                  <BsPersonCircle size={30} className="text-white cursor-pointer font-light" />
-                </Link> */}
-                <Link href="/cart">
-                  <FiShoppingBag size={30} className="text-white cursor-pointer font-light"/>
-                </Link>
-                {/* Add more icons if necessary */}
+                    <Link href="/yourOrders">
+                        <BsPersonCircle size={30} className="text-white cursor-pointer font-light" />
+                    </Link>
+                ) : (
+                    <SignInButton />
+                )}
+
+                {/* Search Bar */}
+                {searchActive && (
+                    <div className="absolute right-24 top-full bg-white shadow-md w-96 p-4 mt-2 rounded-md">
+                        <input
+                            type="text"
+                            value={searchQuery}
+                            onChange={handleSearchChange}
+                            placeholder="Search products..."
+                            className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600"
+                        />
+                        {searchResults.length > 0 && (
+                            <ul className="mt-2 bg-white shadow-md rounded-md max-h-40 overflow-y-auto">
+                                {searchResults.map((result, index) => (
+                                    <li
+                                        key={index}
+                                        className="hover:bg-pink-200 cursor-pointer"
+                                    >
+                                        <Link href={`/product/${result._id.toString()}`}>
+                                            <div className="flex items-center p-2 jestify-center space-x-10">
+                                                <Image src={result.images[0]} alt={result.title} width={50} height={50}/>
+                                                <span className="ml-2">{result.title}</span>
+                                                <p className="text-lg font-semibold text-gray-700 mb-2  ">
+                                                    ₹{result.discountedPrice ?? result.price}{" "}
+                                                    {result.discountedPrice && (
+                                                    <span className="line-through text-sm text-gray-500">
+                                                        ₹{result.price}
+                                                    </span>
+                                                    )}
+                                                </p>
+                                            </div>
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </div>
+                )}
             </div>
         </header>
     );

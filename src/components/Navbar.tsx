@@ -9,10 +9,14 @@ import Link from "next/link";
 import { Playfair_Display } from "next/font/google";
 import HamburgerMenu from "./HamburgerMenu";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
+import SignInButton from "./authComp/signInButton";
+
 
 const playFair = Playfair_Display({ subsets: ["latin"], weight: "400" });
 
 const Navbar = () => {
+    let {data : session} = useSession();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
@@ -103,9 +107,14 @@ const Navbar = () => {
                 <Link href="/wishlist">
                   <CiHeart size={40} className="text-white cursor-pointer font-light" />
                 </Link>
-                <Link href="/yourOrders">
+                {session ? (
+                    <Link href="/profile">
+                    <BsPersonCircle size={30} className="text-white cursor-pointer font-light" />
+                  </Link>
+                ):<SignInButton/>}
+                {/* <Link href="/profile">
                   <BsPersonCircle size={30} className="text-white cursor-pointer font-light" />
-                </Link>
+                </Link> */}
                 <Link href="/cart">
                   <FiShoppingBag size={30} className="text-white cursor-pointer font-light"/>
                 </Link>

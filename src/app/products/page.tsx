@@ -98,11 +98,12 @@ const FilterPanel = ({
           className="border rounded-lg p-2 w-full text-sm"
         >
           <option value="">All</option>
-          <option value="kurti">Kurti</option>
-          <option value="shirt">Shirt</option>
           <option value="saree">Saree</option>
-          <option value="salwar">Salwar</option>
+          <option value="lengha">Lengha</option>
+          <option value="salwar_kameez">Salwar & Kameez</option>
+          <option value="kurti">Kurti</option>
           <option value="dupatta">Dupatta</option>
+
         </select>
       </div>
 

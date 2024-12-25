@@ -1,7 +1,9 @@
-import React from "react";
+"use client";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import { Playfair_Display } from "next/font/google";
 import Link from "next/link";
+import useProductStore from "@/store/productState";
 
 const playFair = Playfair_Display({ subsets: ["latin"], weight: "400" });
 
@@ -15,6 +17,14 @@ function Page() {
         "/ekana.webp",
         "/ekana2.webp",
     ];
+
+    const { fetchProducts} = useProductStore();
+
+    useEffect(() => {
+        fetchProducts();
+    }, []);
+
+
 
     return (
         <main className="relative w-full">

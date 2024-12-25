@@ -68,6 +68,7 @@ interface OrderActions {
   addOrderItems: (items: OrderItem[], orderId: string, orderDate: string, total: number) => void;
   addAddress: (billingDetails: Partial<AddressDetails>, shippingDetails?: Partial<AddressDetails>) => void;
   updatePaymentMethod: (method: string) => void;
+  updateshippingCharges: (shipping_charges: number) => void;
   updateDimensions: (length: number, breadth: number, height: number, weight: number) => void;
   resetOrder: () => void;
 }
@@ -152,6 +153,13 @@ const useOrderStore = create<OrderStore>(
         height,
         weight,
       })),
+
+      updateshippingCharges: (shipping_charges: number) =>
+        set((state: OrderState) => ({
+          ...state,
+          shipping_charges: shipping_charges,
+        })),
+
 
      resetOrder: () =>
         set(() => ({

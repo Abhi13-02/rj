@@ -22,6 +22,7 @@ interface CheckoutButtonProps {
 export default function CheckoutButton({ amount }: CheckoutButtonProps) {
   const router = useRouter();
   const { data: session } = useSession();
+  
   const setShiprocketOrderId = useDBOrderStore((state) => state.setShiprocketOrderId);
   const setUserId = useDBOrderStore((state) => state.setUserId);
   const resetDBOrder = useDBOrderStore((state: any) => state.resetOrder);
@@ -148,7 +149,7 @@ export default function CheckoutButton({ amount }: CheckoutButtonProps) {
     <div>
       <button
         onClick={handlePayment}
-        className="bg-blue-500 text-white px-4 py-2 rounded"
+        className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
       >
         Pay ₹{amount}
       </button>

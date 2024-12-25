@@ -6,11 +6,18 @@ const razorpay = new Razorpay({
   key_secret: process.env.RAZORPAY_KEY_SECRET || "",
 });
 
-export async function POST(req: NextRequest, res: NextResponse) {
-  const body = await req.json();
-  const { amount, currency } = body;
-
+export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
+    const body = await req.json(); // Parse the request body
+    const { amount, currency } = body;
+
+    if (!amount || !currency) {
+      return NextResponse.json(
+        { error: "Amount and currency are required" },
+        { status: 400 }
+      );
+    }
+
     const options = {
       amount: amount * 100, // Convert to paise
       currency: currency || "INR",
@@ -18,11 +25,14 @@ export async function POST(req: NextRequest, res: NextResponse) {
     };
 
     const order = await razorpay.orders.create(options);
-    // console.log("cretate order",order);
-    
+
     return NextResponse.json({ order }, { status: 200 });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error creating Razorpay order:", error);
-    return NextResponse.json({ error: "Failed to create Razorpay order" }, { status: 500 });
+
+    return NextResponse.json(
+      { error: "Failed to create Razorpay order" },
+      { status: 500 }
+    );
   }
 }

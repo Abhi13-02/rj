@@ -94,11 +94,11 @@ const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
       <div className="product-price mt-2">
         {product.discountedPrice ? (
           <>
-            <span className="line-through text-gray-500 mr-2">${product.price}</span>
-            <span className="text-green-600 font-bold">${product.discountedPrice}</span>
+            <span className="line-through text-gray-500 mr-2">₹{product.price}</span>
+            <span className="text-green-600 font-bold">₹{product.discountedPrice}</span>
           </>
         ) : (
-          <span className="text-gray-800 font-bold">${product.price}</span>
+          <span className="text-gray-800 font-bold">₹{product.price}</span>
         )}
       </div>
 

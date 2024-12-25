@@ -76,7 +76,6 @@ const useDBOrderStore = create<OrderState>((set) => ({
   setShiprocketOrderId: (shiprocketOrderId) =>
     set(() => ({
       shiprocketOrderId,
-      status: 'shipped', // Update status when Shiprocket order is created
     })),
 
   // Action to reset order (useful after order completion)

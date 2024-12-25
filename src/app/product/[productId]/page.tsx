@@ -8,12 +8,16 @@ import useOrderStore from "@/store/order";
 import useDBOrderStore from "@/store/dbOrders";
 import { OrderItem } from "@/models/Orders";
 import { set } from "mongoose";
+import useProductStore from "@/store/productState";
+import ProductCard from "@/components/productCard";
 
 const ProductPage = () => {
   const router = useRouter();
   const { productId } = useParams();
   const { data: session } = useSession();
   const [product, setProduct] = useState<IProduct | null>(null);
+  const [similarProducts, setSimilarProducts] = useState<IProduct[]>([]);
+  const { products } = useProductStore();
   const [selectedSize, setSelectedSize] = useState("");
   const [mainImage, setMainImage] = useState("");
   const [quantity, setQuantity] = useState(1);
@@ -21,7 +25,12 @@ const ProductPage = () => {
   const addOrderItems = useOrderStore((state) => state.addOrderItems);
   const setItems = useDBOrderStore((state) => state.setItems);
   let orderItems: OrderItem[] = useDBOrderStore((state) => state.items);
-  let totalAmount: number = useDBOrderStore((state) => state.totalAmount);
+
+  const { fetchProducts} = useProductStore();
+
+    useEffect(() => {
+        fetchProducts();
+    }, []);
 
   useEffect(() => {
     if (productId) {
@@ -39,6 +48,24 @@ const ProductPage = () => {
         });
     }
   }, [productId]);
+
+  useEffect(() => {
+      const applyFilters = ({
+          selectedCategory
+        }: {
+          selectedCategory: string | undefined
+        }) => {
+          const filtered = products.filter((productt: IProduct) => {
+            const matchesCategory = selectedCategory
+              ? productt.category.toLowerCase() === selectedCategory.toLowerCase()
+              : true;
+            return matchesCategory && productt.title !== product?.title;
+          });
+          setSimilarProducts(filtered);
+        };
+        applyFilters({selectedCategory: product?.category});
+    }, [product]);
+
 
   if (loading) {
     return <div className="text-center">Loading...</div>;
@@ -189,12 +216,14 @@ const ProductPage = () => {
         <div>
           <h1 className="text-2xl font-bold mb-2">{product.title}</h1>
           <p className="text-lg font-semibold text-gray-700 mb-2">
-            ₹{product.discountedPrice ?? product.price}{" "}
-            {product.discountedPrice && (
-              <span className="line-through text-sm text-gray-500">
-                ₹{product.price}
-              </span>
-            )}
+            {product.discountedPrice ? (
+            <>
+              <span className="line-through text-gray-500 mr-2">₹{product.price}</span>
+              <span className="text-green-600 font-bold">₹{product.discountedPrice}</span>
+            </>
+              ) : (
+                <span className="text-gray-800 font-bold">₹{product.price}</span>
+              )}
           </p>
           <p className="text-gray-500 mb-4">{product.description}</p>
 
@@ -253,16 +282,13 @@ const ProductPage = () => {
         <h2 className="text-xl font-bold mb-4">You May Also Like</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
           {/* Dummy Related Products */}
-          {[1, 2, 3, 4].map((item) => (
-            <div key={item} className="border rounded p-4">
-              <img
-                src={`https://via.placeholder.com/150?text=Product+${item}`}
-                alt={`Product ${item}`}
-                className="w-full h-auto mb-2"
-              />
-              <h3 className="text-sm font-medium">Product {item}</h3>
-              <p className="text-gray-500 text-sm">₹{item * 1000}</p>
-            </div>
+          {similarProducts.map((item, index) => (
+            <div
+            key={item._id.toString()}
+            className="product-card-container"
+          >
+            <ProductCard product={item} />
+          </div>
           ))}
         </div>
       </div>

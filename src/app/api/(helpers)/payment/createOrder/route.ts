@@ -9,18 +9,20 @@ const razorpay = new Razorpay({
 export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
     const body = await req.json(); // Parse the request body
-    const { amount, currency } = body;
+    const { amount } = body;
 
-    if (!amount || !currency) {
+    console.log("Razorpay order data:", { amount});
+
+    if (!amount ) {
       return NextResponse.json(
-        { error: "Amount and currency are required" },
+        { error: "Amount is require" },
         { status: 400 }
       );
     }
 
     const options = {
       amount: amount * 100, // Convert to paise
-      currency: currency || "INR",
+      currency:  "INR",
       receipt: `receipt_${Date.now()}`,
     };
 

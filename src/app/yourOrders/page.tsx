@@ -1,5 +1,6 @@
 "use client";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
 const YourOrders = () => {
@@ -58,6 +59,7 @@ const YourOrders = () => {
                 <p className="text-gray-600">
                   Total Amount: ₹{order.totalAmount}
                 </p>
+                <p className="text-gray-600">Payment Method: {order.paymentMethod}</p>
                 <p className="text-gray-600">
                   Ordered On: {new Date(order.createdAt).toLocaleDateString()}
                 </p>
@@ -71,32 +73,32 @@ const YourOrders = () => {
                 <h2 className="font-semibold mb-2">Order Items</h2>
                 <div className="space-y-2">
                   {order.items.map((item: any, index: number) => (
-                    <div
-                      key={index}
-                      className="flex items-start space-x-4 border-b pb-2"
-                    >
-                      <img
-                        src={item.images[0]}
-                        alt={item.name}
-                        className="w-16 h-16 object-cover rounded"
-                      />
-                      <div>
-                        <p className="font-medium">{item.name}</p>
-                        <p className="text-sm text-gray-600">
-                          Size: {item.size} | Quantity: {item.quantity}
-                        </p>
-                        <p className="text-sm text-gray-600">
-                          Price: ₹{item.price}
-                        </p>
+                    <Link href={`/product/${item.productId.toString()}`} key={index}>
+                      <div
+                        className="flex items-start space-x-4 border-b pb-2"
+                      >
+                        <img
+                          src={item.images[0]}
+                          alt={item.name}
+                          className="w-16 h-16 object-cover rounded"
+                        />
+                        <div>
+                          <p className="font-medium">{item.name}</p>
+                          <p className="text-sm text-gray-600">
+                            Size: {item.size} | Quantity: {item.quantity}
+                          </p>
+                          <p className="text-sm text-gray-600">
+                            Price: ₹{item.price}
+                          </p>
+                        </div>
                       </div>
-                    </div>
+                    </Link>
                   ))}
                 </div>
                 <h2 className="font-semibold mt-4">Shipping Address</h2>
                 <p className="text-sm text-gray-600">
-                  {order.shippingAddress.street}, {order.shippingAddress.city},{" "}
-                  {order.shippingAddress.state}, {order.shippingAddress.postalCode},{" "}
-                  {order.shippingAddress.country}
+                  {order.shippingAddress.address},{" "}{order.shippingAddress.city},{" "}
+                  {order.shippingAddress.state}-{order.shippingAddress.pincode}, Phone: {order.shippingAddress.phone}
                 </p>
               </div>
             )}

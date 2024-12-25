@@ -1,10 +1,10 @@
 "use client";
 
 import { FiShoppingBag } from "react-icons/fi";
+import { BsCart3 } from "react-icons/bs";
 import { BsPersonCircle } from "react-icons/bs";
 import { BsSearch } from "react-icons/bs";
-import { CiHeart } from "react-icons/ci";
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import Link from "next/link";
 import { Playfair_Display } from "next/font/google";
 import HamburgerMenu from "./HamburgerMenu";
@@ -24,6 +24,7 @@ const Navbar = () => {
     const [searchResults, setSearchResults] = useState<IProduct[]>([]); // Fetched results
     const [openDropdown, setOpenDropdown] = useState<string | null>(null);
     const products = useProductStore((state) => state.products);
+    const [cart, setCart] = useState([]);
 
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -100,7 +101,9 @@ const Navbar = () => {
                     />
                 </div>
                 <Link href="/cart">
-                    <FiShoppingBag size={30} className="text-white cursor-pointer font-light" />
+                
+                  <BsCart3 size={30} className="text-white cursor-pointer font-light" />
+
                 </Link>
                 {session ? (
                     <Link href="/yourOrders">
@@ -132,11 +135,13 @@ const Navbar = () => {
                                                 <Image src={result.images[0]} alt={result.title} width={50} height={50}/>
                                                 <span className="ml-2">{result.title}</span>
                                                 <p className="text-lg font-semibold text-gray-700 mb-2  ">
-                                                    ₹{result.discountedPrice ?? result.price}{" "}
-                                                    {result.discountedPrice && (
-                                                    <span className="line-through text-sm text-gray-500">
-                                                        ₹{result.price}
-                                                    </span>
+                                                {result.discountedPrice ? (
+                                                    <>
+                                                        <span className="line-through text-gray-500 mr-2">₹{result.price}</span>
+                                                        <span className="text-green-600 font-bold">₹{result.discountedPrice}</span>
+                                                    </>
+                                                    ) : (
+                                                    <span className="text-gray-800 font-bold">₹{result.price}</span>
                                                     )}
                                                 </p>
                                             </div>

@@ -10,6 +10,7 @@ import ProductCard from "@/components/productCard";
 import LoginPanel from "@/components/loginPanel"; // Import your Login Panel component
 import useDBOrderStore from "@/store/dbOrders";
 import useOrderStore from "@/store/order";
+import ScrollableRow from "@/components/scrollableSection";
 
 const ProductPage = () => {
   const router = useRouter();
@@ -17,6 +18,7 @@ const ProductPage = () => {
   const { data: session } = useSession();
   const [product, setProduct] = useState<IProduct | null>(null);
   const [similarProducts, setSimilarProducts] = useState<IProduct[]>([]);
+  const [bestSellers, setBestSellers] = useState<IProduct[]>([]);
   const { products } = useProductStore();
   const [selectedSize, setSelectedSize] = useState("");
   const [mainImage, setMainImage] = useState("");
@@ -27,6 +29,8 @@ const ProductPage = () => {
   const fetchProducts = useProductStore((state) => state.fetchProducts);
   const resetDBOrder = useDBOrderStore((state) => state.resetOrder);
   const resetOrder = useOrderStore((state) => state.resetOrder);
+  const addOrderItems = useOrderStore((state) => state.addOrderItems);
+  const setItems = useDBOrderStore((state) => state.setItems);
 
   useEffect(() => {
     fetchProducts();
@@ -60,10 +64,18 @@ const ProductPage = () => {
         return matchesCategory && productt.title !== product?.title;
       });
       setSimilarProducts(filtered);
+
+      // For simplicity, fetching best sellers as top products by price
+      const topProducts = products.filter((productt: IProduct) => {
+        const isLoved = productt.tags.includes("Most Loved");
+        return isLoved && productt.title !== product?.title;
+      });
+      setBestSellers(products);
     };
     applyFilters({ selectedCategory: product?.category });
   }, [product]);
 
+  
   const handleAddToCart = async () => {
     if (!session) {
       setShowLoginPanel(true); // Show login panel if not logged in
@@ -94,7 +106,56 @@ const ProductPage = () => {
       setShowLoginPanel(true); // Show login panel if not logged in
       return;
     }
-    handleAddToCart();
+
+    if (!product) return;
+    ////////setting shiprocket order////
+    const newOrderItems = [
+      {
+        name: product?.title,
+        sku: product?.title.substring(0, 10),
+        units: quantity,
+        selling_price: product?.discountedPrice?.toString() || product?.price.toString(),
+        discount: "0",
+        tax: "0",
+        hsn: 0,
+      },
+    ];
+
+    const now = new Date();
+    const formattedDate = new Intl.DateTimeFormat("en-CA", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    })
+      .format(now)
+      .replace(",", "");
+
+    addOrderItems(
+      newOrderItems,
+      Date.now().toString(),
+      formattedDate,
+      product?.discountedPrice || product?.price
+    );
+
+    //////setting in DB////
+
+    setItems(
+      [
+        {
+          name: product?.title,
+          productId: product?._id.toString(),
+          quantity: quantity,
+          size: selectedSize,
+          images: product?.images,
+          price: product?.discountedPrice || product?.price,
+        },
+      ],
+      product?.discountedPrice || product?.price
+    );
+
     // Redirect to the buy page
     router.push("/ordering/address");
   };
@@ -114,7 +175,7 @@ const ProductPage = () => {
                 key={index}
                 src={img}
                 alt={`Image ${index + 1}`}
-                className="w-20 h-32 object-cover border cursor-pointer"
+                className="w-20 h-36 object-cover border cursor-pointer"
                 onClick={() => setMainImage(img)}
               />
             ))}
@@ -123,7 +184,7 @@ const ProductPage = () => {
             <img
               src={mainImage}
               alt={product?.title}
-              className="w-full h-[500px] object-cover border"
+              className="w-full h-[600px] object-contain border"
             />
           </div>
         </div>
@@ -184,6 +245,13 @@ const ProductPage = () => {
           </div>
         </div>
       </div>
+
+      <div className="max-w-7xl mx-auto p-6">
+      {/* Other content here */}
+      
+      <ScrollableRow title="Similar Products" products={similarProducts} />
+      <ScrollableRow title="Best Sellers" products={bestSellers} />
+    </div>
     </div>
   );
 };

@@ -94,12 +94,12 @@ const CartPage = () => {
     console.log(useOrderStore.getState());
   }, []);
 
+  
   const handleCheckout = async () => {
-
     ///storing the shipRocketorder
     const newOrderItems = cartItems.map((item) => ({
       name: item.name,
-      sku: item.name + item.size,
+      sku: item.name.substring(0, 10),
       units: item.quantity,
       selling_price: item.price.toString(),
       discount: "0",

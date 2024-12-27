@@ -4,19 +4,7 @@ import React, { useEffect, useState } from "react";
 import { IProduct } from "@/models/Products";
 import useProductStore from "@/store/productState";
 import ProductCard from "@/components/productCard";
-
-// const fetchProducts = async (): Promise<IProduct[]> => {
-//   const res = await fetch(`api/getAllProducts`, {
-//     next: { revalidate: 600 }, // ISR: Revalidate every 600 seconds
-//   });
-
-//   if (!res.ok) {
-//     throw new Error("Failed to fetch products");
-//   }
-
-//   const data = await res.json();
-//   return data;
-// };
+import { FaBars, FaTimes } from "react-icons/fa";
 
 const FilterPanel = ({
   onApplyFilters,
@@ -99,11 +87,10 @@ const FilterPanel = ({
         >
           <option value="">All</option>
           <option value="saree">Saree</option>
-          <option value="lengha">Lengha</option>
-          <option value="salwar_kameez">Salwar & Kameez</option>
+          <option value="lehenga">Lehenga</option>
+          <option value="suits">Suits</option>
           <option value="kurti">Kurti</option>
           <option value="dupatta">Dupatta</option>
-
         </select>
       </div>
 
@@ -170,6 +157,7 @@ const ProductPage = () => {
   const { fetchProducts } = useProductStore();
   const [products, setProducts] = useState<IProduct[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<IProduct[]>([]);
+  const [showFilter, setShowFilter] = useState(false); // For mobile filter toggle
 
   const applyFilters = ({
     priceRange,
@@ -184,7 +172,6 @@ const ProductPage = () => {
     selectedSizes: string[];
     selectedColors: string[];
   }) => {
-    console.log("Applying filters:", { priceRange, selectedCategory, selectedTags, selectedSizes, selectedColors });
     const filtered = products.filter((product: IProduct) => {
       const price = product.discountedPrice ?? product.price;
       const inPriceRange = price >= priceRange[0] && price <= priceRange[1];
@@ -203,12 +190,6 @@ const ProductPage = () => {
         ? selectedColors.some((color) => product.tags?.includes(color))
         : true;
 
-      console.log("inPriceRange:", inPriceRange);
-      console.log("matchesCategory:", matchesCategory);
-      console.log("matchesTags:", matchesTags);
-      console.log("matchesSizes:", matchesSizes);
-      console.log("matchesColors:", matchesColors);
-
       return inPriceRange && matchesCategory && matchesTags && matchesSizes && matchesColors;
     });
 
@@ -217,26 +198,37 @@ const ProductPage = () => {
 
   useEffect(() => {
     const initializeProducts = async () => {
-      await fetchProducts(); // Wait for the products to be fetched
-      setProducts(useProductStore.getState().products); // Apply initial products as filtered products
+      await fetchProducts();
+      setProducts(useProductStore.getState().products);
       setFilteredProducts(useProductStore.getState().products);
     };
     initializeProducts();
-  }, []); 
-
-  useEffect(() => {
-    console.log("filteredProducts:", filteredProducts);
-  }, [filteredProducts]);
+  }, []);
 
   return (
-    <div>
-      <h1 className="text-3xl font-bold mb-8 text-center">Products</h1>
-      <div className="flex gap-8">
-        <aside className="w-1/4">
+    <div className="container mx-auto h-screen bg-orange-400 flex flex-wrap overflow-scroll">
+      <h1 className="text-2xl font-thin w-full bg-slate-300  mb-2 sm:mb-4 text-center">All Products</h1>
+      <div className="flex flex-col lg:flex-row gap-8">
+        {/* Hamburger Menu */}
+        <button
+          className="lg:hidden bg-gray-100 text-black text-lg px-4 py- py-1 shadow flex items-center gap-2"
+          onClick={() => setShowFilter(!showFilter)}
+        >
+          {showFilter ? <FaTimes /> : <FaBars />} Filters
+        </button>
+
+        {/* Filter Panel */}
+        <aside
+          className={`lg:block lg:w-1/4 ${
+            showFilter ? "block" : "hidden"
+          } bg-white p-4 lg:p-0`}
+        >
           <FilterPanel onApplyFilters={applyFilters} />
         </aside>
-        <main className="w-3/4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 px-4">
+
+        {/* Product Grid */}
+        <main className="w-full lg:w-3/4 h-full ">
+          <div className="grid bg-blue-200 h-full grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-8 px-2 sm:px-4">
             {filteredProducts.map((product) => (
               <div
                 key={product._id.toString()}

@@ -1,14 +1,20 @@
 "use client"
 import { useSession,signOut } from "next-auth/react"
+import { useRouter } from "next/navigation";
  
 export default function SignOut() {
-
+  
+  const router = useRouter();
   let {data : session} = useSession();
 
+  const handleSignOut = () => {
+    router.push("/");
+    signOut();
+  };
 
   return (
     <div>
-      {session ? <button onClick={() => signOut()} className=" ring-1 hover:bg-gray-900 ring-white px-4 py-2 rounded-2xl text-white">Logout</button> : <p>Not signed in</p>}
+      {session ? <button onClick={handleSignOut}>Logout</button> : <p>Not signed in</p>}
     </div>
   )
 } 

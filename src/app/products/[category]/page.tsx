@@ -216,8 +216,8 @@ const ProductPage = () => {
   }, [products]);
 
   return (
-    <div className="container mx-auto h-screen bg-orange-400 flex flex-wrap overflow-scroll">
-      <h1 className="text-2xl font-thin w-full bg-slate-300  mb-2 sm:mb-4 text-center">All Products</h1>
+    <div className="container mx-auto h-screen  flex flex-wrap overflow-scroll">
+      <h1 className="text-2xl font-thin w-full  mb-2 sm:mb-4 text-center">All Products</h1>
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Hamburger Menu */}
         <button
@@ -238,7 +238,7 @@ const ProductPage = () => {
 
         {/* Product Grid */}
         <main className="w-full lg:w-3/4 h-full ">
-          <div className="grid bg-blue-200 h-full grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-8 px-2 sm:px-4">
+          <div className="grid  h-full grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-8 px-2 sm:px-4">
             {filteredProducts.map((product) => (
               <div
                 key={product._id.toString()}

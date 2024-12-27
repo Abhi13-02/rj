@@ -191,16 +191,16 @@ const ProductPage = () => {
       {showLoginPanel && <LoginPanel onClose={() => setShowLoginPanel(false)} />}
 
       {/* Product Details Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {/* Product Images */}
         <div className="flex">
-          <div className="flex flex-col space-y-2 mr-4">
+          <div className="flex flex-col space-y-2 mr-4 ">
             {product?.images.map((img, index) => (
               <img
                 key={index}
                 src={img}
                 alt={`Image ${index + 1}`}
-                className="w-20 h-36 object-cover border cursor-pointer"
+                className="w-20 h-36 ring-black ring-1 rounded-md object-cover border cursor-pointer"
                 onClick={() => setMainImage(img)}
               />
             ))}
@@ -216,29 +216,37 @@ const ProductPage = () => {
 
         {/* Product Information */}
         <div>
-          <h1 className="text-2xl font-bold mb-2">{product?.title}</h1>
-          <p className="text-lg font-semibold text-gray-700 mb-2">
+          <h1 className="text-2xl font-bold mb-3">{product?.title}</h1>
+          <p className="text-lg font-semibold text-gray-700 my-4">
             {product?.discountedPrice ? (
               <>
                 <span className="line-through text-gray-500 mr-2">₹{product?.price}</span>
-                <span className="text-green-600 font-bold">₹{product?.discountedPrice}</span>
+                <span className="text-black text-2xl font-md">₹{product?.discountedPrice}</span>
+                {" "}
+                |{" "}
+                <span className="text-green-700">
+                  {(
+                    ((product.price - product.discountedPrice) / product.price) *
+                    100
+                  ).toFixed(0)}
+                  %off
+                </span>
               </>
             ) : (
-              <span className="text-gray-800 font-bold">₹{product?.price}</span>
+              <span className="text-gray-700 font-bold">₹{product?.price}</span>
             )}
           </p>
-          <p className="text-gray-500 mb-4">{product?.description}</p>
 
           {/* Select Size */}
-          <div className="mb-4">
+          <div className="mb-5">
             <label className="block font-medium mb-2">Select Size:</label>
             <div className="flex space-x-2">
               {product?.sizes.map((size) => (
                 <button
-                  key={size.size}
-                  className={`px-4 py-2 border ${
-                    selectedSize === size.size ? "bg-blue-500 text-white" : ""
-                  }`}
+                key={size.size}
+                className={`px-4 py-2 border ${
+                  selectedSize === size.size ? "bg-pink-200 text-pink-700" : ""
+                }`}
                   onClick={() => {setSelectedSize(size.size); setQuantity(1);}}
                 >
                   {size.size}
@@ -248,7 +256,7 @@ const ProductPage = () => {
           </div>
 
           {/* Select Quantity */}
-          <div className="mb-4">
+          <div className="mb-5">
             <label className="block font-medium mb-2">Select Quantity:</label>
             <div className="flex items-center space-x-4">
               <button onClick={() => handleQuantityChange("decrement")} className="px-4 py-2 border bg-gray-200 rounded">
@@ -262,18 +270,22 @@ const ProductPage = () => {
           </div>
 
           {/* Buttons */}
-          <div className="flex space-x-4">
-            <button onClick={handleAddToCart} className="px-4 py-2 bg-blue-600 text-white rounded">
+          <div className="flex w-full space-x-4 mb-5">
+            <button onClick={handleAddToCart} className="px-4 py-2 w-[50%] bg-blue-600 text-white rounded">
               Add to Bag
             </button>
-            <button onClick={handleBuyNow} className="px-4 py-2 bg-green-600 text-white rounded">
+            <button onClick={handleBuyNow} className="px-4 py-2 w-[50%] bg-green-600 text-white rounded">
               Buy Now
             </button>
+          </div>
+          <div className="text-gray-500 mb-4">
+            <label className="font-medium text-black">Product Description:</label>
+            <p className="">{product?.description}</p>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto p-6">
+     <div className="max-w-7xl mx-auto p-6">
       {/* Other content here */}
       
       <ScrollableRow title="Similar Products" products={similarProducts} />

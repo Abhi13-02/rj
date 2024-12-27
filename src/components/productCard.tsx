@@ -72,7 +72,7 @@ const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
   };
 
   return (
-    <div className="product-card border  rounded-lg sm:p-3 p-1 shadow-md max-w-sm relative w-full sm:w-64 h-[400px] sm:h-[500px]">
+    <div className="product-card border bg-lime-700 rounded-lg sm:p-3 p-1 shadow-md max-w-sm relative w-full sm:w-64 h-[400px] sm:h-[500px]">
       {/* Product Image */}
       <Link href={`/product/${product._id.toString()}`}>
         <div className="image-container">

@@ -5,6 +5,7 @@ import { IProduct } from "@/models/Products";
 import useProductStore from "@/store/productState";
 import ProductCard from "@/components/productCard";
 import { useParams } from "next/navigation";
+import { FaBars, FaTimes } from "react-icons/fa";
 
 
 const FilterPanel = ({
@@ -16,6 +17,7 @@ const FilterPanel = ({
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
+  
 
   const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -80,7 +82,7 @@ const FilterPanel = ({
       <div className="mb-6">
         <h3 className="font-medium text-gray-600 mb-2">Tags</h3>
         <div className="flex flex-wrap gap-3">
-          {["New Arrival", "Best Seller", "Trending", "Discounted"].map((tag) => (
+          {["Banarsi Saree", "Ghatchola Saree","Georgette", "Dola Silk Lehenga","Kota Doirya Lehenga","Art Silk Lehenga"].map((tag) => (
             <label key={tag} className="flex items-center gap-2">
               <input
                 type="checkbox"
@@ -116,7 +118,7 @@ const FilterPanel = ({
       <div className="mb-6">
         <h3 className="font-medium text-gray-600 mb-2">Colors</h3>
         <div className="flex flex-wrap gap-3">
-          {["Red", "Blue", "Green", "Black", "White", "Yellow", "Pink"].map(
+          {["Multicolor", "Black", "Red", "Blue", "Green", "Yellow", "Orange", "Purple", "Pink","White", "Grey", "Brown"].map(
             (color) => (
               <label key={color} className="flex items-center gap-2">
                 <input
@@ -140,6 +142,7 @@ const ProductPage = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<IProduct[]>([]);
   const { category } = useParams() as { category: string };
+   const [showFilter, setShowFilter] = useState(false); // For mobile filter toggle
 
   const applyFilters = ({
     priceRange,
@@ -213,14 +216,29 @@ const ProductPage = () => {
   }, [products]);
 
   return (
-    <div>
-      <h1 className="text-3xl font-bold mb-8 text-center">Products</h1>
-      <div className="flex gap-8">
-        <aside className="w-1/4">
+    <div className="container mx-auto h-screen bg-orange-400 flex flex-wrap overflow-scroll">
+      <h1 className="text-2xl font-thin w-full bg-slate-300  mb-2 sm:mb-4 text-center">All Products</h1>
+      <div className="flex flex-col lg:flex-row gap-8">
+        {/* Hamburger Menu */}
+        <button
+          className="lg:hidden bg-gray-100 text-black text-lg px-4 py- py-1 shadow flex items-center gap-2"
+          onClick={() => setShowFilter(!showFilter)}
+        >
+          {showFilter ? <FaTimes /> : <FaBars />} Filters
+        </button>
+
+        {/* Filter Panel */}
+        <aside
+          className={`lg:block lg:w-1/4 ${
+            showFilter ? "block" : "hidden"
+          } bg-white p-4 lg:p-0`}
+        >
           <FilterPanel onApplyFilters={applyFilters} />
         </aside>
-        <main className="w-3/4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 px-4">
+
+        {/* Product Grid */}
+        <main className="w-full lg:w-3/4 h-full ">
+          <div className="grid bg-blue-200 h-full grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-8 px-2 sm:px-4">
             {filteredProducts.map((product) => (
               <div
                 key={product._id.toString()}

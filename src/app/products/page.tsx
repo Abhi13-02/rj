@@ -98,7 +98,7 @@ const FilterPanel = ({
       <div className="mb-6">
         <h3 className="font-medium text-gray-600 mb-2">Tags</h3>
         <div className="flex flex-wrap gap-3">
-          {["New Arrival", "Best Seller", "Trending", "Discounted"].map((tag) => (
+          {["Banarsi Saree", "Ghatchola Saree","Georgette", "Dola Silk Lehenga","Kota Doirya Lehenga","Art Silk Lehenga"].map((tag) => (
             <label key={tag} className="flex items-center gap-2">
               <input
                 type="checkbox"
@@ -134,7 +134,7 @@ const FilterPanel = ({
       <div className="mb-6">
         <h3 className="font-medium text-gray-600 mb-2">Colors</h3>
         <div className="flex flex-wrap gap-3">
-          {["Red", "Blue", "Green", "Black", "White", "Yellow", "Pink"].map(
+          {["Multicolor", "Black", "Red", "Blue", "Green", "Yellow", "Orange", "Purple", "Pink","White", "Grey", "Brown"].map(
             (color) => (
               <label key={color} className="flex items-center gap-2">
                 <input
@@ -207,11 +207,11 @@ const ProductPage = () => {
 
   return (
     <div className="container mx-auto h-screen bg-orange-400 flex flex-wrap overflow-scroll">
-      <h1 className="text-2xl font-thin w-full bg-slate-300  mb-2 sm:mb-4 text-center">All Products</h1>
+      <h1 className="text-2xl font-thin w-full h-12 bg-slate-100 flex items-center justify-center  my-2 sm:mb-4 text-center">All Products</h1>
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Hamburger Menu */}
         <button
-          className="lg:hidden bg-gray-100 text-black text-lg px-4 py- py-1 shadow flex items-center gap-2"
+          className="lg:hidden bg-gray-100 text-black text-lg px-4 py-1 shadow flex items-center gap-2"
           onClick={() => setShowFilter(!showFilter)}
         >
           {showFilter ? <FaTimes /> : <FaBars />} Filters

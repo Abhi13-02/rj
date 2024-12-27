@@ -251,11 +251,11 @@ const ProductPage = () => {
           <div className="mb-4">
             <label className="block font-medium mb-2">Select Quantity:</label>
             <div className="flex items-center space-x-4">
-              <button onClick={() => setQuantity((prev) => Math.max(prev - 1, 1))} className="px-4 py-2 border bg-gray-200 rounded">
+              <button onClick={() => handleQuantityChange("decrement")} className="px-4 py-2 border bg-gray-200 rounded">
                 -
               </button>
               <span className="text-lg">{quantity}</span>
-              <button onClick={() => setQuantity((prev) => prev + 1)} className="px-4 py-2 border bg-gray-200 rounded">
+              <button onClick={() => handleQuantityChange("increment")} className="px-4 py-2 border bg-gray-200 rounded">
                 +
               </button>
             </div>

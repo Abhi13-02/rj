@@ -87,8 +87,8 @@ const FilterPanel = ({
         >
           <option value="">All</option>
           <option value="saree">Saree</option>
-          <option value="lengha">Lengha</option>
-          <option value="salwar_kameez">Salwar & Kameez</option>
+          <option value="lehenga">Lehenga</option>
+          <option value="suits">Suits</option>
           <option value="kurti">Kurti</option>
           <option value="dupatta">Dupatta</option>
         </select>

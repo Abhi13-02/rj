@@ -93,7 +93,7 @@ const Navbar = () => {
 
       {/* Navigation Links */}
       <nav
-        className={`absolute lg:static top-20 left-0 w-full lg:w-auto lg:flex bg-black lg:bg-transparent flex-col lg:flex-row lg:items-center transition-all ${
+        className={`absolute lg:static top-20 left-0 w-full lg:w-auto lg:flex bg-[#A0214D] text-black lg:bg-transparent flex-col lg:flex-row lg:items-center transition-all ${
           isMenuOpen ? "block" : "hidden"
         }`}
       >
@@ -103,9 +103,9 @@ const Navbar = () => {
               <button className="text-white flex items-center">All</button>
             </Link>
           </li>
-          {["SAREE", "LENGHA", "SALWAR & KAMEEZ", "KURTI", "DUPATTA"].map(
+          {["SAREE", "LEHENGA", "SUITS", "KURTI", "DUPATTA"].map(
             (item) => (
-              <li key={item} className="relative group">
+              <li key={item} className="relative group ">
                 <Link href={`/products/${item.toLowerCase()}`}>
                   <button className="text-white flex items-center">
                     {item}

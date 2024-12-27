@@ -4,7 +4,7 @@ import { FiShoppingBag } from "react-icons/fi";
 import { BsCart3 } from "react-icons/bs";
 import { BsPersonCircle } from "react-icons/bs";
 import { BsSearch } from "react-icons/bs";
-import React, { use, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import Link from "next/link";
 import { Playfair_Display } from "next/font/google";
 import HamburgerMenu from "./HamburgerMenu";
@@ -13,6 +13,7 @@ import { useSession } from "next-auth/react";
 import SignInButton from "./authComp/signInButton";
 import useProductStore from "@/store/productState";
 import { IProduct } from "@/models/Products";
+import useCartStore, { ICart } from "@/store/cartState";
 import SignOut from "./authComp/signOutButton";
 
 const playFair = Playfair_Display({ subsets: ["latin"], weight: "400" });
@@ -25,9 +26,20 @@ const Navbar = () => {
   const [searchResults, setSearchResults] = useState<IProduct[]>([]); // Fetched results
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const products = useProductStore((state) => state.products);
-  const [cart, setCart] = useState([]);
-
+  // Fetch the cart state directly from Zustand
+  const  fetchCart  = useCartStore((state) => state.fetchCart);
+  const cart = useCartStore((state) => state.Cart);
+  
   const [dropdownOpen, setDropdownOpen] = useState(false); // Dropdown toggle state
+
+  useEffect(() => {
+    const fetchCartData = async () => {
+        if (session?.user?.id) {
+            await fetchCart(session.user.id);
+        }
+    };
+    fetchCartData();
+}, [session, fetchCart]);
 
   // Handle toggle
   const handleToggle = () => setDropdownOpen(!dropdownOpen);
@@ -114,9 +126,6 @@ const Navbar = () => {
             onClick={handleSearchIconClick}
           />
         </div>
-        <Link href="/cart">
-          <BsCart3 size={30} className="text-white cursor-pointer font-light" />
-        </Link>
         {session ? (
           <>
             <BsPersonCircle
@@ -137,6 +146,21 @@ const Navbar = () => {
         ) : (
           <SignInButton />
         )}
+         <Link href="/cart" className="relative flex ">
+                    <BsCart3 size={30} className="text-white cursor-pointer font-light" />
+                    {cart?.items?.length > 0 && (
+                        <div>
+                            {/* Item count badge */}
+                            <span className="absolute -bottom-3 -left-2 bg-red-500 text-white text-sm font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                                {cart?.items.length}
+                            </span>
+                            {/* Total amount */}
+                            <span className=" text-white font-thin text-sm px-1 py-1 rounded-md">
+                                ₹{cart?.totalAmount}
+                            </span>
+                        </div>
+                    )}
+                </Link>
 
         {/* Search Bar */}
         {searchActive && (

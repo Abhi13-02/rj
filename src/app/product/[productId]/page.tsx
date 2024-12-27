@@ -10,6 +10,7 @@ import { OrderItem } from "@/models/Orders";
 import { set } from "mongoose";
 import useProductStore from "@/store/productState";
 import ProductCard from "@/components/productCard";
+import useCartStore from "@/store/cartState";
 
 const ProductPage = () => {
   const router = useRouter();
@@ -26,7 +27,8 @@ const ProductPage = () => {
   const setItems = useDBOrderStore((state) => state.setItems);
   let orderItems: OrderItem[] = useDBOrderStore((state) => state.items);
 
-  const { fetchProducts} = useProductStore();
+  const  fetchCart  = useCartStore((state) => state.fetchCart) ;
+  const  fetchProducts = useProductStore((state) => state.fetchProducts) ;
 
     useEffect(() => {
         fetchProducts();
@@ -103,11 +105,12 @@ const ProductPage = () => {
       }),
     });
 
-    if (!response.ok) {
+    if (!response.ok ) {
       throw new Error("Failed to add product to cart");
     } else {
       console.log("Product added to cart successfully");
-      alert(`Added ${quantity} ${product.title}(s) of size ${selectedSize} to cart!`);
+      if(session?.user?.id)
+      fetchCart(session.user.id);
     }
   };
 

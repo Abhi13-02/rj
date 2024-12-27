@@ -1,4 +1,5 @@
 "use client";
+import useCartStore from "@/store/cartState";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -8,10 +9,12 @@ const YourOrders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
+  const fetchCart = useCartStore((state) => state.fetchCart);
 
   useEffect(() => {
     if (session?.user?.id) {
       fetchYourOrders();
+      fetchCart(session.user.id);
     }
   }, [session?.user?.id]);
 

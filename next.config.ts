@@ -20,6 +20,10 @@ const nextConfig: NextConfig = {
         protocol: 'http',
         hostname: 'pub-0d09e9dbdb334949bc64fece4edb6ce5.r2.dev',
       },
+      {
+        protocol: 'https',
+        hostname: 'rjtraditional.com',
+      }
     ],
   },
   eslint: {

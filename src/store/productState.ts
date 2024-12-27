@@ -10,19 +10,11 @@ const queryClient = new QueryClient();
 // Define the Zustand store
 interface ProductState {
   products: IProduct[];
-  // Cart: ICart;
   fetchProducts: () => Promise<void>;
-  // fetchCart: () => Promise<void>;
 }
 
 const useProductStore = create<ProductState>((set) => ({
   products: [],
-  // Cart:{
-  //     userId: "",
-  //     items: [],
-  //     totalAmount: 0,
-  //     updatedAt: new Date()
-  // } ,
 
     fetchProducts: async () => {
       const queryKey = ['products'];
@@ -46,39 +38,11 @@ const useProductStore = create<ProductState>((set) => ({
         },
       });
 
-      console.log("store",data);
+      console.log("ProductStore",data);
 
       // Update the Zustand store
       set(() => ({ products: data }));
     },
-
-    // fetchCart: async () => {
-    //   const queryKey = ['Cart'];
-  
-    //   // Check if products are already cached
-    //   const cachedData = queryClient.getQueryData<ICart>(queryKey);
-    //   if (cachedData) {
-    //     set(() => ({ Cart: cachedData }));
-    //     return;
-    //   }
-  
-    //   // Fetch cart if not cached
-    //   const data = await queryClient.fetchQuery({
-    //     queryKey,
-    //     queryFn: async (): Promise<IProduct[]> => {
-    //       const response = await fetch('/api/getAllProducts');
-    //       if (!response.ok) {
-    //         throw new Error('Failed to fetch products');
-    //       }
-    //       return response.json();
-    //     },
-    //   });
-  
-    //   console.log(data);
-  
-    //   // Update the Zustand store
-    //   set(() => ({ products: data }));
-    // },
 
   }))
 

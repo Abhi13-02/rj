@@ -108,9 +108,9 @@ export async function PUT(req: NextRequest) {
 
     // console.log("Cart found:", cart);
     // Find and update the specific product in the cart
-    console.log(size,"hoiiiii")
+    // console.log(size,"hoiiiii")
     const item = cart.items.find((item: any) => (item.productId.toString() === productId && item.size === size));
-    console .log("Found item:", item, size);
+    // console .log("Found item:", item, size);
     if (item) {
       item.quantity = quantity;
       cart.totalAmount = cart.items.reduce((total: number, item: any) => total + item.price * item.quantity, 0);

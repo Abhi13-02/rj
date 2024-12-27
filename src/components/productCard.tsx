@@ -4,6 +4,9 @@ import { useSession } from 'next-auth/react';
 import useDBOrderStore from "@/store/dbOrders";
 import { OrderItem } from "@/models/Orders";
 import Link from 'next/link';
+import useCartStore from '@/store/cartState';
+import { DiVim } from 'react-icons/di';
+import SignIn from './authComp/signInButton';
 
 const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
   const { data: session } = useSession();
@@ -14,6 +17,7 @@ const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
   const [quantity, setQuantity] = useState(1);
   const [size, setSize] = useState('');
   const [isPanelOpen, setIsPanelOpen] = useState(false);
+  const { updateCart } = useCartStore();
 
   const handleIncrease = () => {
     setQuantity((prevQuantity) => prevQuantity + 1);
@@ -37,41 +41,42 @@ const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
     setIsPanelOpen(false); // Close the size selection panel
 
     // Add the product to the cart
-    
-    const response = await fetch(`/api/addCartItems`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        userId: session?.user?.id,
-        image: product.images,
-        productId: product._id,
-        name: product.title,
-        price: product.discountedPrice || product.price,
-        quantity,
-        size,
-      }),
-    });
 
-    if (!response.ok) {
-      throw new Error('Failed to add product to cart');
-    } else {
-      console.log('Product added to cart successfully');
-      alert(`Added ${quantity} ${product.title}(s) of size ${size} to cart!`);
-
-      // const items: OrderItem[] = orderItems;
-      // items.push({
-      //   productId: product._id.toString(),
-      //   name: product.title,
-      //   price: product.discountedPrice || product.price,
-      //   quantity,
-      //   size,
-      //   images: [product.images[0]],
-      // });
-      // const total =  totalAmount + (product.discountedPrice || product.price) * quantity;
-      // setItems(items, total); 
+    const orderItem = {
+      userId: session?.user?.id ,
+      image: product.images,
+      productId: product._id.toString(),
+      name: product.title,
+      price: product.discountedPrice || product.price,
+      quantity,
+      size,
     }
+    
+    if(session?.user?.id) {
+      const response = await fetch(`/api/addCartItems`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: session?.user?.id,
+          image: product.images,
+          productId: product._id,
+          name: product.title,
+          price: product.discountedPrice || product.price,
+          quantity,
+          size,
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to add product to cart');
+      } else {
+        console.log('Product added to cart successfully');
+        updateCart(orderItem);
+      }
+    }
+
   };
 
   return (
@@ -111,7 +116,7 @@ const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
       </button>
 
       {/* Sliding Side Panel */}
-      {isPanelOpen && session && (
+      {session?.user?.id ? (isPanelOpen && session && (
         <div className="fixed top-0 right-0 h-full w-64 bg-white shadow-lg z-50 transition-transform duration-300 transform translate-x-0">
           <div className="p-4">
             <h3 className="text-xl font-bold mb-4">Select Size</h3>
@@ -163,7 +168,9 @@ const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
             </button>
           </div>
         </div>
-      )}
+      )): <div>
+        <SignIn />
+        </div>}
     </div>
   );
 };

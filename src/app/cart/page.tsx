@@ -1,12 +1,14 @@
 "use client";
 import { MdDeleteOutline } from "react-icons/md";
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { CartItem } from "@/models/Cart";
 import { useSession, signIn } from "next-auth/react";
 import useOrderStore from "@/store/order";
 import { useRouter } from "next/navigation";
 import useDBOrderStore from "@/store/dbOrders";
 import { OrderItem } from "@/models/Orders";
+import Link from "next/link";
+import useCartStore from "@/store/cartState";
 
 const CartPage = () => {
   const router = useRouter();
@@ -17,16 +19,19 @@ const CartPage = () => {
   const setItems = useDBOrderStore((state) => state.setItems);
   let orderItems: OrderItem[] = useDBOrderStore((state) => state.items);
   let totalAmount: number = useDBOrderStore((state) => state.totalAmount);
+  const resetDBOrder = useDBOrderStore((state) => state.resetOrder);
+  const resetOrder = useOrderStore((state) => state.resetOrder);
+  const fetchCart = useCartStore((state) => state.fetchCart);
 
   useEffect(() => {
     if (session?.user?.id) {
-      fetchCart();
+      fetchCartt();
     } else {
       setLoading(false);
     }
   }, [session]);
 
-  const fetchCart = async () => {
+  const fetchCartt = async () => {
     try {
       const response = await fetch(`/api/showCart?userId=${session?.user?.id}`);
       const data = await response.json();
@@ -52,6 +57,8 @@ const CartPage = () => {
       });
       const updatedCart = await response.json();
       setCartItems(updatedCart.items);
+      if(session?.user?.id)
+      fetchCart(session?.user?.id);
       console.log("Updated cart:", updatedCart);
     } catch (error) {
       console.error("Error updating quantity:", error);
@@ -72,11 +79,20 @@ const CartPage = () => {
       });
       const updatedCart = await response.json();
       setCartItems(updatedCart.items);
+      if(session?.user?.id)
+        fetchCart(session?.user?.id);
       console.log("Updated cart:", updatedCart);
     } catch (error) {
       console.error("Error deleting cart item:", error);
     }
   };
+
+  useEffect(() => {
+      resetDBOrder();
+      resetOrder();
+    console.log(useDBOrderStore.getState());
+    console.log(useOrderStore.getState());
+  }, []);
 
   const handleCheckout = async () => {
 
@@ -157,45 +173,46 @@ const CartPage = () => {
         ) : (
           cartItems?.map((item) => (
             <div
-              key={item._id?.toString()}
-              className="cart-item flex items-center justify-between mb-4 border p-2 rounded flex-wrap"
-            >
-              <div className="flex items-center m-2">
-                <img
-                  src={item.image[0]}
-                  alt={item.name}
-                  className="w-20 h-24 object-cover mr-4"
-                />
-                <div className="flex justify-center items-center gap-5">
-                  <h2 className="text-lg font-semibold">{item.name}</h2>
-                  <p>Size: {item.size}</p>
+                key={item._id?.toString()}
+                className="cart-item flex items-center justify-between mb-4 border p-2 rounded flex-wrap"
+              >
+                <Link key={item._id?.toString()} href={`/product/${item.productId}`}>
+                    <div className="flex items-center m-2">
+                      <img
+                        src={item.image[0]}
+                        alt={item.name}
+                        className="w-20 h-24 object-cover mr-4"
+                        />
+                      <div className="flex justify-center items-center gap-5">
+                        <h2 className="text-lg font-semibold">{item.name}</h2>
+                        <p>Size: {item.size}</p>
+                      </div>
+                    </div>
+                </Link>
+                <div className="flex items-center m-2">
+                  <span className="mr-4 font-mono text-xl">Price: ₹{item.price*item.quantity}</span>
+                  <button
+                    onClick={() => updateQuantity(item.productId, item.quantity - 1, item.size)}
+                    className="px-3 py-2 border bg-gray-200 rounded-l"
+                    disabled={item.quantity <= 1}
+                  >
+                    -
+                  </button>
+                  <span className="px-4 py-1">{item.quantity}</span>
+                  <button
+                    onClick={() => updateQuantity(item.productId, item.quantity + 1, item.size)}
+                    className="px-3 py-2 border bg-gray-200 rounded-r"
+                  >
+                    +
+                  </button>
+                  <button
+                    onClick={() => deleteCartItem(item.productId, item.quantity, item.size)}
+                    className="ml-4 text-red-600 bg-slate-200 p-1 rounded-lg"
+                  >
+                    <MdDeleteOutline size={25}/>
+                  </button>
                 </div>
-              </div>
-
-              <div className="flex items-center m-2">
-                <span className="mr-4 font-mono text-xl">Price: ₹{item.price*item.quantity}</span>
-                <button
-                  onClick={() => updateQuantity(item.productId, item.quantity - 1, item.size)}
-                  className="px-3 py-2 border bg-gray-200 rounded-l"
-                  disabled={item.quantity <= 1}
-                >
-                  -
-                </button>
-                <span className="px-4 py-1">{item.quantity}</span>
-                <button
-                  onClick={() => updateQuantity(item.productId, item.quantity + 1, item.size)}
-                  className="px-3 py-2 border bg-gray-200 rounded-r"
-                >
-                  +
-                </button>
-                <button
-                  onClick={() => deleteCartItem(item.productId, item.quantity, item.size)}
-                  className="ml-4 text-red-600 bg-slate-200 p-1 rounded-lg"
-                >
-                  <MdDeleteOutline size={25}/>
-                </button>
-              </div>
-            </div>
+             </div>
           ))
         )}
       </div>

@@ -89,6 +89,8 @@ const useDBOrderStore = create<OrderState>((set) => ({
       shiprocketOrderId: null,
       status: 'pending',
     })),
+
+  onReset: () => console.log("Order reset")
 }));
 
 if (typeof window !== "undefined") {

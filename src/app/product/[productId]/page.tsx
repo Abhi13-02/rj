@@ -11,6 +11,9 @@ import LoginPanel from "@/components/loginPanel"; // Import your Login Panel com
 import useDBOrderStore from "@/store/dbOrders";
 import useOrderStore from "@/store/order";
 import ScrollableRow from "@/components/scrollableSection";
+import { IoBagHandleOutline } from "react-icons/io5";
+import { MdOutlinePayments } from "react-icons/md";
+
 
 const ProductPage = () => {
   const router = useRouter();
@@ -187,111 +190,148 @@ const ProductPage = () => {
 
   return (
     <div className="max-w-7xl mx-auto p-6">
-      {/* Login Panel */}
-      {showLoginPanel && <LoginPanel onClose={() => setShowLoginPanel(false)} />}
-
-      {/* Product Details Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-        {/* Product Images */}
-        <div className="flex">
-          <div className="flex flex-col space-y-2 mr-4 ">
-            {product?.images.map((img, index) => (
-              <img
-                key={index}
-                src={img}
-                alt={`Image ${index + 1}`}
-                className="w-20 h-36 ring-black ring-1 rounded-md object-cover border cursor-pointer"
-                onClick={() => setMainImage(img)}
-              />
+    {/* Login Panel */}
+    {showLoginPanel && <LoginPanel onClose={() => setShowLoginPanel(false)} />}
+  
+    {/* Product Details Section */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+      {/* Product Images */}
+      <div className="flex flex-col md:flex-row">
+        <div className="flex md:flex-col space-x-2 md:space-x-0 md:space-y-2 order-2 md:order-1 mt-4 md:mt-0">
+          {product?.images.map((img, index) => (
+            <img
+              key={index}
+              src={img}
+              alt={`Image ${index + 1}`}
+              className="w-16 md:w-24 h-24 md:h-36 ring-black ring-1 rounded-md object-cover border cursor-pointer"
+              onClick={() => setMainImage(img)}
+            />
+          ))}
+        </div>
+        <div className="flex-1 md:ml-5 order-1 md:order-2">
+          <img
+            src={mainImage}
+            alt={product?.title}
+            className="w-full h-[300px] md:h-[600px] object-contain border"
+          />
+        </div>
+      </div>
+  
+      {/* Product Information */}
+      <div>
+        <h1 className="text-2xl font-bold mb-3">{product?.title}</h1>
+        <p className="text-lg font-semibold text-gray-700 my-4">
+          {product?.discountedPrice ? (
+            <>
+              <span className="line-through text-gray-500 mr-2">₹{product?.price}</span>
+              <span className="text-black text-2xl font-md">₹{product?.discountedPrice}</span> |{" "}
+              <span className="text-green-700">
+                {(((product.price - product.discountedPrice) / product.price) * 100).toFixed(0)}% off
+              </span>
+            </>
+          ) : (
+            <span className="text-gray-700 font-bold">₹{product?.price}</span>
+          )}
+        </p>
+  
+        {/* Select Size */}
+        <div className="mb-5 fle overflow-x-scroll">
+          <label className="block font-medium mb-2">Select Size:</label>
+          <div className="flex space-x-2 overflow-x-scroll">
+            {product?.sizes.map((size) => (
+              <button
+                key={size.size}
+                className={`px-4 py-2  border rounded-full ${
+                  selectedSize === size.size ? "bg-[#FFD8D8] text-[#a22a2a]" : ""
+                }`}
+                onClick={() => {
+                  setSelectedSize(size.size);
+                  setQuantity(1);
+                }}
+              >
+                {size.size}
+              </button>
             ))}
           </div>
-          <div className="flex-1">
-            <img
-              src={mainImage}
-              alt={product?.title}
-              className="w-full h-[600px] object-contain border"
-            />
+        </div>
+  
+        {/* Select Quantity */}
+        <div className="mb-5">
+          <label className="block font-medium mb-2">Select Quantity:</label>
+          <div className="flex items-center space-x-4">
+            <button
+              onClick={() => handleQuantityChange("decrement")}
+              className="px-4 py-2 border bg-gray-200 rounded"
+            >
+              -
+            </button>
+            <span className="text-lg">{quantity}</span>
+            <button
+              onClick={() => handleQuantityChange("increment")}
+              className="px-4 py-2 border bg-gray-200 rounded"
+            >
+              +
+            </button>
           </div>
         </div>
-
-        {/* Product Information */}
-        <div>
-          <h1 className="text-2xl font-bold mb-3">{product?.title}</h1>
-          <p className="text-lg font-semibold text-gray-700 my-4">
-            {product?.discountedPrice ? (
-              <>
-                <span className="line-through text-gray-500 mr-2">₹{product?.price}</span>
-                <span className="text-black text-2xl font-md">₹{product?.discountedPrice}</span>
-                {" "}
-                |{" "}
-                <span className="text-green-700">
-                  {(
-                    ((product.price - product.discountedPrice) / product.price) *
-                    100
-                  ).toFixed(0)}
-                  %off
-                </span>
-              </>
-            ) : (
-              <span className="text-gray-700 font-bold">₹{product?.price}</span>
-            )}
-          </p>
-
-          {/* Select Size */}
-          <div className="mb-5">
-            <label className="block font-medium mb-2">Select Size:</label>
-            <div className="flex space-x-2">
-              {product?.sizes.map((size) => (
-                <button
-                key={size.size}
-                className={`px-4 py-2 border ${
-                  selectedSize === size.size ? "bg-pink-200 text-pink-700" : ""
-                }`}
-                  onClick={() => {setSelectedSize(size.size); setQuantity(1);}}
-                >
-                  {size.size}
-                </button>
-              ))}
-            </div>
+  
+        {/* Buttons */}
+        <div className="flex w-full space-x-4 mb-6">
+          <button
+            onClick={handleAddToCart}
+            className="flex justify-center items-center gap-4 px-4 py-2 w-[50%] bg-[#FFD8D8] text-[#a22a2a] rounded"
+          >
+            Add to Bag <IoBagHandleOutline className="text-xl" />
+          </button>
+          <button
+            onClick={handleBuyNow}
+            className="animate-bounce px-4 py-2 flex justify-center items-center gap-4 w-[50%] bg-green-500 text-black rounded"
+          >
+            Buy Now <MdOutlinePayments className="text-xl" />
+          </button>
+        </div>
+  
+        {/* Payment Options */}
+        <div className="sm:flex mb-4 items-center gap-2">
+          <div className="mr-2 flex items-center justify-center">
+            <span className="text-black font-semibold mr-2">Pay With :</span>
+            <img src="/special/razorpay.svg" width={110} alt="" />
+          </div>{" "}
+          <div className="text-sm text-center">or</div>
+          <div className="mx-2 flex items-center justify-center">
+            <span className="text-black font-semibold mr-2">Cash on Delivery :</span>
+            <MdOutlinePayments className="text-2xl" />
           </div>
-
-          {/* Select Quantity */}
-          <div className="mb-5">
-            <label className="block font-medium mb-2">Select Quantity:</label>
-            <div className="flex items-center space-x-4">
-              <button onClick={() => handleQuantityChange("decrement")} className="px-4 py-2 border bg-gray-200 rounded">
-                -
-              </button>
-              <span className="text-lg">{quantity}</span>
-              <button onClick={() => handleQuantityChange("increment")} className="px-4 py-2 border bg-gray-200 rounded">
-                +
-              </button>
-            </div>
+        </div>
+  
+        {/* Product Description */}
+        <div className="mb-6">
+          <label className="font-medium text-black">Product Description:</label>
+          <p className="text-gray-700">{product?.description}</p>
+        </div>
+        <div className="flex gap-20">
+          <div className="flex flex-col justify-center items-center space-y-2">
+            <img src="/special/quality.png" alt="Fast Delivery" width={80} height={80} />
+            <p className="mt-2">Superior Quality</p>
           </div>
-
-          {/* Buttons */}
-          <div className="flex w-full space-x-4 mb-5">
-            <button onClick={handleAddToCart} className="px-4 py-2 w-[50%] bg-blue-600 text-white rounded">
-              Add to Bag
-            </button>
-            <button onClick={handleBuyNow} className="px-4 py-2 w-[50%] bg-green-600 text-white rounded">
-              Buy Now
-            </button>
+          <div className="flex flex-col justify-center items-center space-y-2">
+            <img src="/special/offer.png" alt="Lowest Price" width={75} height={75} />
+            <p>Best Offers</p>
           </div>
-          <div className="text-gray-500 mb-4">
-            <label className="font-medium text-black">Product Description:</label>
-            <p className="">{product?.description}</p>
+          <div>
+            <img src="/special/cash.png" alt="Fast Delivery" width={75} height={75} />
+            <p className="mt-2">Cash on Delivery</p>
           </div>
         </div>
       </div>
-
-     <div className="max-w-7xl mx-auto p-6">
-      {/* Other content here */}
-      
+    </div>
+  
+    <div className="max-w-full mx-auto ">
       <ScrollableRow title="Similar Products" products={similarProducts} />
       <ScrollableRow title="Best Sellers" products={bestSellers} />
     </div>
-    </div>
+  </div>
+  
   );
 };
 

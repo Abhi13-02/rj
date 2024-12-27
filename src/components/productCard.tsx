@@ -72,21 +72,19 @@ const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
   };
 
   return (
-    <div className="product-card border  rounded-lg sm:p-3 p-1 shadow-md max-w-sm relative w-full sm:w-64 h-[400px] sm:h-[500px]">
+    <div className="relative product-card border bg-slate-100 rounded-lg shadow-md w-full lg:w-[260px] h-[400px] sm:h-[500px]">
       {/* Product Image */}
       <Link href={`/product/${product._id.toString()}`}>
-        <div className="image-container">
           <img
             src={product.images[0]}
             alt={product.title}
-            className=" w-full h-[250px] sm:h-64 object-cover rounded-md"
+            className=" w-full h-[250px] sm:h-[72%] object-cover rounded-md"
           />
-        </div>
       </Link>
 
       {/* Product Name */}
       <h2 
-        className="product-name w-full h-[10%] sm:h-auto overflow-y-auto text-md sm:text-lg font-semibold mt-4"
+        className="sm:px-3 w-full sm:h-auto overflow-y-auto text-md font-semibold mt-2"
       >
         {window.innerWidth < 640 && product.title.length > 18
           ? product.title.substring(0, 18) + "..."
@@ -95,17 +93,17 @@ const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
 
 
       {/* Product Price */}
-      <div className="product-price mt-2 text-green-600">
+      <div className="product-price mt-2 sm:px-3 text-green-700">
         {product.discountedPrice ? (
           <>
             <span className="line-through text-sm text-gray-500 mr-1">
               ₹{product.price}
             </span>
-            <span className="text-black font-bold">
+            <span className="text-black text-lg font-medium">
               ₹{product.discountedPrice}
             </span>{" "}
             |{" "}
-            <span className="text-green-600">
+            <span className="text-green-700">
               {(
                 ((product.price - product.discountedPrice) / product.price) *
                 100
@@ -121,7 +119,7 @@ const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
       {/* Add to Cart Button */}
       <button
         onClick={handleAddToCart}
-        className="add-to-cart-btn w-full bg-black text-white py-1 rounded-md hover:bg-blue-700 mt-4"
+        className="add-to-cart-btn hover:cursor-pointer  absolute bottom-0 w-full bg-black text-white py-2  hover:bg-gray-700 mt-4"
       >
         Add to Cart
       </button>

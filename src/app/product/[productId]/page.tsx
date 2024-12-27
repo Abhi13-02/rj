@@ -77,9 +77,18 @@ const ProductPage = () => {
     return <div className="text-center">Product not found!</div>;
   }
 
-  const handleQuantityChange = (operation: "increment" | "decrement") => {
+  const handleQuantityChange = (operation: "increment" | "decrement") => { 
     if (operation === "increment") {
-      setQuantity((prev) => prev + 1);
+      const selectedsizeProduct = product.sizes.find((availableSize) => availableSize.size === selectedSize);
+
+      if (!selectedsizeProduct) {
+        alert("Please select a size first.");
+        return;
+      }
+    
+      if(!(quantity >= selectedsizeProduct.stock)) {
+        setQuantity((prevQuantity) => prevQuantity + 1); 
+      }
     } else if (operation === "decrement" && quantity > 1) {
       setQuantity((prev) => prev - 1);
     }
@@ -240,7 +249,7 @@ const ProductPage = () => {
                   className={`px-4 py-2 border ${
                     selectedSize === size.size ? "bg-blue-500 text-white" : ""
                   }`}
-                  onClick={() => setSelectedSize(size.size)}
+                  onClick={() => {setSelectedSize(size.size); setQuantity(1);}}
                 >
                   {size.size}
                 </button>

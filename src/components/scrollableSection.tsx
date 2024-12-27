@@ -35,10 +35,15 @@ const ScrollableRow = ({ title, products }: { title: string; products: IProduct[
         <div
           className="flex space-x-4 overflow-x-auto no-scrollbar"
           ref={scrollRef}
-          style={{ scrollBehavior: "smooth" }} // Ensure smooth scrolling works
+          style={{ scrollBehavior: "smooth" }}
         >
           {products.map((product, index) => (
-            <ProductCard key={index} product={product} />
+            <div
+              key={index}
+              className="flex-shrink-0" // Set a fixed width for each product card
+            >
+              <ProductCard product={product} />
+            </div>
           ))}
         </div>
 

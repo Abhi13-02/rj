@@ -14,13 +14,23 @@ const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
   // let orderItems: OrderItem[] = useDBOrderStore((state) => state.items);
   // let totalAmount: number = useDBOrderStore((state) => state.totalAmount);
 
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState<number>(1);
   const [size, setSize] = useState('');
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const { updateCart } = useCartStore();
 
   const handleIncrease = () => {
-    setQuantity((prevQuantity) => prevQuantity + 1);
+
+    const selectedSize = product.sizes.find((availableSize) => availableSize.size === size);
+
+    if (!selectedSize) {
+      alert("Please select a size first.");
+      return;
+    }
+  
+    if(!(quantity >= selectedSize.stock)) {
+      setQuantity((prevQuantity) => prevQuantity + 1); 
+    }
   };
 
   const handleDecrease = () => {

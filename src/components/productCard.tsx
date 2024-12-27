@@ -134,7 +134,9 @@ const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
               {product.sizes.map((availableSize) => (
                 <button
                   key={availableSize.size}
-                  onClick={() => setSize(availableSize.size)}
+                  onClick={() => {setSize(availableSize.size);
+                    setQuantity(1);
+                  }}
                   className={`px-4 py-2 border rounded-md mr-2 ${
                     size === availableSize.size
                       ? 'bg-blue-600 text-white'

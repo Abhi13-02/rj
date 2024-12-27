@@ -12,7 +12,7 @@ const AddressPage: React.FC = () => {
   const setShippingAddress = useDBOrderStore((state) => state.setShippingAddress);
   const { items, totalAmount } = useDBOrderStore((state) => state);
 
-  console.log("items", items);
+  console.log("address items", items);
 
   const [billingDetails, setBillingDetails] = useState<ShippingAddress>({
     customer_name: "",

@@ -139,12 +139,16 @@ const Navbar = () => {
                     Your Orders
                 </Link>
                 <hr className="w-full bg-white" />
-                <SignOut/>
+                <Link href="/products" className="block w-4/5 rounded-md px-4 py-2 text-white hover:bg-gray-900">
+                     <SignOut/>
+                </Link>
               </div>
             )}
           </>
         ) : (
-          <SignInButton />
+          <div className="ring-1 hover:bg-white hover:text-gray-900 ring-white px-4 py-2 rounded-2xl text-white">
+            <SignInButton />
+          </div>
         )}
          <Link href="/cart" className="relative flex ">
                     <BsCart3 size={30} className="text-white cursor-pointer font-light" />

@@ -49,7 +49,7 @@ const Navbar = () => {
     };
 
     return (
-        <header className="bg-[#A0214D] w-full h-20 sticky top-0 flex items-center justify-between px-6 z-10">
+        <header className="bg-[#A0214D] w-full h-20 sticky top-0 flex items-center justify-between px-6 z-20">
             {/* Hamburger Icon */}
             <button
                 className="text-white lg:hidden focus:outline-none"
@@ -60,11 +60,20 @@ const Navbar = () => {
 
             {/* Logo */}
             <div className={`text-2xl font-bold text-white ${playFair.className}`}>
-                <Link href="/">
-                    RJ TRADITIONAL
-                </Link>
+                <Link href="/">RJ TRADITIONAL</Link>
             </div>
 
+            {/* Search Bar */}
+            <div className="relative hidden lg:flex flex-grow justify-center items-center">
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute left-7 top-5">
+                    <path d="M20 20L15.65 15.65M18 10C18 14.4183 14.4183 18 10 18C5.58172 18 2 14.4183 2 10C2 5.58172 5.58172 2 10 2C14.4183 2 18 5.58172 18 10Z" stroke="#1E1E1E" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                <input
+                    type="text"
+                    placeholder="Search..."
+                    className="w-full h-10 ps-4 text-black rounded-full focus:outline-none"
+                />
+            </div>
 
             {/* Navigation Links */}
             <nav
@@ -98,8 +107,8 @@ const Navbar = () => {
                             {/* Dropdown */}
                             <ul
                                 className={`absolute left-0 bg-[#d39c55] text-black shadow-lg rounded transform translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 lg:group-hover:block transition-transform duration-500 ease-in-out ${openDropdown === menu.label
-                                        ? "opacity-100 block translate-y-0"
-                                        : "opacity-0 hidden"
+                                    ? "opacity-100 block translate-y-0"
+                                    : "opacity-0 hidden"
                                     }`}
                             >
                                 {menu.dropdown.map((item, idx) => (
@@ -137,7 +146,23 @@ const Navbar = () => {
                         />
                     </svg>
                 </Link>
-                {/* Add more icons if necessary */}
+                <Link href="#">
+                    <svg
+                        width="30"
+                        height="30"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 40 37"
+                    >
+                        <path
+                            d="M20 2C24.9706 2 29 6.02944 29 11C29..."
+                            stroke="#FFFEFE"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                        />
+                    </svg>
+                </Link>
             </div>
         </header>
     );

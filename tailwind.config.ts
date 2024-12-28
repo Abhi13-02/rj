@@ -15,16 +15,16 @@ export default {
       keyframes: {
         slide: {
           "0%": { transform: "translateX(0)" },
-          "16.66%": { transform: "translateX(0)" }, // Pause on the first image
+          "20%": { transform: "translateX(0)" }, // Pause on the first video
           "33.33%": { transform: "translateX(-100vw)" },
-          "50%": { transform: "translateX(-100vw)" }, // Pause on the second image
+          "53.33%": { transform: "translateX(-100vw)" }, // Pause on the second video
           "66.66%": { transform: "translateX(-200vw)" },
-          "83.33%": { transform: "translateX(-200vw)" }, // Pause on the third image
-          "100%": { transform: "translateX(-300vw)" }, // Continue
+          "86.66%": { transform: "translateX(-200vw)" }, // Pause on the third video
+          "100%": { transform: "translateX(-300vw)" },
         },
       },
       animation: {
-        slide: "slide 14s infinite linear"
+        slide: "slide 15s infinite linear"
       }
     },
   },

@@ -235,9 +235,9 @@ const ProductPage = () => {
         </p>
   
         {/* Select Size */}
-        <div className="mb-5 fle overflow-x-scroll">
+        <div className="mb-5 ">
           <label className="block font-medium mb-2">Select Size:</label>
-          <div className="flex space-x-2 overflow-x-scroll">
+          <div className="flex space-x-2 overflow-x-auto">
             {product?.sizes.map((size) => (
               <button
                 key={size.size}

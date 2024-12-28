@@ -72,7 +72,7 @@ const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
   };
 
   return (
-    <div className="relative product-card border bg-slate-100 rounded-lg shadow-md w-[160px] lg:w-[260px] h-[380px] sm:h-[500px]">
+    <div className="relative p-2 product-card  hover:bg-slate-100 lg:hover:scale-[1.02] rounded-lg w-[160px] lg:w-[280px] h-[380px] sm:h-[500px]">
       {/* Product Image */}
       <Link href={`/product/${product._id.toString()}`}>
           <img
@@ -93,7 +93,7 @@ const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
 
 
       {/* Product Price */}
-      <div className="product-price mt-2 sm:px-3 text-green-700">
+      <div className="product-price mt-2 sm:px-3 text-green-800">
         {product.discountedPrice ? (
           <>
             <span className="line-through text-sm text-gray-500 mr-1">
@@ -103,7 +103,7 @@ const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
               ₹{product.discountedPrice}
             </span>{" "}
             |{" "}
-            <span className="text-green-700">
+            <span className="text-green-800">
               {(
                 ((product.price - product.discountedPrice) / product.price) *
                 100
@@ -119,7 +119,7 @@ const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
       {/* Add to Cart Button */}
       <button
         onClick={handleAddToCart}
-        className="add-to-cart-btn hover:cursor-pointer n absolute bottom-0 w-full bg-black text-white py-2  hover:bg-gray-700 mt-4"
+        className="add-to-cart-btn hover:cursor-pointer absolute left-0 bottom-0 w-full bg-black text-white py-2  hover:bg-gray-700 mt-4"
       >
         Add to Cart
       </button>

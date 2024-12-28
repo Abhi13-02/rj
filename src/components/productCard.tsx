@@ -71,49 +71,52 @@ const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
   };
 
   return (
-    <div className="relative p-2 product-card hover:bg-slate-100 lg:hover:scale-[1.02] rounded-lg flex-grow max-w-[300px] aspect-[2/3]">
+    <div className="relative shadow-sm bg-slate-50 product-card hover:bg-slate-100 lg:hover:scale-[1.02] rounded-lg flex-grow max-w-[180px] sm:max-w-[230px] md:max-w-[250px]  h-full aspect-[2/4] sm:aspect-[2/3] md:aspect-[3/5] lg:aspect-[3/7] xl:aspect-[5/9]">
       {/* Product Image */}
       <Link href={`/product/${product._id.toString()}`}>
         <img
           src={product.images[0]}
           alt={product.title}
-          className="w-full h-3/5 object-cover rounded-md"
+          className="w-full h-[60%] sm:h-[65%]  object-cover rounded-md"
         />
       </Link>
 
-      {/* Product Name */}
-      <h2 className="text-md font-semibold mt-2 line-clamp-2">
-        {product.title}
-      </h2>
+      <div className="px-2">
+        {/* Product Name */}
+        <h2 className="text-md md:text-lg text-gray-800 font-semibold xl:mt-2 line-clamp-2">
+          {product.title}
+        </h2>
 
-      {/* Product Price */}
-      <div className="text-green-800 mt-2">
-        {product.discountedPrice ? (
-          <>
-            <span className="line-through text-sm text-gray-500 mr-1">
-              ₹{product.price}
-            </span>
-            <span className="text-black text-md font-medium">
-              ₹{product.discountedPrice}
-            </span>{" "}
-            |{" "}
-            <span className="text-green-800">
-              {(
-                ((product.price - product.discountedPrice) / product.price) *
-                100
-              ).toFixed(0)}
-              % off
-            </span>
-          </>
-        ) : (
-          <span className="text-gray-800 font-bold">₹{product.price}</span>
-        )}
+        {/* Product Price */}
+        <div className="text-green-800 mt-1">
+          {product.discountedPrice ? (
+            <>
+              <span className="line-through text-xs text-gray-500 mr-1">
+                ₹{product.price}
+              </span>
+              <span className="text-black text-md md:text-lg xl:text-xl font-medium">
+                ₹{product.discountedPrice}
+              </span>{" "}
+              |{" "}
+              <span className="text-green-800 text-sm md:text-md">
+                {(
+                  ((product.price - product.discountedPrice) / product.price) *
+                  100
+                ).toFixed(0)}
+                % off
+              </span>
+            </>
+          ) : (
+            <span className="text-black text-md md:text-lg xl:text-xl font-medium">₹{product.price}</span>
+          )}
+        </div>
       </div>
+
 
       {/* Add to Cart Button */}
       <button
         onClick={handleAddToCart}
-        className="absolute left-0 bottom-0 w-full bg-black text-white py-2 hover:bg-gray-700"
+        className="absolute flex items-center justify-center left-0 bottom-0 w-full h-8 sm:h-10 bg-black text-white py-2 hover:bg-gray-700"
       >
         Add to Cart
       </button>

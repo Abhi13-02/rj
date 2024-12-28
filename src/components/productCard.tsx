@@ -119,7 +119,7 @@ const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
       {/* Add to Cart Button */}
       <button
         onClick={handleAddToCart}
-        className="add-to-cart-btn hover:cursor-pointer absolute left-0 bottom-0 w-full bg-black text-white py-2  hover:bg-gray-700 mt-4"
+        className="add-to-cart-btn hover:cursor-pointer absolute left-0 bottom-0 w-full bg-black text-white py-2  hover:bg-gray-700 mt-8"
       >
         Add to Cart
       </button>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import useOrderStore from "@/store/order";
 import useDBOrderStore from "@/store/dbOrders";
@@ -8,8 +8,19 @@ import { ShippingAddress } from "@/store/dbOrders";
 
 const AddressPage: React.FC = () => {
   const router = useRouter();
+  const orderInfo = useOrderStore((state) => state);
   const addAddress = useOrderStore((state) => state.addAddress);
   const setShippingAddress = useDBOrderStore((state) => state.setShippingAddress);
+
+  console.log("orderInfo", orderInfo);
+
+  useEffect(() => {
+    if (!orderInfo || !orderInfo.order_items?.length) {
+      router.replace("/products"); 
+    }
+  }, [orderInfo, router]);
+
+  
   const { items, totalAmount } = useDBOrderStore((state) => state);
 
   console.log("address items", items);

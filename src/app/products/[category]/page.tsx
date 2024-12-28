@@ -62,7 +62,7 @@ const FilterPanel = ({
   };
 
   return (
-    <div className="w-full bg-pink-100 p-6 border rounded-lg shadow-md">
+    <div className="w-full bg-pink-100 p-6 border rounded-lg shadow-md max-w-[300px]">
     <h2 className="text-lg font-semibold mb-6 text-gray-800">Filters</h2>
     <hr className="h-1 bg-pink-800" />
 
@@ -301,7 +301,7 @@ const ProductPage = () => {
       <aside
         className={`${
           showFilter ? "block" : "hidden"
-        } lg:block lg:w-1/4 bg-white shadow-lg p-4`}
+        } lg:block lg:w-1/4 bg-white shadow-lg p-4 max-w-[330px]`}
       >
         <FilterPanel onApplyFilters={applyFilters} />
       </aside>
@@ -309,7 +309,7 @@ const ProductPage = () => {
       {/* Product Grid */}
       <main className="w-full lg:w-3/4">
         <h1 className="text-2xl font-bold mb-4 text-center">{category} Products</h1>
-        <div className="flex flex-wrap sm:justify-start justify-center gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 place-items-center">
           {filteredProductsbyPannel.map((product, index) => (
             <ProductCard key={index} product={product} />
           ))}

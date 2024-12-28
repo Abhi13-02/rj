@@ -42,7 +42,6 @@ const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
     }
     setIsPanelOpen(false); // Close the size selection panel
 
-    // Add the product to the cart
     const orderItem = {
       userId: session?.user?.id,
       image: product.images,
@@ -72,34 +71,29 @@ const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
   };
 
   return (
-    <div className="relative p-2 product-card  hover:bg-slate-100 lg:hover:scale-[1.02] rounded-lg w-[160px] lg:w-[280px] h-[500px] ">
+    <div className="relative p-2 product-card hover:bg-slate-100 lg:hover:scale-[1.02] rounded-lg flex-grow max-w-[300px] aspect-[2/3]">
       {/* Product Image */}
       <Link href={`/product/${product._id.toString()}`}>
-          <img
-            src={product.images[0]}
-            alt={product.title}
-            className=" w-full h-[250px] sm:h-[72%] object-cover rounded-md"
-          />
+        <img
+          src={product.images[0]}
+          alt={product.title}
+          className="w-full h-3/5 object-cover rounded-md"
+        />
       </Link>
 
       {/* Product Name */}
-      <h2 
-        className="sm:px-3 w-full sm:h-auto overflow-y-auto text-md font-semibold mt-2"
-      >
-        {window.innerWidth < 640 && product.title.length > 18
-          ? product.title.substring(0, 18) + "..."
-          : product.title}
+      <h2 className="text-md font-semibold mt-2 line-clamp-2">
+        {product.title}
       </h2>
 
-
       {/* Product Price */}
-      <div className="product-price mt-2 sm:px-3 text-green-800">
+      <div className="text-green-800 mt-2">
         {product.discountedPrice ? (
           <>
             <span className="line-through text-sm text-gray-500 mr-1">
               ₹{product.price}
             </span>
-            <span className="text-black text-lg font-medium">
+            <span className="text-black text-md font-medium">
               ₹{product.discountedPrice}
             </span>{" "}
             |{" "}
@@ -108,7 +102,7 @@ const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
                 ((product.price - product.discountedPrice) / product.price) *
                 100
               ).toFixed(0)}
-              %off
+              % off
             </span>
           </>
         ) : (
@@ -119,14 +113,14 @@ const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
       {/* Add to Cart Button */}
       <button
         onClick={handleAddToCart}
-        className="add-to-cart-btn hover:cursor-pointer absolute left-0 bottom-0 w-full bg-black text-white py-2  hover:bg-gray-700 mt-8"
+        className="absolute left-0 bottom-0 w-full bg-black text-white py-2 hover:bg-gray-700"
       >
         Add to Cart
       </button>
 
       {/* Sliding Side Panel */}
       {isPanelOpen && (
-        <div className="fixed top-0 right-0 h-full w-64 bg-white shadow-lg z-50 transition-transform duration-300 transform translate-x-0">
+        <div className="fixed top-0 right-0 h-full w-64 bg-white shadow-lg z-50 transition-transform duration-300">
           <div className="p-4">
             {session?.user?.id ? (
               <>
@@ -146,8 +140,6 @@ const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
                     </button>
                   ))}
                 </div>
-
-                {/* Quantity Controls */}
                 <div className="quantity-controls flex items-center mt-4">
                   <button
                     onClick={handleDecrease}
@@ -155,9 +147,7 @@ const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
                   >
                     -
                   </button>
-                  <span className="px-4 py-1 border-t border-b">
-                    {quantity}
-                  </span>
+                  <span className="px-4 py-1 border-t border-b">{quantity}</span>
                   <button
                     onClick={handleIncrease}
                     className="px-2 py-1 border rounded-r-md bg-gray-100 hover:bg-gray-200"
@@ -165,10 +155,9 @@ const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
                     +
                   </button>
                 </div>
-
                 <button
                   onClick={handleConfirmSize}
-                  className="confirm-btn w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 mt-4"
+                  className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 mt-4"
                 >
                   Confirm
                 </button>
@@ -182,7 +171,7 @@ const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
 
             <button
               onClick={() => setIsPanelOpen(false)}
-              className="cancel-btn w-full bg-red-600 text-white py-2 rounded-md mt-4 hover:bg-red-700"
+              className="w-full bg-red-600 text-white py-2 rounded-md mt-4 hover:bg-red-700"
             >
               Close
             </button>

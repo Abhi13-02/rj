@@ -13,6 +13,7 @@ import useOrderStore from "@/store/order";
 import ScrollableRow from "@/components/scrollableSection";
 import { IoBagHandleOutline } from "react-icons/io5";
 import { MdOutlinePayments } from "react-icons/md";
+import ImageZoom from "@/components/helpers/ImageZoom";
 
 
 const ProductPage = () => {
@@ -209,11 +210,12 @@ const ProductPage = () => {
           ))}
         </div>
         <div className="flex-1 md:ml-5 order-1 md:order-2">
-          <img
+          {/* <img
             src={mainImage}
             alt={product?.title}
             className="w-full h-[300px] md:h-[600px] object-contain border"
-          />
+          /> */}
+          <ImageZoom imageSrc={mainImage} altText={product?.title} />
         </div>
       </div>
   

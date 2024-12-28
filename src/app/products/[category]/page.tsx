@@ -17,6 +17,16 @@ const FilterPanel = ({
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
+   const [expandedSections, setExpandedSections] = useState<{
+      [key: string]: boolean;
+    }>({
+      price: true,
+      category: true,
+      tags: true,
+      sizes: true,
+      colors: true,
+    });
+  
   
 
   const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,6 +45,13 @@ const FilterPanel = ({
     );
   };
 
+  const toggleSection = (section: string) => {
+    setExpandedSections((prev) => ({
+      ...prev,
+      [section]: !prev[section],
+    }));
+  };
+
   const handleApplyFilters = () => {
     onApplyFilters({
       priceRange,
@@ -45,44 +62,62 @@ const FilterPanel = ({
   };
 
   return (
-    <div className="filter-panel bg-white p-6 border rounded-lg shadow-md">
-      <h2 className="text-lg font-semibold mb-6 text-gray-800">Filters</h2>
+    <div className="w-full bg-pink-100 p-6 border rounded-lg shadow-md">
+    <h2 className="text-lg font-semibold mb-6 text-gray-800">Filters</h2>
+    <hr className="h-1 bg-pink-800" />
 
-      {/* Price Filter */}
-      <div className="mb-6">
-        <h3 className="font-medium text-gray-600 mb-2">Price</h3>
-        <div className="flex items-center gap-2">
+    {/* Price Filter */}
+    <div className="mb-6">
+      <div className="flex justify-between items-center">
+        <h3 className="font-medium text-gray-600">Price</h3>
+        <button
+          onClick={() => toggleSection("price")}
+          className="text-gray-500 hover:text-gray-700 focus:outline-none"
+        >
+          {expandedSections.price ? "−" : "+"}
+        </button>
+      </div>
+      {expandedSections.price && (
+        <div className="flex flex-col items-center gap-2 mt-2">
           <input
-            type="number"
-            name="min"
-            value={priceRange[0]}
-            onChange={handlePriceChange}
-            className="border rounded-lg p-2 w-20 text-sm"
-            placeholder="Min"
-          />
-          <span>to</span>
-          <input
-            type="number"
-            name="max"
+            type="range"
+            min={0}
+            max={10000}
             value={priceRange[1]}
             onChange={handlePriceChange}
-            className="border rounded-lg p-2 w-20 text-sm"
-            placeholder="Max"
+            className="w-full"
           />
-          <button
-            onClick={handleApplyFilters}
-            className="bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600 transition"
-          >
-            Apply
-          </button>
+          <div className="flex w-full justify-between text-sm mt-2">
+            <span>$0</span>
+            <span>${priceRange[1]}</span>
+          </div>
         </div>
-      </div>
+      )}
+    </div>
 
-      {/* Tags Filter */}
-      <div className="mb-6">
-        <h3 className="font-medium text-gray-600 mb-2">Tags</h3>
-        <div className="flex flex-wrap gap-3">
-          {["Banarsi Saree", "Ghatchola Saree","Georgette", "Dola Silk Lehenga","Kota Doirya Lehenga","Art Silk Lehenga"].map((tag) => (
+    <hr className="bg-pink-800 h-[2px]"/>
+
+    {/* Tags Filter */}
+    <div className="mb-6">
+      <div className="flex justify-between items-center">
+        <h3 className="font-medium text-gray-600">Tags</h3>
+        <button
+          onClick={() => toggleSection("tags")}
+          className="text-gray-500 hover:text-gray-700 focus:outline-none"
+        >
+          {expandedSections.tags ? "−" : "+"}
+        </button>
+      </div>
+      {expandedSections.tags && (
+        <div className="flex flex-wrap gap-3 mt-2">
+          {[
+            "Banarsi Saree",
+            "Ghatchola Saree",
+            "Georgette",
+            "Dola Silk Lehenga",
+            "Kota Doirya Lehenga",
+            "Art Silk Lehenga",
+          ].map((tag) => (
             <label key={tag} className="flex items-center gap-2">
               <input
                 type="checkbox"
@@ -94,12 +129,24 @@ const FilterPanel = ({
             </label>
           ))}
         </div>
-      </div>
+      )}
+    </div>
 
-      {/* Sizes Filter */}
-      <div className="mb-6">
-        <h3 className="font-medium text-gray-600 mb-2">Sizes</h3>
-        <div className="flex flex-wrap gap-3">
+    <hr className="bg-pink-800 h-[2px]"/>
+
+    {/* Sizes Filter */}
+    <div className="mb-6">
+      <div className="flex justify-between items-center">
+        <h3 className="font-medium text-gray-600">Sizes</h3>
+        <button
+          onClick={() => toggleSection("sizes")}
+          className="text-gray-500 hover:text-gray-700 focus:outline-none"
+        >
+          {expandedSections.sizes ? "−" : "+"}
+        </button>
+      </div>
+      {expandedSections.sizes && (
+        <div className="flex flex-wrap gap-3 mt-2">
           {["S", "M", "L", "XL", "XXL", "FREE-SIZE"].map((size) => (
             <label key={size} className="flex items-center gap-2">
               <input
@@ -112,28 +159,59 @@ const FilterPanel = ({
             </label>
           ))}
         </div>
-      </div>
-
-      {/* Colors Filter */}
-      <div className="mb-6">
-        <h3 className="font-medium text-gray-600 mb-2">Colors</h3>
-        <div className="flex flex-wrap gap-3">
-          {["Multicolor", "Black", "Red", "Blue", "Green", "Yellow", "Orange", "Purple", "Pink","White", "Grey", "Brown"].map(
-            (color) => (
-              <label key={color} className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  checked={selectedColors.includes(color)}
-                  onChange={() => toggleSelection(color, setSelectedColors)}
-                  className="rounded focus:ring-red-500 text-red-500"
-                />
-                <span className="text-sm text-gray-700">{color}</span>
-              </label>
-            )
-          )}
-        </div>
-      </div>
+      )}
     </div>
+
+    <hr className="bg-pink-800 h-[2px]"/>
+
+    {/* Colors Filter */}
+    <div className="mb-6">
+      <div className="flex justify-between items-center">
+        <h3 className="font-medium text-gray-600">Colors</h3>
+        <button
+          onClick={() => toggleSection("colors")}
+          className="text-gray-500 hover:text-gray-700 focus:outline-none"
+        >
+          {expandedSections.colors ? "−" : "+"}
+        </button>
+      </div>
+      {expandedSections.colors && (
+        <div className="flex flex-wrap gap-2 mt-2">
+          {[
+            "Multicolor",
+            "Black",
+            "Red",
+            "Blue",
+            "Green",
+            "Yellow",
+            "Orange",
+            "Purple",
+            "Pink",
+            "White",
+            "Grey",
+            "Brown",
+          ].map((color) => (
+            <label key={color} className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={selectedColors.includes(color)}
+                onChange={() => toggleSelection(color, setSelectedColors)}
+                className="rounded focus:ring-red-500 text-red-500"
+              />
+              <span className="text-sm text-gray-700">{color}</span>
+            </label>
+          ))}
+        </div>
+      )}
+    </div>
+
+    <button
+            onClick={handleApplyFilters}
+            className="bg-red-500 mt-2 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600 transition"
+          >
+            Apply
+    </button>
+  </div>
   );
 };
 
@@ -141,6 +219,7 @@ const ProductPage = () => {
   const { fetchProducts } = useProductStore();
   const [products, setProducts] = useState<IProduct[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<IProduct[]>([]);
+  const [filteredProductsbyPannel, setFilteredProductsbyPannel] = useState<IProduct[]>([]);
   const { category } = useParams() as { category: string };
    const [showFilter, setShowFilter] = useState(false); // For mobile filter toggle
 
@@ -151,16 +230,13 @@ const ProductPage = () => {
     selectedColors,
   }: {
     priceRange: number[];
-    selectedCategory: string;
     selectedTags: string[];
     selectedSizes: string[];
     selectedColors: string[];
   }) => {
-    console.log("Applying filters:", { priceRange, selectedTags, selectedSizes, selectedColors });
-    const filtered = products.filter((product: IProduct) => {
+    const filtered = filteredProducts.filter((product: IProduct) => {
       const price = product.discountedPrice ?? product.price;
       const inPriceRange = price >= priceRange[0] && price <= priceRange[1];
-      const matchesCategory = product.category.toLowerCase() === category.toLowerCase();
       const matchesTags = selectedTags.length > 0
         ? selectedTags.every((tag) => product.tags?.includes(tag))
         : true;
@@ -173,16 +249,11 @@ const ProductPage = () => {
         ? selectedColors.some((color) => product.tags?.includes(color))
         : true;
 
-      console.log("inPriceRange:", inPriceRange);
-      console.log("matchesCategory:", matchesCategory);
-      console.log("matchesTags:", matchesTags);
-      console.log("matchesSizes:", matchesSizes);
-      console.log("matchesColors:", matchesColors);
 
-      return inPriceRange && matchesCategory && matchesTags && matchesSizes && matchesColors;
+      return inPriceRange && matchesTags && matchesSizes && matchesColors;
     });
 
-    setFilteredProducts(filtered);
+    setFilteredProductsbyPannel(filtered);
   };
 
   useEffect(() => {
@@ -211,45 +282,39 @@ const ProductPage = () => {
           return matchesCategory ;
         });
         setFilteredProducts(filtered);
+        setFilteredProductsbyPannel(filtered);
       };
       applyFilters({selectedCategory: category});
   }, [products]);
 
   return (
-    <div className="container mx-auto h-screen  flex flex-wrap overflow-scroll">
-      <h1 className="text-2xl font-thin w-full  mb-2 sm:mb-4 text-center">All Products</h1>
-      <div className="flex flex-col lg:flex-row gap-8">
-        {/* Hamburger Menu */}
-        <button
-          className="lg:hidden bg-gray-100 text-black text-lg px-4 py- py-1 shadow flex items-center gap-2"
-          onClick={() => setShowFilter(!showFilter)}
-        >
-          {showFilter ? <FaTimes /> : <FaBars />} Filters
-        </button>
+    <div className="p-4 flex flex-col lg:flex-row gap-6">
+      {/* Hamburger Menu */}
+      <button
+        className="lg:hidden flex items-center gap-2 bg-gray-200 text-black px-4 py-2 rounded shadow"
+        onClick={() => setShowFilter(!showFilter)}
+      >
+        {showFilter ? <FaTimes /> : <FaBars />} Filters
+      </button>
 
-        {/* Filter Panel */}
-        <aside
-          className={`lg:block lg:w-1/4 ${
-            showFilter ? "block" : "hidden"
-          } bg-white p-4 lg:p-0`}
-        >
-          <FilterPanel onApplyFilters={applyFilters} />
-        </aside>
+      {/* Filter Panel */}
+      <aside
+        className={`${
+          showFilter ? "block" : "hidden"
+        } lg:block lg:w-1/4 bg-white shadow-lg p-4`}
+      >
+        <FilterPanel onApplyFilters={applyFilters} />
+      </aside>
 
-        {/* Product Grid */}
-        <main className="w-full lg:w-3/4 h-full ">
-          <div className="grid  h-full grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-8 px-2 sm:px-4">
-            {filteredProducts.map((product) => (
-              <div
-                key={product._id.toString()}
-                className="product-card-container"
-              >
-                <ProductCard product={product} />
-              </div>
-            ))}
-          </div>
-        </main>
-      </div>
+      {/* Product Grid */}
+      <main className="w-full lg:w-3/4">
+        <h1 className="text-2xl font-bold mb-4 text-center">{category} Products</h1>
+        <div className="flex flex-wrap sm:justify-start justify-center gap-2">
+          {filteredProductsbyPannel.map((product, index) => (
+            <ProductCard key={index} product={product} />
+          ))}
+        </div>
+      </main>
     </div>
   );
 };

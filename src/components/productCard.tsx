@@ -72,7 +72,7 @@ const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
   };
 
   return (
-    <div className="relative p-2 product-card  hover:bg-slate-100 lg:hover:scale-[1.02] rounded-lg w-[160px] lg:w-[280px] h-[380px] sm:h-[500px]">
+    <div className="relative p-2 product-card  hover:bg-slate-100 lg:hover:scale-[1.02] rounded-lg w-[160px] lg:w-[280px] h-[500px] ">
       {/* Product Image */}
       <Link href={`/product/${product._id.toString()}`}>
           <img
@@ -119,7 +119,7 @@ const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
       {/* Add to Cart Button */}
       <button
         onClick={handleAddToCart}
-        className="add-to-cart-btn hover:cursor-pointer absolute left-0 bottom-0 w-full bg-black text-white py-2  hover:bg-gray-700 mt-4"
+        className="add-to-cart-btn hover:cursor-pointer absolute left-0 bottom-0 w-full bg-black text-white py-2  hover:bg-gray-700 mt-8"
       >
         Add to Cart
       </button>

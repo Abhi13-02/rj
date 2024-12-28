@@ -48,7 +48,6 @@ const FilterPanel = ({
       selectedSizes,
       selectedColors,
     });
-
   };
 
   const toggleSection = (section: string) => {
@@ -92,7 +91,7 @@ const FilterPanel = ({
         )}
       </div>
 
-      <hr className="bg-pink-800 h-[2px]"/>
+      <hr className="bg-pink-800 h-[2px]" />
 
       {/* Category Filter */}
       <div className="mb-6">
@@ -121,7 +120,7 @@ const FilterPanel = ({
         )}
       </div>
 
-      <hr className="bg-pink-800 h-[2px]"/>
+      <hr className="bg-pink-800 h-[2px]" />
 
       {/* Tags Filter */}
       <div className="mb-6">
@@ -158,7 +157,7 @@ const FilterPanel = ({
         )}
       </div>
 
-      <hr className="bg-pink-800 h-[2px]"/>
+      <hr className="bg-pink-800 h-[2px]" />
 
       {/* Sizes Filter */}
       <div className="mb-6">
@@ -188,7 +187,7 @@ const FilterPanel = ({
         )}
       </div>
 
-      <hr className="bg-pink-800 h-[2px]"/>
+      <hr className="bg-pink-800 h-[2px]" />
 
       {/* Colors Filter */}
       <div className="mb-6">
@@ -232,15 +231,14 @@ const FilterPanel = ({
       </div>
 
       <button
-              onClick={handleApplyFilters}
-              className="bg-red-500 mt-2 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600 transition"
-            >
-              Apply
+        onClick={handleApplyFilters}
+        className="bg-red-500 mt-2 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600 transition"
+      >
+        Apply
       </button>
     </div>
   );
 };
-
 
 const ProductPage = () => {
   const { fetchProducts } = useProductStore();
@@ -262,24 +260,35 @@ const ProductPage = () => {
     selectedColors: string[];
   }) => {
     const filtered = products.filter((product: IProduct) => {
-      const price = product.discountedPrice ? product.discountedPrice: product.price;
+      const price = product.discountedPrice
+        ? product.discountedPrice
+        : product.price;
       const inPriceRange = price >= priceRange[0] && price <= priceRange[1];
       const matchesCategory = selectedCategory
         ? product.category.toLowerCase() === selectedCategory.toLowerCase()
         : true;
-      const matchesTags = selectedTags.length > 0
-        ? selectedTags.every((tag) => product.tags?.includes(tag))
-        : true;
-      const matchesSizes = selectedSizes.length > 0
-        ? selectedSizes.every((size) =>
-            product.sizes?.some((s) => s.size === size)
-          )
-        : true;
-      const matchesColors = selectedColors.length > 0
-        ? selectedColors.some((color) => product.tags?.includes(color))
-        : true;
+      const matchesTags =
+        selectedTags.length > 0
+          ? selectedTags.every((tag) => product.tags?.includes(tag))
+          : true;
+      const matchesSizes =
+        selectedSizes.length > 0
+          ? selectedSizes.every((size) =>
+              product.sizes?.some((s) => s.size === size)
+            )
+          : true;
+      const matchesColors =
+        selectedColors.length > 0
+          ? selectedColors.some((color) => product.tags?.includes(color))
+          : true;
 
-      return inPriceRange && matchesCategory && matchesTags && matchesSizes && matchesColors;
+      return (
+        inPriceRange &&
+        matchesCategory &&
+        matchesTags &&
+        matchesSizes &&
+        matchesColors
+      );
     });
 
     setFilteredProducts(filtered);
@@ -308,7 +317,7 @@ const ProductPage = () => {
       <aside
         className={`${
           showFilter ? "block" : "hidden"
-        } lg:block lg:w-1/4 bg-white shadow-lg p-4`}
+        } lg:block lg:w-1/4 bg-white shadow-lg p-4 max-w-[330px]`}
       >
         <FilterPanel onApplyFilters={applyFilters} />
       </aside>
@@ -316,7 +325,7 @@ const ProductPage = () => {
       {/* Product Grid */}
       <main className="w-full lg:w-3/4">
         <h1 className="text-2xl font-bold mb-4 text-center">All Products</h1>
-        <div className="flex flex-wrap sm:justify-start justify-center gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 place-items-center">
           {filteredProducts.map((product, index) => (
             <ProductCard key={index} product={product} />
           ))}

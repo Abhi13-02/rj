@@ -212,7 +212,7 @@ const ProductPage = () => {
           <img
             src={mainImage}
             alt={product?.title}
-            className="w-full h-[300px] md:h-[600px] object-contain border"
+            className="w-full h-[300px] md:h-[600px] object-contain"
           />
         </div>
       </div>

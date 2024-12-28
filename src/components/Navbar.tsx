@@ -168,7 +168,7 @@ const Navbar = () => {
 
         {/* Search Bar */}
         {searchActive && (
-          <div className="absolute right-24 top-full bg-white shadow-md w-96 p-4 mt-2 rounded-md">
+          <div className="absolute right-24 top-full bg-white shadow-md w-full sm:w-[500px] p-4 mt-2 rounded-md">
             <input
               type="text"
               value={searchQuery}

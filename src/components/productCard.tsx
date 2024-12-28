@@ -72,7 +72,7 @@ const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
   };
 
   return (
-    <div className="relative p-2 product-card  hover:bg-slate-100 lg:hover:scale-[1.02] rounded-lg w-[160px] lg:w-[280px] h-[380px] sm:h-[500px]">
+    <div className="relative  sm:p-2 product-card  hover:bg-slate-100 lg:hover:scale-[1.02] rounded-lg w-[160px] lg:w-[280px] h-[360px] sm:h-[500px]">
       {/* Product Image */}
       <Link href={`/product/${product._id.toString()}`}>
           <img
@@ -93,7 +93,7 @@ const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
 
 
       {/* Product Price */}
-      <div className="product-price mt-2 sm:px-3 text-green-800">
+      <div className="product-price mt-1 sm:mt-2 sm:px-3 text-green-800">
         {product.discountedPrice ? (
           <>
             <span className="line-through text-sm text-gray-500 mr-1">

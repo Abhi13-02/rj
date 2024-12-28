@@ -30,7 +30,7 @@ export interface OrderState {
   shippingAddress: ShippingAddress | null;
   paymentMethod: 'COD' | 'Prepaid' | null;
   shiprocketOrderId: string | null;
-  status: 'pending' | 'shipped' | 'delivered' | 'cancelled';
+  status: string;
 
   // Actions
   setUserId: (userId: string) => void;
@@ -48,7 +48,7 @@ const useDBOrderStore = create<OrderState>((set) => ({
   shippingAddress: null,
   paymentMethod: null,
   shiprocketOrderId: null,
-  status: 'pending',
+  status: 'PENDING',
 
   // Action to set user ID
   setUserId: (userId) => set(() => ({ userId })),
@@ -87,7 +87,7 @@ const useDBOrderStore = create<OrderState>((set) => ({
       shippingAddress: null,
       paymentMethod: null,
       shiprocketOrderId: null,
-      status: 'pending',
+      status: 'PENDING',
     })),
 
   onReset: () => console.log("Order reset")

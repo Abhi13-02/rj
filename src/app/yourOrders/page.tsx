@@ -32,22 +32,60 @@ const YourOrders = () => {
     }
   };
 
-  const cancelOrder = async (orderId: string) => {
+  const updateDataBase = async (orderId: string, newStatus: string) => {
+    try {
+      const response = await fetch(`/api/orders/updateStatus`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orderId, newStatus }),
+      });
+      const data = await response.json();
+      console.log("Order status updated:", data);
+    } catch (error) {
+      console.error("Error updating order status:", error);
+    }
+  };
+
+  const getOrderStatus = async (shipOrderId: string, orderId: string) => {
+    try {
+      const response = await fetch(`/api/ship/getOrderStatus?orderId=${shipOrderId}`, {
+        method: "GET",
+      });
+      const data = await response.json();
+      if (response.ok) {
+        console.log("Order status fetched:", data);
+        const status = data;
+        setOrders((prevOrders: any) =>
+          prevOrders.map((order: IOrder) =>
+            order.shiprocketOrderId === shipOrderId ? { ...order, status: status } : order
+          )
+        );
+        updateDataBase(orderId, status);
+      } else {
+        console.error("Error fetching order status:", data.message);
+      }
+    } catch (error) {
+      console.error("Error fetching order status:", error);
+    }
+  };
+
+  const cancelOrder = async (shipOrderId: string, orderId: string) => {
     try {
       const response = await fetch(`/api/ship/cancelOrder`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ "ids":[orderId] }),
+        body: JSON.stringify({ ids: [shipOrderId] }),
       });
       const data = await response.json();
       if (response.ok) {
         setOrders((prevOrders: any) =>
-          prevOrders.map((order : any) =>
-            order._id === orderId ? { ...order, status: "cancelled" } : order
+          prevOrders.map((order: IOrder) =>
+            order.shiprocketOrderId === shipOrderId ? { ...order, status: "CANCELED" } : order
           )
         );
         console.log("Order cancelled:", data);
-        alert("Order cancelled successfully!");
+        alert("Order canceled successfully!");
+        updateDataBase(orderId, "CANCELED");
       } else {
         console.error("Error cancelling order:", data.message);
       }
@@ -56,7 +94,10 @@ const YourOrders = () => {
     }
   };
 
-  const toggleExpandOrder = (orderId: string) => {
+  const toggleExpandOrder = (shiprocketOrderId: string, orderId: string, status?: string) => {
+    if (status !== "CANCELED") {
+      getOrderStatus(shiprocketOrderId, orderId);
+    }
     setExpandedOrder((prev) => (prev === orderId ? null : orderId));
   };
 
@@ -75,15 +116,24 @@ const YourOrders = () => {
         {orders.map((order: IOrder, index) => (
           <div
             key={index}
-            className="bg-white rounded-lg shadow p-4 border border-gray-200"
+            className={`bg-white rounded-lg shadow p-4 border ${
+              order.status.toLocaleLowerCase() === "canceled"
+                ? "border-red-500 bg-red-100"
+                : "border-gray-200"
+             }` 
+          }
           >
             <div
               className="flex justify-between items-center cursor-pointer"
-              onClick={() => toggleExpandOrder(order._id as string)}
+              onClick={() => toggleExpandOrder(order.shiprocketOrderId, order._id as string, order.status)}
             >
               <div>
-                <p className="text-lg font-semibold">OrderId #{order.shiprocketOrderId}</p>
-                <p className="text-gray-600">Status: {order.status}</p>
+                <p className="text-lg font-semibold">
+                  OrderId #{order.shiprocketOrderId}
+                </p>
+                {expandedOrder === order._id && (
+                  <p className="text-gray-600">Status: {order.status === "NEW" ? "PENDING" : order.status}</p>
+                )}
                 <p className="text-gray-600">
                   Total Amount: ₹{order.totalAmount}
                 </p>
@@ -128,9 +178,9 @@ const YourOrders = () => {
                   {order.shippingAddress.state}-{order.shippingAddress.pincode}, Phone:{" "}
                   {order.shippingAddress.phone}
                 </p>
-                {order.status !== "cancelled" && (
+                {order.status.toLocaleLowerCase() == "pending" && (
                   <button
-                    onClick={() => cancelOrder(order.shiprocketOrderId)}
+                    onClick={() => cancelOrder(order.shiprocketOrderId, order._id as string)}
                     className="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
                   >
                     Cancel Order

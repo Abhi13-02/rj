@@ -9,15 +9,7 @@ export async function PATCH(req: NextRequest) {
   try {
     const { orderId, newStatus } = await req.json();
 
-    // Validate newStatus
-    const validStatuses = ['pending', 'shipped', 'delivered', 'cancelled'];
-    if (!validStatuses.includes(newStatus)) {
-      return NextResponse.json(
-        { error: 'Invalid status value' },
-        { status: 400 }
-      );
-    }
-
+   
     // Find the order by ID
     const order = await Orders.findById(orderId);
 

@@ -23,7 +23,7 @@ export interface ShippingAddress {
     phone: string;
 }
 
-interface OrderState {
+export interface OrderState {
   userId: string | null;
   items: OrderItem[];
   totalAmount: number;

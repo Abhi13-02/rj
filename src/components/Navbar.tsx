@@ -15,6 +15,7 @@ import useProductStore from "@/store/productState";
 import { IProduct } from "@/models/Products";
 import useCartStore, { ICart } from "@/store/cartState";
 import SignOut from "./authComp/signOutButton";
+import { IoBagHandleOutline } from "react-icons/io5";
 
 const playFair = Playfair_Display({ subsets: ["latin"], weight: "400" });
 
@@ -151,15 +152,15 @@ const Navbar = () => {
           </div>
         )}
          <Link href="/cart" className="relative flex ">
-                    <BsCart3 size={30} className="text-white cursor-pointer font-light" />
+                   <IoBagHandleOutline className=" text-white" size={30} />
                     {cart?.items?.length > 0 && (
-                        <div>
+                        <div className="relative flex">
                             {/* Item count badge */}
-                            <span className="absolute -bottom-3 -left-2 bg-red-500 text-white text-sm font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                            <span className="absolute -bottom-3 -left-9 bg-red-500 text-white text-sm font-bold rounded-full h-5 w-5 flex items-center justify-center">
                                 {cart?.items.length}
                             </span>
                             {/* Total amount */}
-                            <span className=" text-white font-thin text-sm px-1 py-1 rounded-md">
+                            <span className=" text-white font-thin text-md px-1 pt-2  rounded-md">
                                 ₹{cart?.totalAmount}
                             </span>
                         </div>

@@ -19,8 +19,8 @@ const ScrollableRow = ({ title, products }: { title: string; products: IProduct[
   };
 
   return (
-    <div className="mt-10">
-      <h2 className="text-xl font-bold mb-4">{title}</h2>
+    <div className="mt-10 flex flex-col px-3 pt-2 bg-[#fffafa]">
+      <h2 className="text-2xl mb-4 text-center font-thin  border-b-1 border-gray-900" >{title}</h2>
       <div className="relative">
         {/* Left Arrow */}
         <button
@@ -33,7 +33,7 @@ const ScrollableRow = ({ title, products }: { title: string; products: IProduct[
 
         {/* Product List */}
         <div
-          className="flex space-x-4 overflow-x-auto no-scrollbar"
+          className="flex space-x-4 overflow-x-auto overflow-y-hidden no-scrollbar"
           ref={scrollRef}
           style={{ scrollBehavior: "smooth" }}
         >

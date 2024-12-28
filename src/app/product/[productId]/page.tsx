@@ -222,15 +222,15 @@ const ProductPage = () => {
       {/* Product Information */}
       <div>
         <h1 className="text-2xl font-bold mb-3">{product?.title}</h1>
-        <p className="text-lg font-semibold text-gray-700 my-4">
+        <p className="text-lg font-semibold  text-gray-700 my-4">Price:
           {product?.discountedPrice ? (
-            <>
+            <div className="">
               <span className="line-through text-gray-500 mr-2">₹{product?.price}</span>
-              <span className="text-black text-2xl font-md">₹{product?.discountedPrice}</span> |{" "}
-              <span className="text-green-700">
-                {(((product.price - product.discountedPrice) / product.price) * 100).toFixed(0)}% off
+              <span className="text-black text-3xl font-md">₹{product?.discountedPrice}</span> 
+              <span className="text-green-700 text-2xl">
+              {""} |{" "} {(((product.price - product.discountedPrice) / product.price) * 100).toFixed(0)}% off
               </span>
-            </>
+            </div>
           ) : (
             <span className="text-gray-700 font-bold">₹{product?.price}</span>
           )}
@@ -281,13 +281,13 @@ const ProductPage = () => {
         <div className="flex w-full space-x-4 mb-6">
           <button
             onClick={handleAddToCart}
-            className="flex justify-center items-center gap-4 px-4 py-2 w-[50%] bg-[#FFD8D8] text-[#a22a2a] rounded"
+            className="flex justify-center items-center gap-4 px-4 py-2 w-[50%] bg-[#A0214D] text-white sm:text-lg rounded"
           >
             Add to Bag <IoBagHandleOutline className="text-xl" />
           </button>
           <button
             onClick={handleBuyNow}
-            className="animate-bounce px-4 py-2 flex justify-center items-center gap-4 w-[50%] bg-green-500 text-black rounded"
+            className="animate-bounce px-4 py-2 flex justify-center items-center gap-4 w-[50%] bg-gray-900 text-white sm:text-lg rounded"
           >
             Buy Now <MdOutlinePayments className="text-xl" />
           </button>
@@ -295,10 +295,13 @@ const ProductPage = () => {
   
         {/* Payment Options */}
         <div className="sm:flex mb-4 items-center gap-2">
-          <div className="mr-2 flex items-center justify-center">
-            <span className="text-black font-semibold mr-2">Pay With :</span>
-            <img src="/special/razorpay.svg" width={110} alt="" />
-          </div>{" "}
+          <span className="text-black font-semibold mr-1">Pay With :</span>
+            <div className="mr-2 flex items-center mt-2 justify-center gap-5">
+              <img src="/special/gpay.png" alt="" width={40} />
+              <img src="/special/ppay.svg" alt="" width={35} />
+              <img src="/special/paytm.svg" alt="" width={60} />
+              <img src="/special/razorpay.svg" width={110} alt="" />
+            </div>{" "}
           <div className="text-sm text-center">or</div>
           <div className="mx-2 flex items-center justify-center">
             <span className="text-black font-semibold mr-2">Cash on Delivery :</span>
@@ -317,8 +320,8 @@ const ProductPage = () => {
             <p className="mt-2">Superior Quality</p>
           </div>
           <div className="flex flex-col justify-center items-center space-y-2">
-            <img src="/special/offer.png" alt="Lowest Price" width={75} height={75} />
-            <p>Best Offers</p>
+            <img src="/special/truck1.png" alt="Lowest Price" width={75} height={75} />
+            <p>Delivery within 7 days</p>
           </div>
           <div>
             <img src="/special/cash.png" alt="Fast Delivery" width={75} height={75} />

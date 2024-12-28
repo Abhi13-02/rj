@@ -44,11 +44,14 @@ const PaymentPage: React.FC = () => {
   const handleCODcharges = () => {
     if(paymentMethod !== "COD"){
       setTotalAmount(sub_total + shippingCharges);
-    }
-    else{
+     }
+   }
+
+  const handlePrepaid = () => {
+    if(paymentMethod !== "Prepaid"){
       setTotalAmount(sub_total);
-    }
-  };
+     }
+   }
 
   const handleFinish = async () => {
     if (paymentMethod === "COD") {
@@ -167,7 +170,7 @@ const PaymentPage: React.FC = () => {
               value="Prepaid"
               checked={paymentMethod === "Prepaid"}
               onChange={(e) => {
-                handleCODcharges();
+                handlePrepaid();
                 setPaymentMethod(e.target.value);
               }}
               className="mr-2"

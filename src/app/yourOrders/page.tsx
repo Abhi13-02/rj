@@ -3,6 +3,7 @@ import useCartStore from "@/store/cartState";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import { IOrder } from "@/models/Orders";
 
 const YourOrders = () => {
   const { data: session } = useSession();
@@ -31,7 +32,72 @@ const YourOrders = () => {
     }
   };
 
-  const toggleExpandOrder = (orderId: string) => {
+  const updateDataBase = async (orderId: string, newStatus: string) => {
+    try {
+      const response = await fetch(`/api/orders/updateStatus`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orderId, newStatus }),
+      });
+      const data = await response.json();
+      console.log("Order status updated:", data);
+    } catch (error) {
+      console.error("Error updating order status:", error);
+    }
+  };
+
+  const getOrderStatus = async (shipOrderId: string, orderId: string) => {
+    try {
+      const response = await fetch(`/api/ship/getOrderStatus?orderId=${shipOrderId}`, {
+        method: "GET",
+      });
+      const data = await response.json();
+      if (response.ok) {
+        console.log("Order status fetched:", data);
+        const status = data;
+        setOrders((prevOrders: any) =>
+          prevOrders.map((order: IOrder) =>
+            order.shiprocketOrderId === shipOrderId ? { ...order, status: status } : order
+          )
+        );
+        updateDataBase(orderId, status);
+      } else {
+        console.error("Error fetching order status:", data.message);
+      }
+    } catch (error) {
+      console.error("Error fetching order status:", error);
+    }
+  };
+
+  const cancelOrder = async (shipOrderId: string, orderId: string) => {
+    try {
+      const response = await fetch(`/api/ship/cancelOrder`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ids: [shipOrderId] }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        setOrders((prevOrders: any) =>
+          prevOrders.map((order: IOrder) =>
+            order.shiprocketOrderId === shipOrderId ? { ...order, status: "CANCELED" } : order
+          )
+        );
+        console.log("Order cancelled:", data);
+        alert("Order canceled successfully!");
+        updateDataBase(orderId, "CANCELED");
+      } else {
+        console.error("Error cancelling order:", data.message);
+      }
+    } catch (error) {
+      console.error("Error cancelling order:", error);
+    }
+  };
+
+  const toggleExpandOrder = (shiprocketOrderId: string, orderId: string, status?: string) => {
+    if (status !== "CANCELED") {
+      getOrderStatus(shiprocketOrderId, orderId);
+    }
     setExpandedOrder((prev) => (prev === orderId ? null : orderId));
   };
 
@@ -47,18 +113,27 @@ const YourOrders = () => {
     <div className="min-h-screen p-6 bg-gray-100">
       <h1 className="text-3xl font-bold mb-6">Your Orders</h1>
       <div className="space-y-4">
-        {orders.map((order: any) => (
+        {orders.map((order: IOrder, index) => (
           <div
-            key={order._id}
-            className="bg-white rounded-lg shadow p-4 border border-gray-200"
+            key={index}
+            className={`bg-white rounded-lg shadow p-4 border ${
+              order.status.toLocaleLowerCase() === "canceled"
+                ? "border-red-500 bg-red-100"
+                : "border-gray-200"
+             }` 
+          }
           >
             <div
               className="flex justify-between items-center cursor-pointer"
-              onClick={() => toggleExpandOrder(order._id)}
+              onClick={() => toggleExpandOrder(order.shiprocketOrderId, order._id as string, order.status)}
             >
               <div>
-                <p className="text-lg font-semibold">Order #{order._id}</p>
-                <p className="text-gray-600">Status: {order.status}</p>
+                <p className="text-lg font-semibold">
+                  OrderId #{order.shiprocketOrderId}
+                </p>
+                {expandedOrder === order._id && (
+                  <p className="text-gray-600">Status: {order.status === "NEW" ? "PENDING" : order.status}</p>
+                )}
                 <p className="text-gray-600">
                   Total Amount: ₹{order.totalAmount}
                 </p>
@@ -77,9 +152,7 @@ const YourOrders = () => {
                 <div className="space-y-2">
                   {order.items.map((item: any, index: number) => (
                     <Link href={`/product/${item.productId.toString()}`} key={index}>
-                      <div
-                        className="flex items-start space-x-4 border-b pb-2"
-                      >
+                      <div className="flex items-start space-x-4 border-b pb-2">
                         <img
                           src={item.images[0]}
                           alt={item.name}
@@ -100,9 +173,19 @@ const YourOrders = () => {
                 </div>
                 <h2 className="font-semibold mt-4">Shipping Address</h2>
                 <p className="text-sm text-gray-600">
-                  {order.shippingAddress.address},{" "}{order.shippingAddress.city},{" "}
-                  {order.shippingAddress.state}-{order.shippingAddress.pincode}, Phone: {order.shippingAddress.phone}
+                  {order.shippingAddress.address},{" "}
+                  {order.shippingAddress.city},{" "}
+                  {order.shippingAddress.state}-{order.shippingAddress.pincode}, Phone:{" "}
+                  {order.shippingAddress.phone}
                 </p>
+                {order.status.toLocaleLowerCase() == "pending" && (
+                  <button
+                    onClick={() => cancelOrder(order.shiprocketOrderId, order._id as string)}
+                    className="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                  >
+                    Cancel Order
+                  </button>
+                )}
               </div>
             )}
           </div>

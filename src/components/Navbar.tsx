@@ -97,9 +97,9 @@ const Navbar = () => {
                             </button>
                             {/* Dropdown */}
                             <ul
-                                className={`absolute left-0 bg-[#d39c55] text-black shadow-lg rounded transform translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 transition-transform duration-500 ease-in-out ${openDropdown === menu.label
-                                        ? "opacity-100 translate-y-0"
-                                        : "opacity-0"
+                                className={`absolute left-0 bg-[#d39c55] text-black shadow-lg rounded transform translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 lg:group-hover:block transition-transform duration-500 ease-in-out ${openDropdown === menu.label
+                                        ? "opacity-100 block translate-y-0"
+                                        : "opacity-0 hidden"
                                     }`}
                             >
                                 {menu.dropdown.map((item, idx) => (

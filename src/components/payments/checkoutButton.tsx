@@ -1,9 +1,9 @@
 // components/CheckoutButton.tsx
 
-"use client"
+"use client";
+import useDBOrderStore from "@/store/dbOrders";
 import { useRouter } from "next/navigation";
-import Script from "next/script"
-
+import Script from "next/script";
 
 declare global {
   interface Window {
@@ -16,8 +16,14 @@ interface CheckoutButtonProps {
 }
 
 export default function CheckoutButton({ amount }: CheckoutButtonProps) {
-
   const router = useRouter();
+
+  const resetDBOrder = useDBOrderStore((state: any) => state.resetOrder);
+  const dbOrderState = useDBOrderStore.getState();
+
+  const setDBPaymentMethod = useDBOrderStore(
+    (state: any) => state.setPaymentMethod
+  );
   const handlePayment = async () => {
     try {
       // Step 1: Create an order on the server
@@ -27,9 +33,8 @@ export default function CheckoutButton({ amount }: CheckoutButtonProps) {
         body: JSON.stringify({ amount }),
       });
 
-      const {order} = await orderResponse.json();
+      const { order } = await orderResponse.json();
       console.log("Razorpay order data:", order);
-      
 
       if (!order || !order.id) {
         console.error("Failed to create Razorpay order");
@@ -59,7 +64,25 @@ export default function CheckoutButton({ amount }: CheckoutButtonProps) {
           const verifyData = await verifyResponse.json();
           if (verifyResponse.ok) {
             alert("Payment successful");
-            router.push("/dashboard");
+            setDBPaymentMethod("razorpay");
+            // router.push("/dashboard");
+
+            ////////DB connection here after correctly handeling address///////////
+            /*
+       const response2 = await fetch("/api/orders/cart",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify(dbOrderState),
+       });
+
+       const data2 = await response2.json();
+       console.log(data2);
+
+       if(!response2.ok){
+        throw new Error("Failed to create order");
+       }
+      */
+
             console.log("Payment Verified:", verifyData);
           } else {
             alert("Payment verification failed");
@@ -89,15 +112,13 @@ export default function CheckoutButton({ amount }: CheckoutButtonProps) {
 
   return (
     <div>
-
-    
-    <button
-      onClick={handlePayment}
-      className="bg-blue-500 text-white px-4 py-2 rounded"
-    >
-      Pay ₹{amount}
-    </button>
-    <Script src="https://checkout.razorpay.com/v1/checkout.js" />
+      <button
+        onClick={handlePayment}
+        className="bg-blue-500 text-white px-4 py-2 rounded"
+      >
+        Pay ₹{amount}
+      </button>
+      <Script src="https://checkout.razorpay.com/v1/checkout.js" />
     </div>
   );
 }

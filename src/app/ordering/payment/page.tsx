@@ -1,11 +1,12 @@
 'use client';
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import useOrderStore from "@/store/order";
 import CheckoutButton from "@/components/payments/checkoutButton";
 import { useSession } from "next-auth/react";
 import useDBOrderStore from "@/store/dbOrders";
+import { log } from "console";
 
 const PaymentPage: React.FC = () => {
   const router = useRouter();
@@ -25,6 +26,18 @@ const PaymentPage: React.FC = () => {
   const { updateshippingCharges } = useOrderStore((state) => state);
   const sub_total = useOrderStore((state: any) => state.sub_total);
   const [totalAmount, setTotalAmount] = useState(sub_total);
+
+  const orderInfo = useOrderStore((state) => state);
+
+  console.log("orderInfo", orderInfo);
+  
+
+  useEffect(() => {
+      if (!orderInfo || !orderInfo.order_items?.length || !orderInfo.billing_address) {
+        router.replace("/products"); 
+      }
+    }, [orderInfo, router]);
+
   const { items } = useDBOrderStore((state) => state);
   const shippingCharges = 150;
 

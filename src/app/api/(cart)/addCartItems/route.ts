@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
         item.size === size 
     );
 
-    // console.log("hiiii",existingItemIndex,cart);
+    console.log("hiiii",existingItemIndex,cart);
 
 
     if (existingItemIndex >= 0) {
@@ -43,11 +43,12 @@ export async function POST(req: NextRequest) {
 
     // Recalculate total amount
     cart.totalAmount = cart.items.reduce(
-      (total: number, item: CartItem) => total + item.price ,
+      (total: number, item: CartItem) => total + item.price*item.quantity ,
       0
     );
 
     const savedCart = await cart.save();
+    console.log(savedCart);
     return NextResponse.json(savedCart, { status: 201 });
   } catch (error) {
     console.error("Error adding item to cart:", error);

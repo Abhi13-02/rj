@@ -5,7 +5,7 @@ import Orders from '@/models/Orders';
 import { NextRequest, NextResponse } from 'next/server';
 
 
-export async function PATCH(req: NextRequest, res: NextResponse) {
+export async function PATCH(req: NextRequest) {
   try {
     const { orderId, newStatus } = await req.json();
 

@@ -1,171 +1,221 @@
 "use client";
 
-import React, { useState } from "react";
+import { FiShoppingBag } from "react-icons/fi";
+import { BsCart3 } from "react-icons/bs";
+import { BsPersonCircle } from "react-icons/bs";
+import { BsSearch } from "react-icons/bs";
+import React, { use, useEffect, useState } from "react";
 import Link from "next/link";
 import { Playfair_Display } from "next/font/google";
 import HamburgerMenu from "./HamburgerMenu";
+import Image from "next/image";
+import { useSession } from "next-auth/react";
+import SignInButton from "./authComp/signInButton";
+import useProductStore from "@/store/productState";
+import { IProduct } from "@/models/Products";
+import useCartStore, { ICart } from "@/store/cartState";
+import SignOut from "./authComp/signOutButton";
 
 const playFair = Playfair_Display({ subsets: ["latin"], weight: "400" });
 
-const menuItems = [
-    {
-        label: "ALL",
-        dropdown: ["View All Products"],
-    },
-    {
-        label: "COLLECTIONS",
-        dropdown: ["New Arrivals", "Best Sellers", "Seasonal Favorites"],
-    },
-    {
-        label: "SAREES",
-        dropdown: ["Kanjivaram Silk Sarees", "Banarasi Sarees", "Bandhani Sarees"],
-    },
-    {
-        label: "LEHENGA",
-        dropdown: ["Bridal Lehenga", "Party Lehenga", "Festive Lehenga"],
-    },
-    {
-        label: "SALWAR",
-        dropdown: ["Churidar", "Anarkali", "Plazzo suits"],
-    },
-    {
-        label: "CHOORI",
-        dropdown: ["Bangles", "Bracelets", "Cuffs"],
-    },
-];
-
 const Navbar = () => {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  let { data: session } = useSession();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [searchActive, setSearchActive] = useState(false); // Search bar visibility
+  const [searchQuery, setSearchQuery] = useState(""); // Search input
+  const [searchResults, setSearchResults] = useState<IProduct[]>([]); // Fetched results
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const products = useProductStore((state) => state.products);
+  // Fetch the cart state directly from Zustand
+  const  fetchCart  = useCartStore((state) => state.fetchCart);
+  const cart = useCartStore((state) => state.Cart);
+  
+  const [dropdownOpen, setDropdownOpen] = useState(false); // Dropdown toggle state
 
-    const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-
-    const toggleDropdown = (label: string) => {
-        if (openDropdown === label) {
-            setOpenDropdown(null); // Close if it's already open
-        } else {
-            setOpenDropdown(label); // Open the selected dropdown
+  useEffect(() => {
+    const fetchCartData = async () => {
+        if (session?.user?.id) {
+            await fetchCart(session.user.id);
         }
     };
+    fetchCartData();
+}, [session, fetchCart]);
 
-    return (
-        <header className="bg-[#A0214D] w-full h-20 sticky top-0 flex items-center justify-between px-6 z-20">
-            {/* Hamburger Icon */}
-            <button
-                className="text-white lg:hidden focus:outline-none"
-                onClick={toggleMenu}
-            >
-                <HamburgerMenu />
-            </button>
+  // Handle toggle
+  const handleToggle = () => setDropdownOpen(!dropdownOpen);
 
-            {/* Logo */}
-            <div className={`text-2xl font-bold text-white ${playFair.className}`}>
-                <Link href="/">RJ TRADITIONAL</Link>
-            </div>
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
-            {/* Search Bar */}
-            <div className="relative hidden lg:flex flex-grow justify-center items-center">
-                <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute left-7 top-5">
-                    <path d="M20 20L15.65 15.65M18 10C18 14.4183 14.4183 18 10 18C5.58172 18 2 14.4183 2 10C2 5.58172 5.58172 2 10 2C14.4183 2 18 5.58172 18 10Z" stroke="#1E1E1E" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-                <input
-                    type="text"
-                    placeholder="Search..."
-                    className="w-full h-10 ps-4 text-black rounded-full focus:outline-none"
-                />
-            </div>
+  const toggleDropdown = (label: string) => {
+    if (openDropdown === label) {
+      setOpenDropdown(null); // Close if it's already open
+    } else {
+      setOpenDropdown(label); // Open the selected dropdown
+    }
+  };
 
-            {/* Navigation Links */}
-            <nav
-                className={`absolute lg:static top-20 left-0 w-full lg:w-auto lg:flex bg-pink-700 lg:bg-transparent flex-col lg:flex-row lg:items-center transition-all ${isMenuOpen ? "block" : "hidden"
-                    }`}
-            >
-                <ul className="flex flex-col lg:flex-row gap-6 p-2">
-                    {menuItems.map((menu, index) => (
-                        <li key={index} className="relative group">
-                            <button
-                                className="text-white flex items-center"
-                                onClick={() => toggleDropdown(menu.label)}
-                            >
-                                {menu.label}
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className={`h-5 w-5 ml-2 transition-transform duration-300 lg:group-hover:rotate-180 ${openDropdown === menu.label ? "rotate-180" : ""
-                                        }`}
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M19 9l-7 7-7-7"
-                                    />
-                                </svg>
-                            </button>
-                            {/* Dropdown */}
-                            <ul
-                                className={`absolute left-0 bg-[#d39c55] text-black shadow-lg rounded transform translate-y-4 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 lg:group-hover:block transition-transform duration-500 ease-in-out ${openDropdown === menu.label
-                                    ? "opacity-100 block translate-y-0"
-                                    : "opacity-0 hidden"
-                                    }`}
-                            >
-                                {menu.dropdown.map((item, idx) => (
-                                    <li key={idx}>
-                                        <Link
-                                            href="#"
-                                            className="block px-4 py-2 hover:bg-[#fdbc67] rounded"
-                                        >
-                                            {item}
-                                        </Link>
-                                    </li>
-                                ))}
-                            </ul>
-                        </li>
-                    ))}
-                </ul>
-            </nav>
+  const handleSearchIconClick = () => {
+    setSearchActive((prev) => !prev);
+    setSearchQuery(""); // Clear search query when opening/closing
+    setSearchResults([]); // Clear results when toggling
+  };
 
-            {/* Utility Icons */}
-            <div className="hidden lg:flex gap-4">
-                <Link href="#">
-                    <svg
-                        width="30"
-                        height="30"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 40 37"
-                    >
-                        <path
-                            d="M34.7332 7.10709C33.8819 6.31931..."
-                            stroke="#FFFEFE"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                        />
-                    </svg>
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+
+    // Simulate fetching search results
+    if (query) {
+      const simulatedResults = products;
+      const filteredResults = simulatedResults.filter((product) =>
+        product.title.toLowerCase().includes(query.toLowerCase())
+      );
+      setSearchResults(filteredResults);
+    } else {
+      setSearchResults([]);
+    }
+  };
+
+  return (
+    <header className="bg-[#A0214D] w-full h-20 sticky top-0 flex items-center justify-between px-6 z-10">
+      {/* Hamburger Icon */}
+      <button
+        className="text-white lg:hidden focus:outline-none"
+        onClick={toggleMenu}
+      >
+        <HamburgerMenu />
+      </button>
+
+      {/* Logo */}
+      <div className={`text-2xl font-bold text-white ${playFair.className}`}>
+        <Link href="/">RJ TRADITIONAL</Link>
+      </div>
+
+      {/* Navigation Links */}
+      <nav
+        className={`absolute lg:static top-20 left-0 w-full lg:w-auto lg:flex bg-[#A0214D] text-black lg:bg-transparent flex-col lg:flex-row lg:items-center transition-all ${
+          isMenuOpen ? "block" : "hidden"
+        }`}
+      >
+        <ul className="flex flex-col lg:flex-row gap-6 p-2">
+          <li className="relative group">
+            <Link href={`/products`}>
+              <button className="text-white flex items-center">All</button>
+            </Link>
+          </li>
+          {["SAREE", "LEHENGA", "SUITS", "KURTI", "DUPATTA"].map(
+            (item) => (
+              <li key={item} className="relative group ">
+                <Link href={`/products/${item.toLowerCase()}`}>
+                  <button className="text-white flex items-center">
+                    {item}
+                  </button>
                 </Link>
-                <Link href="#">
-                    <svg
-                        width="30"
-                        height="30"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 40 37"
-                    >
-                        <path
-                            d="M20 2C24.9706 2 29 6.02944 29 11C29..."
-                            stroke="#FFFEFE"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                        />
-                    </svg>
+              </li>
+            )
+          )}
+        </ul>
+      </nav>
+
+      {/* Utility Icons */}
+      <div className="hidden lg:flex gap-6 items-center justify-center relative">
+        <div>
+          <BsSearch
+            size={30}
+            className="text-white cursor-pointer font-light"
+            onClick={handleSearchIconClick}
+          />
+        </div>
+        {session ? (
+          <>
+            <BsPersonCircle
+              size={30}
+              className="text-white cursor-pointer font-light"
+              onClick={handleToggle}
+            />
+            {dropdownOpen && (
+              <div className="absolute right-0 top-8 mt-2 w-40 flex flex-col items-center gap-2 bg-red-400 shadow-md rounded-md py-2 z-10">
+                <Link className="block w-4/5 rounded-md px-4 py-2 text-white hover:bg-gray-900" href="/yourOrders">
+                    Your Orders
                 </Link>
-            </div>
-        </header>
-    );
+                <hr className="w-full bg-white" />
+                <Link href="/products" className="block w-4/5 rounded-md px-4 py-2 text-white hover:bg-gray-900">
+                     <SignOut/>
+                </Link>
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="ring-1 hover:bg-white hover:text-gray-900 ring-white px-4 py-2 rounded-2xl text-white">
+            <SignInButton />
+          </div>
+        )}
+         <Link href="/cart" className="relative flex ">
+                    <BsCart3 size={30} className="text-white cursor-pointer font-light" />
+                    {cart?.items?.length > 0 && (
+                        <div>
+                            {/* Item count badge */}
+                            <span className="absolute -bottom-3 -left-2 bg-red-500 text-white text-sm font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                                {cart?.items.length}
+                            </span>
+                            {/* Total amount */}
+                            <span className=" text-white font-thin text-sm px-1 py-1 rounded-md">
+                                ₹{cart?.totalAmount}
+                            </span>
+                        </div>
+                    )}
+                </Link>
+
+        {/* Search Bar */}
+        {searchActive && (
+          <div className="absolute right-24 top-full bg-white shadow-md w-96 p-4 mt-2 rounded-md">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={handleSearchChange}
+              placeholder="Search products..."
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-600"
+            />
+            {searchResults.length > 0 && (
+              <ul className="mt-2 bg-white shadow-md rounded-md max-h-40 overflow-y-auto">
+                {searchResults.map((result, index) => (
+                  <li key={index} className="hover:bg-pink-200 cursor-pointer">
+                    <Link href={`/product/${result._id.toString()}`}>
+                      <div className="flex items-center p-2 jestify-center space-x-10">
+                        <Image
+                          src={result.images[0]}
+                          alt={result.title}
+                          width={50}
+                          height={50}
+                        />
+                        <span className="ml-2">{result.title}</span>
+                        <p className="text-lg font-semibold text-gray-700 mb-2  ">
+                          {result.discountedPrice ? (
+                            <>
+                              <span className="line-through text-gray-500 mr-2">
+                                ₹{result.price}
+                              </span>
+                              <span className="text-green-600 font-bold">
+                                ₹{result.discountedPrice}
+                              </span>
+                            </>
+                          ) : (
+                            <span className="text-gray-800 font-bold">
+                              ₹{result.price}
+                            </span>
+                          )}
+                        </p>
+                      </div>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )}
+      </div>
+    </header>
+  );
 };
 
 export default Navbar;

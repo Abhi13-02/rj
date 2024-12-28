@@ -77,14 +77,15 @@ export async function GET(req: NextRequest) {
 //   }
 // }
 
+// PUT: Update quantity of a cart item
 export async function PUT(req: NextRequest) {
   const body = await req.json();
-  const { userId, productId, quantity } = body;
+  const { userId, productId, quantity, size } = body;
 
-  if (!userId || !productId || quantity === undefined) {
+  if (!userId || !productId || quantity === undefined || size === undefined) {
     console.log(userId, productId, quantity);
     return NextResponse.json(
-      { error: "User ID, Product ID, and Quantity are required" },
+      { error: "User ID, Product ID, and Quantity are required, and size is required" },
       { status: 400 }
     );
   }
@@ -97,7 +98,6 @@ export async function PUT(req: NextRequest) {
 
     // Convert userId to ObjectId if necessary
     const cart = await Cart.findOne({ userId: userId });
-
     if (!cart) {
       return NextResponse.json(
         { message: "Cart not found for the user" },
@@ -105,17 +105,21 @@ export async function PUT(req: NextRequest) {
       );
     }
 
-    console.log("Cart found:", cart);
+
+    // console.log("Cart found:", cart);
     // Find and update the specific product in the cart
-    const item = cart.items.find((item: any) => item.productId.toString() === productId);
+    // console.log(size,"hoiiiii")
+    const item = cart.items.find((item: any) => (item.productId.toString() === productId && item.size === size));
+    // console .log("Found item:", item, size);
     if (item) {
       item.quantity = quantity;
+      cart.totalAmount = cart.items.reduce((total: number, item: any) => total + item.price * item.quantity, 0);
       await cart.save();
       return NextResponse.json(cart);
     } else {
       return NextResponse.json(
         { message: "Product not found in the cart" },
-        { status: 404 }
+        { status: 400 }
       );
     }
   } catch (error) {
@@ -151,7 +155,7 @@ export async function DELETE(req: NextRequest) {
     }
 
     // Filter out the product to delete
-    cart.items = cart.items.filter((item: any) => item.productId.toString() !== productId && item.quantity !== quantity && item.size !== size);
+    cart.items = cart.items.filter((item: any) => item.productId.toString() !== productId || item.quantity !== quantity || item.size !== size);
 
     cart.totalAmount = cart.items.reduce((total: number, item: any) => {
       return total + item.price * item.quantity;

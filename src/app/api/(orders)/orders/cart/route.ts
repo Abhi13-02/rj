@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Cart, { CartItem } from '@/models/Cart';
 import User from '@/models/User';
-import Orders, { OrderItem } from '@/models/Orders';
+import Order, { OrderItem } from '@/models/Orders';
 import Products from '@/models/Products';
 import dbConnect from '@/libs/dbConnect';
 
@@ -10,26 +10,22 @@ export async function POST(req: NextRequest) {
 
   try {
     const body = await req.json();
-    const { userId, shippingAddress, paymentMethod } = body;
+    const { userId, shippingAddress, paymentMethod, shiprocketOrderId, status, items, totalAmount } = body;
 
     // Find the user's cart
     const userCart = await Cart.findOne({ userId }).populate('items.productId');
 
-    if (!userCart || userCart.items.length === 0) {
-      return NextResponse.json({ error: 'Cart is empty' }, { status: 400 });
-    }
-
-    if(!userId || !shippingAddress || !paymentMethod) {
-      return NextResponse.json({ error: 'User ID, shipping address, and payment method are required' }, { status: 400 });
+    if(!paymentMethod) {
+      return NextResponse.json({ error: ' payment method are required' }, { status: 400 });
     }
 
    // Validate stock for each item
-
    let messages = [];
     for (const item of userCart.items) {
-    if (item.quantity > item.productId.stock) {
+    const productSizes = item.productId.sizes as { size: string; stock: number }[];
+    if (item.quantity > productSizes.filter((size ) => size.size === item.size)[0].stock) {
       messages.push(
-        `Insufficient stock for ${item.productId.title}. Available: ${item.productId.stock}, Requested: ${item.quantity}`
+        `Insufficient stock for ${item.productId.title}. Available: ${productSizes.filter((size ) => size.size === item.size)[0].stock}, Requested: ${item.quantity}`
       );
      }
     }
@@ -42,34 +38,24 @@ export async function POST(req: NextRequest) {
     );
   }
 
-    // Prepare order items and calculate the total
-    const orderItems = userCart.items.map((item:any) => ({
-      productId: item.productId._id,
-      name: item.productId.title,
-      price: item.price,
-      quantity: item.quantity,
-      size: item.size,
-      color: item.color,
-    }));
-
-    const totalAmount = userCart.totalAmount;
-
     // Create the order
-    const order = await Orders.create({
+    const order = await Order.create({
       userId,
-      items: orderItems,
+      items: items,
       totalAmount,
       shippingAddress,
+      shiprocketOrderId,
       paymentMethod,
-      status: 'pending',
+      status: status ,
     });
 
     // Deduct stock for each product
-    for (const item of userCart.items) {
-      await Products.findByIdAndUpdate(item.productId._id, {
-        $inc: { stock: -item.quantity },
-      });
-    }
+      for (const item of userCart.items) {
+        await Products.updateOne(
+          { _id: item.productId._id, "sizes.size": item.size }, // Match the product and size
+          { $inc: { "sizes.$.stock": -item.quantity } } // Decrement the stock for the matched size
+        );
+      }
 
     // Clear the cart
     userCart.items = [];
@@ -81,7 +67,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ order }, { status: 201 });
   } catch (error) {
-    console.error('Error creating order from cart:', error);
-    return NextResponse.json({ error: 'Failed to create order' }, { status: 500 });
+    console.error('Error creating dborder:', error);
+    return NextResponse.json({ error: 'Failed to create dbOrder' }, { status: 500 });
   }
 }

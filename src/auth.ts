@@ -12,6 +12,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
   callbacks: {
     async signIn({ user }) {
+      if (typeof window === "undefined") {
       await dbConnect(); // Ensure MongoDB is connected
 
       try {
@@ -33,6 +34,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         console.error("Error saving user to database:", error);
         return false; // Deny sign-in on error
       }
+    }
 
       return true; // Allow sign-in
     },

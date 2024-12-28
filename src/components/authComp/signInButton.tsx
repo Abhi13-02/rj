@@ -8,7 +8,7 @@ export default function SignIn() {
 
   return (
     <div>
-      {session ? <p>signed in as {session.user?.email} and ID is {session.user?.id}</p> : <button onClick={() => signIn("google")} className="bg-blue-500 px-4 py-2 rounded">Signin with Google</button>}  
+     <button onClick={() => signIn("google")}>Login</button>
     </div>
   )
 } 

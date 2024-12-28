@@ -1,56 +1,336 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { IProduct } from "@/models/Products";
-import useProductStore from "@/store/productState"; // Import the product store
-import ProductCard from "@/components/productCard"; // Import the ProductCard component
-import Link from "next/link";
+import useProductStore from "@/store/productState";
+import ProductCard from "@/components/productCard";
+import { FaBars, FaTimes } from "react-icons/fa";
 
-const fetchProducts = async (): Promise<IProduct[]> => {
-  const res = await fetch(`api/getAllProducts`, {
-    next: { revalidate: 600 }, // ISR: Revalidate every 60 seconds
+const FilterPanel = ({
+  onApplyFilters,
+}: {
+  onApplyFilters: (filters: any) => void;
+}) => {
+  const [priceRange, setPriceRange] = useState([0, 10000]);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
+  const [selectedColors, setSelectedColors] = useState<string[]>([]);
+  const [expandedSections, setExpandedSections] = useState<{
+    [key: string]: boolean;
+  }>({
+    price: true,
+    category: true,
+    tags: true,
+    sizes: true,
+    colors: true,
   });
 
-  if (!res.ok) {
-    throw new Error("Failed to fetch products");
-  }
+  const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newPrice = Number(event.target.value);
+    setPriceRange((prev) => [prev[0], newPrice]);
+  };
 
-  const data = await res.json();
-  return data; 
+  const toggleSelection = (
+    item: string,
+    setState: React.Dispatch<React.SetStateAction<string[]>>
+  ) => {
+    setState((prev) =>
+      prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item]
+    );
+  };
+
+  const handleApplyFilters = () => {
+    onApplyFilters({
+      priceRange,
+      selectedCategory,
+      selectedTags,
+      selectedSizes,
+      selectedColors,
+    });
+  };
+
+  const toggleSection = (section: string) => {
+    setExpandedSections((prev) => ({
+      ...prev,
+      [section]: !prev[section],
+    }));
+  };
+
+  return (
+    <div className="w-full bg-pink-100 p-6 border rounded-lg shadow-md">
+      <h2 className="text-lg font-semibold mb-6 text-gray-800">Filters</h2>
+      <hr className="h-1 bg-pink-800" />
+
+      {/* Price Filter */}
+      <div className="mb-6">
+        <div className="flex justify-between items-center">
+          <h3 className="font-medium text-gray-600">Price</h3>
+          <button
+            onClick={() => toggleSection("price")}
+            className="text-gray-500 hover:text-gray-700 focus:outline-none"
+          >
+            {expandedSections.price ? "−" : "+"}
+          </button>
+        </div>
+        {expandedSections.price && (
+          <div className="flex flex-col items-center gap-2 mt-2">
+            <input
+              type="range"
+              min={0}
+              max={10000}
+              value={priceRange[1]}
+              onChange={handlePriceChange}
+              className="w-full"
+            />
+            <div className="flex w-full justify-between text-sm mt-2">
+              <span>$0</span>
+              <span>${priceRange[1]}</span>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <hr className="bg-pink-800 h-[2px]" />
+
+      {/* Category Filter */}
+      <div className="mb-6">
+        <div className="flex justify-between items-center">
+          <h3 className="font-medium text-gray-600">Category</h3>
+          <button
+            onClick={() => toggleSection("category")}
+            className="text-gray-500 hover:text-gray-700 focus:outline-none"
+          >
+            {expandedSections.category ? "−" : "+"}
+          </button>
+        </div>
+        {expandedSections.category && (
+          <select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            className="border rounded-lg p-2 w-full text-sm mt-2"
+          >
+            <option value="">All</option>
+            <option value="saree">Saree</option>
+            <option value="lehenga">Lehenga</option>
+            <option value="suits">Suits</option>
+            <option value="kurti">Kurti</option>
+            <option value="dupatta">Dupatta</option>
+          </select>
+        )}
+      </div>
+
+      <hr className="bg-pink-800 h-[2px]" />
+
+      {/* Tags Filter */}
+      <div className="mb-6">
+        <div className="flex justify-between items-center">
+          <h3 className="font-medium text-gray-600">Tags</h3>
+          <button
+            onClick={() => toggleSection("tags")}
+            className="text-gray-500 hover:text-gray-700 focus:outline-none"
+          >
+            {expandedSections.tags ? "−" : "+"}
+          </button>
+        </div>
+        {expandedSections.tags && (
+          <div className="flex flex-wrap gap-3 mt-2">
+            {[
+              "Banarsi Saree",
+              "Ghatchola Saree",
+              "Georgette",
+              "Dola Silk Lehenga",
+              "Kota Doirya Lehenga",
+              "Art Silk Lehenga",
+            ].map((tag) => (
+              <label key={tag} className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={selectedTags.includes(tag)}
+                  onChange={() => toggleSelection(tag, setSelectedTags)}
+                  className="rounded focus:ring-red-500 text-red-500"
+                />
+                <span className="text-sm text-gray-700">{tag}</span>
+              </label>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <hr className="bg-pink-800 h-[2px]" />
+
+      {/* Sizes Filter */}
+      <div className="mb-6">
+        <div className="flex justify-between items-center">
+          <h3 className="font-medium text-gray-600">Sizes</h3>
+          <button
+            onClick={() => toggleSection("sizes")}
+            className="text-gray-500 hover:text-gray-700 focus:outline-none"
+          >
+            {expandedSections.sizes ? "−" : "+"}
+          </button>
+        </div>
+        {expandedSections.sizes && (
+          <div className="flex flex-wrap gap-3 mt-2">
+            {["S", "M", "L", "XL", "XXL", "FREE-SIZE"].map((size) => (
+              <label key={size} className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={selectedSizes.includes(size)}
+                  onChange={() => toggleSelection(size, setSelectedSizes)}
+                  className="rounded focus:ring-red-500 text-red-500"
+                />
+                <span className="text-sm text-gray-700">{size}</span>
+              </label>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <hr className="bg-pink-800 h-[2px]" />
+
+      {/* Colors Filter */}
+      <div className="mb-6">
+        <div className="flex justify-between items-center">
+          <h3 className="font-medium text-gray-600">Colors</h3>
+          <button
+            onClick={() => toggleSection("colors")}
+            className="text-gray-500 hover:text-gray-700 focus:outline-none"
+          >
+            {expandedSections.colors ? "−" : "+"}
+          </button>
+        </div>
+        {expandedSections.colors && (
+          <div className="flex flex-wrap gap-2 mt-2">
+            {[
+              "Multicolor",
+              "Black",
+              "Red",
+              "Blue",
+              "Green",
+              "Yellow",
+              "Orange",
+              "Purple",
+              "Pink",
+              "White",
+              "Grey",
+              "Brown",
+            ].map((color) => (
+              <label key={color} className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={selectedColors.includes(color)}
+                  onChange={() => toggleSelection(color, setSelectedColors)}
+                  className="rounded focus:ring-red-500 text-red-500"
+                />
+                <span className="text-sm text-gray-700">{color}</span>
+              </label>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <button
+        onClick={handleApplyFilters}
+        className="bg-red-500 mt-2 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600 transition"
+      >
+        Apply
+      </button>
+    </div>
+  );
 };
 
 const ProductPage = () => {
-  const { products, setProducts } = useProductStore();
+  const { fetchProducts } = useProductStore();
+  const [products, setProducts] = useState<IProduct[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<IProduct[]>([]);
+  const [showFilter, setShowFilter] = useState(false); // For mobile filter toggle
+
+  const applyFilters = ({
+    priceRange,
+    selectedCategory,
+    selectedTags,
+    selectedSizes,
+    selectedColors,
+  }: {
+    priceRange: number[];
+    selectedCategory: string;
+    selectedTags: string[];
+    selectedSizes: string[];
+    selectedColors: string[];
+  }) => {
+    const filtered = products.filter((product: IProduct) => {
+      const price = product.discountedPrice
+        ? product.discountedPrice
+        : product.price;
+      const inPriceRange = price >= priceRange[0] && price <= priceRange[1];
+      const matchesCategory = selectedCategory
+        ? product.category.toLowerCase() === selectedCategory.toLowerCase()
+        : true;
+      const matchesTags =
+        selectedTags.length > 0
+          ? selectedTags.every((tag) => product.tags?.includes(tag))
+          : true;
+      const matchesSizes =
+        selectedSizes.length > 0
+          ? selectedSizes.every((size) =>
+              product.sizes?.some((s) => s.size === size)
+            )
+          : true;
+      const matchesColors =
+        selectedColors.length > 0
+          ? selectedColors.some((color) => product.tags?.includes(color))
+          : true;
+
+      return (
+        inPriceRange &&
+        matchesCategory &&
+        matchesTags &&
+        matchesSizes &&
+        matchesColors
+      );
+    });
+
+    setFilteredProducts(filtered);
+  };
 
   useEffect(() => {
-    // Fetch products and update Zustand state
-    const fetchAndSetProducts = async () => {
-      try {
-        const fetchedProducts = await fetchProducts();
-        setProducts(fetchedProducts);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      }
+    const initializeProducts = async () => {
+      await fetchProducts();
+      setProducts(useProductStore.getState().products);
+      setFilteredProducts(useProductStore.getState().products);
     };
-
-    // Fetch products only if the store is empty
-    if (products.length === 0) {
-      fetchAndSetProducts();
-    }
-  }, [products, setProducts]);
+    initializeProducts();
+  }, []);
 
   return (
-    <div>
-      <h1 className="text-3xl font-bold mb-8 text-center">Products</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 px-4">
-        {products.map((product) => (
-          <div key={product._id.toString()} className="product-card-container">
-            
-              <ProductCard product = {product} />
-            
-          </div>
-        ))}
-      </div>
+    <div className="p-4 flex flex-col lg:flex-row gap-6">
+      {/* Hamburger Menu */}
+      <button
+        className="lg:hidden flex items-center gap-2 bg-gray-200 text-black px-4 py-2 rounded shadow"
+        onClick={() => setShowFilter(!showFilter)}
+      >
+        {showFilter ? <FaTimes /> : <FaBars />} Filters
+      </button>
+
+      {/* Filter Panel */}
+      <aside
+        className={`${
+          showFilter ? "block" : "hidden"
+        } lg:block lg:w-1/4 bg-white shadow-lg p-4 max-w-[330px]`}
+      >
+        <FilterPanel onApplyFilters={applyFilters} />
+      </aside>
+
+      {/* Product Grid */}
+      <main className="w-full lg:w-3/4">
+        <h1 className="text-2xl font-bold mb-4 text-center">All Products</h1>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 place-items-center">
+          {filteredProducts.map((product, index) => (
+            <ProductCard key={index} product={product} />
+          ))}
+        </div>
+      </main>
     </div>
   );
 };

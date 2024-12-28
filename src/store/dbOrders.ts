@@ -11,15 +11,20 @@ interface OrderItem {
   images: string[];
 }
 
-interface ShippingAddress {
-  address: string;
-  city: string;
-  postalCode: string;
-  country: string;
+export interface ShippingAddress {
+    customer_name: string;
+    last_name: string;
+    address: string;
+    city: string;
+    pincode: string;
+    state: string;
+    country: string;
+    email: string;
+    phone: string;
 }
 
 interface OrderState {
-  userId: string;
+  userId: string | null;
   items: OrderItem[];
   totalAmount: number;
   shippingAddress: ShippingAddress | null;
@@ -58,7 +63,7 @@ const useDBOrderStore = create<OrderState>((set) => ({
   // Action to set shipping address
   setShippingAddress: (shippingAddress) =>
     set(() => ({
-      shippingAddress,
+      shippingAddress
     })),
 
   // Action to set payment method
@@ -71,7 +76,6 @@ const useDBOrderStore = create<OrderState>((set) => ({
   setShiprocketOrderId: (shiprocketOrderId) =>
     set(() => ({
       shiprocketOrderId,
-      status: 'shipped', // Update status when Shiprocket order is created
     })),
 
   // Action to reset order (useful after order completion)
@@ -85,6 +89,8 @@ const useDBOrderStore = create<OrderState>((set) => ({
       shiprocketOrderId: null,
       status: 'pending',
     })),
+
+  onReset: () => console.log("Order reset")
 }));
 
 if (typeof window !== "undefined") {

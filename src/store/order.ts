@@ -68,7 +68,9 @@ interface OrderActions {
   addOrderItems: (items: OrderItem[], orderId: string, orderDate: string, total: number) => void;
   addAddress: (billingDetails: Partial<AddressDetails>, shippingDetails?: Partial<AddressDetails>) => void;
   updatePaymentMethod: (method: string) => void;
+  updateshippingCharges: (shipping_charges: number) => void;
   updateDimensions: (length: number, breadth: number, height: number, weight: number) => void;
+  resetOrder: () => void;
 }
 
 type OrderStore = OrderState & OrderActions;
@@ -77,8 +79,8 @@ const useOrderStore = create<OrderStore>(
   zukeper((set: any) => ({
     order_id: "",
     order_date: "",
-    pickup_location: "Home",
-    channel_id: "5899362",
+    pickup_location: "Primary",
+    channel_id: "5900002",
     comment: "",
     billing_customer_name: "",
     billing_last_name: "",
@@ -151,6 +153,25 @@ const useOrderStore = create<OrderStore>(
         height,
         weight,
       })),
+
+      updateshippingCharges: (shipping_charges: number) =>
+        set((state: OrderState) => ({
+          ...state,
+          shipping_charges: shipping_charges,
+        })),
+
+
+     resetOrder: () =>
+        set(() => ({
+          userId: '',
+          items: [],
+          totalAmount: 0,
+          shippingAddress: null,
+          paymentMethod: null,
+          shiprocketOrderId: null,
+          status: 'pending',
+        }))
+
   }))
 );
 

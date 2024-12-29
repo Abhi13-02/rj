@@ -23,9 +23,13 @@ const YourOrders = () => {
     try {
       const response = await fetch(`/api/orders/getOrders?userId=${session?.user?.id}`);
       const data = await response.json();
-      const sortedOrders = data.sort((a: any, b: any) => b.createdAt - a.createdAt);
-      setOrders(sortedOrders);
-      console.log("Orders fetched:", sortedOrders);
+       // Sort orders by `createdAt` in descending order (newest first)
+    const sortedOrders = data.sort((a: any, b: any) => 
+      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+
+    setOrders(sortedOrders);
+      console.log("Orders sorted fetched:", sortedOrders);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching orders:", error);

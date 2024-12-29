@@ -198,7 +198,7 @@ const ProductPage = () => {
     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
       {/* Product Images */}
       <div className="flex flex-col md:flex-row">
-        <div className="flex md:flex-col space-x-2 md:space-x-0 md:space-y-2 order-2 md:order-1 mt-4 md:mt-0">
+        <div className="flex  md:flex-col space-x-2 md:space-x-0 md:space-y-2 order-2 md:order-1 mt-4 md:mt-0">
           {product?.images.map((img, index) => (
             <img
               key={index}

@@ -25,6 +25,9 @@ export default {
       },
       animation: {
         slide: "slide 15s infinite linear"
+      },
+      screens: {
+        'sm': '344px'
       }
     },
   },

@@ -28,10 +28,11 @@ const Tabs: React.FC<TabsProps> = ({ tabs }) => {
             <div className="w-[100%] h-[90%] p-8">
                 {/* Tabs */}
                 <div className="relative h-[10%] flex items-center justify-around mb-6">
-                    {tabs.map((tab, index) => (
-                        <div className="h-full w-full flex flex-col justify-center items-center">
+                {tabs.map((tab, index) => (
+                    
+                        <div key={index} className="h-full w-full flex flex-col justify-center items-center">
                             <button
-                                key={index}
+                                
                                 onClick={() => {
                                     setActiveTab(index);
                                     setCurrentIndex(0); // Reset the index on tab change
@@ -42,7 +43,9 @@ const Tabs: React.FC<TabsProps> = ({ tabs }) => {
                                 {tab.title}
                             </button>
                         </div>
-                    ))}
+                ))}
+                    
+                    
                     <div className="absolute top-full w-full flex justify-center items-center overflow-hidden mt-6 mb-6">
                         <svg width="1204" height="19" viewBox="0 0 1204 19" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M0 9.55804H553.293" stroke="#832729" />
@@ -61,7 +64,7 @@ const Tabs: React.FC<TabsProps> = ({ tabs }) => {
                 </div>
 
                 {/* Content */}
-                <div className="relative overflow-hidden h-[80%] w-full">
+                <div className="relative overflow-hidden h-[90%] w-full">
                     <div className="flex items-center gap-4 h-full">
                         {/* Previous Button */}
                         <button
@@ -88,13 +91,13 @@ const Tabs: React.FC<TabsProps> = ({ tabs }) => {
 
                         {/* Content Items */}
 
-                        <div className="flex gap-4 w-full overflow-hidden">
+                        <div className="flex gap-4 h-full w-full overflow-hidden">
                             {tabs[activeTab].content
                                 .slice(currentIndex, currentIndex + itemsToShow)
                                 .map((src, index) => (
                                     <div
                                         key={index}
-                                        className="flex justify-center items-center w-[33%] rounded-md shadow-sm transition-opacity duration-500"
+                                        className="flex justify-center items-center lg:h-[90%] md:h-[80%] lg:w-[33%] md:w-[40%] rounded-md shadow-sm transition-opacity duration-500"
                                     >
                                         <img
                                             src={src}

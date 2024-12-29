@@ -111,7 +111,7 @@ const YourOrders = () => {
 
   return (
     <div className="min-h-screen p-6 bg-gray-100">
-      <h1 className="text-3xl font-bold mb-6">Your Orders</h1>
+      <h1 className="text-3xl font-normal underline decoration-1 underline-offset-8 mb-6 text-gray-800">Your Orders</h1>
       <div className="space-y-4">
         {orders.map((order: IOrder, index) => (
           <div
@@ -176,9 +176,9 @@ const YourOrders = () => {
                   {order.shippingAddress.address},{" "}
                   {order.shippingAddress.city},{" "}
                   {order.shippingAddress.state}-{order.shippingAddress.pincode}, Phone:{" "}
-                  {order.shippingAddress.phone}
+                  {order.shippingAddress.phone}, Email: {order.shippingAddress.email}
                 </p>
-                {order.status.toLocaleLowerCase() == "pending" && (
+                {(order.status.toLocaleLowerCase() === "pending" || order.status.toLocaleLowerCase() === "new") && (
                   <button
                     onClick={() => cancelOrder(order.shiprocketOrderId, order._id as string)}
                     className="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"

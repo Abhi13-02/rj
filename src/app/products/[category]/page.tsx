@@ -17,14 +17,13 @@ const FilterPanel = ({
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
-   const [expandedSections, setExpandedSections] = useState<{
+  const [expandedSections, setExpandedSections] = useState<{
       [key: string]: boolean;
     }>({
-      price: true,
-      category: true,
-      tags: true,
-      sizes: true,
-      colors: true,
+      price: false,
+      tags: false,
+      sizes: false,
+      colors: false,
     });
   
   
@@ -62,9 +61,9 @@ const FilterPanel = ({
   };
 
   return (
-    <div className="w-full bg-pink-100 p-6 border rounded-lg shadow-md max-w-[300px]">
-    <h2 className="text-lg font-semibold mb-6 text-gray-800">Filters</h2>
-    <hr className="h-1 bg-pink-800" />
+    <div className="w-full bg-[#FFFAFA] p-6 border rounded-lg shadow-md">
+    <h2 className="text-xl sm:text-3xl font-light mb-6 text-gray-900">Filters</h2>
+    <hr className="h-[1.5px] bg-pink-800" />
 
     {/* Price Filter */}
     <div className="mb-6">
@@ -72,7 +71,7 @@ const FilterPanel = ({
         <h3 className="font-medium text-gray-600">Price</h3>
         <button
           onClick={() => toggleSection("price")}
-          className="text-gray-500 hover:text-gray-700 focus:outline-none"
+          className="text-gray-500 text-4xl hover:text-gray-700 focus:outline-none"
         >
           {expandedSections.price ? "−" : "+"}
         </button>
@@ -85,7 +84,7 @@ const FilterPanel = ({
             max={10000}
             value={priceRange[1]}
             onChange={handlePriceChange}
-            className="w-full"
+            className="w-full "
           />
           <div className="flex w-full justify-between text-sm mt-2">
             <span>$0</span>
@@ -95,7 +94,8 @@ const FilterPanel = ({
       )}
     </div>
 
-    <hr className="bg-pink-800 h-[2px]"/>
+    <hr className="bg-pink-800 h-[1.5px]" />
+    
 
     {/* Tags Filter */}
     <div className="mb-6">
@@ -103,7 +103,7 @@ const FilterPanel = ({
         <h3 className="font-medium text-gray-600">Tags</h3>
         <button
           onClick={() => toggleSection("tags")}
-          className="text-gray-500 hover:text-gray-700 focus:outline-none"
+          className="text-gray-500 text-4xl hover:text-gray-700 focus:outline-none"
         >
           {expandedSections.tags ? "−" : "+"}
         </button>
@@ -132,7 +132,8 @@ const FilterPanel = ({
       )}
     </div>
 
-    <hr className="bg-pink-800 h-[2px]"/>
+    <hr className="bg-pink-800 h-[1.5px]" />
+    
 
     {/* Sizes Filter */}
     <div className="mb-6">
@@ -140,7 +141,7 @@ const FilterPanel = ({
         <h3 className="font-medium text-gray-600">Sizes</h3>
         <button
           onClick={() => toggleSection("sizes")}
-          className="text-gray-500 hover:text-gray-700 focus:outline-none"
+          className="text-gray-500 text-4xl hover:text-gray-700 focus:outline-none"
         >
           {expandedSections.sizes ? "−" : "+"}
         </button>
@@ -162,7 +163,8 @@ const FilterPanel = ({
       )}
     </div>
 
-    <hr className="bg-pink-800 h-[2px]"/>
+    <hr className="bg-pink-800 h-[1.5px]" />
+    
 
     {/* Colors Filter */}
     <div className="mb-6">
@@ -170,7 +172,7 @@ const FilterPanel = ({
         <h3 className="font-medium text-gray-600">Colors</h3>
         <button
           onClick={() => toggleSection("colors")}
-          className="text-gray-500 hover:text-gray-700 focus:outline-none"
+          className="text-gray-500 text-4xl hover:text-gray-700 focus:outline-none"
         >
           {expandedSections.colors ? "−" : "+"}
         </button>
@@ -206,10 +208,10 @@ const FilterPanel = ({
     </div>
 
     <button
-            onClick={handleApplyFilters}
-            className="bg-red-500 mt-2 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600 transition"
-          >
-            Apply
+      onClick={handleApplyFilters}
+      className="bg-[#bd3564] mt-2 text-white px-4 py-2 rounded-lg shadow hover:bg-[#A0214D] transition"
+    >
+      Apply
     </button>
   </div>
   );
@@ -291,7 +293,7 @@ const ProductPage = () => {
     <div className="p-4 flex flex-col lg:flex-row gap-6">
       {/* Hamburger Menu */}
       <button
-        className="lg:hidden flex items-center gap-2 bg-gray-200 text-black px-4 py-2 rounded shadow"
+        className="lg:hidden flex items-center gap-2 bg-gray-100 text-black px-4 py-2 rounded shadow"
         onClick={() => setShowFilter(!showFilter)}
       >
         {showFilter ? <FaTimes /> : <FaBars />} Filters
@@ -308,8 +310,8 @@ const ProductPage = () => {
 
       {/* Product Grid */}
       <main className="w-full lg:w-3/4">
-        <h1 className="text-2xl font-bold mb-4 text-center">{category} Products</h1>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 place-items-center">
+        <h1 className=" text-xl sm:text-2xl mb-5 text-center">{category.toLocaleUpperCase()}</h1>
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-3 sm:gap-5 place-items-center">
           {filteredProductsbyPannel.map((product, index) => (
             <ProductCard key={index} product={product} />
           ))}

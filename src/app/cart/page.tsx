@@ -1,7 +1,7 @@
 "use client";
 import { MdDeleteOutline } from "react-icons/md";
 import React, { use, useEffect, useState } from "react";
-import { CartItem } from "@/models/Cart";
+import { CartItem, ICart } from "@/models/Cart";
 import { useSession, signIn } from "next-auth/react";
 import useOrderStore from "@/store/order";
 import { useRouter } from "next/navigation";
@@ -9,6 +9,7 @@ import useDBOrderStore from "@/store/dbOrders";
 import { OrderItem } from "@/models/Orders";
 import Link from "next/link";
 import useCartStore from "@/store/cartState";
+import useProductStore from "@/store/productState";
 
 const CartPage = () => {
   const router = useRouter();
@@ -22,6 +23,7 @@ const CartPage = () => {
   const resetDBOrder = useDBOrderStore((state) => state.resetOrder);
   const resetOrder = useOrderStore((state) => state.resetOrder);
   const fetchCart = useCartStore((state) => state.fetchCart);
+  const products = useProductStore((state) => state.products);
 
   useEffect(() => {
     if (session?.user?.id) {
@@ -94,6 +96,23 @@ const CartPage = () => {
     console.log(useOrderStore.getState());
   }, []);
 
+  const handleQuantityChange = (operation: "increment" | "decrement", cartProduct: CartItem) => { 
+    const product = products.find((p) => p._id.toString() === cartProduct.productId);
+    if (operation === "increment") {
+      const selectedsizeProduct = product?.sizes.find((availableSize: any) => availableSize.size === cartProduct.size);
+
+      if (!selectedsizeProduct) {
+        alert("Please select a size first.");
+        return;
+      }
+      if(!(cartProduct.quantity >= selectedsizeProduct.stock)) {
+        updateQuantity(cartProduct.productId, cartProduct.quantity + 1, cartProduct.size)
+      }
+    } else if (operation === "decrement" && cartProduct.quantity > 1) {
+      updateQuantity(cartProduct.productId, cartProduct.quantity - 1, cartProduct.size)
+    }
+  };
+
   
   const handleCheckout = async () => {
     ///storing the shipRocketorder
@@ -152,11 +171,11 @@ const CartPage = () => {
 
   if (!session) {
     return (
-      <div className="flex flex-col items-center justify-center h-screen">
+      <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
         <p className="mb-4 text-lg">Please log in to view your cart.</p>
         <button
           onClick={() => signIn()}
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          className="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700"
         >
           Log In
         </button>
@@ -165,74 +184,95 @@ const CartPage = () => {
   }
 
   return (
-    <div className="cart-page max-w-screen-xl mx-auto flex flex-col md:flex-row  p-4">
-      <div className="cart-items flex-1">
-        <h1 className="text-2xl font-bold mb-4">Your Cart</h1>
-        {cartItems?.length === 0 ? (
-          <p className="text-gray-600">Your cart is empty!</p>
-        ) : (
-          cartItems?.map((item) => (
-            <div
-                key={item._id?.toString()}
-                className="cart-item flex items-center justify-between mb-4 border p-2 rounded flex-wrap"
+    <div className="cart-page lg:max-w-screen-xl mx-auto px-2 py-10 bg-gray-50 relative">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Cart Items Section */}
+        <div className="cart-items col-span-2 bg-white shadow-lg rounded-lg p-2 md:p-6">
+          <h1 className="text-3xl font-normal underline decoration-1 underline-offset-8 mb-6 text-gray-800">Your Cart</h1>
+          {cartItems.length === 0 ? (
+            <p className="text-gray-600 text-lg">Your cart is empty!</p>
+          ) : (
+            cartItems.map((item, index) => (
+              <div
+                key={index}
+                className="flex relative items-center justify-between p-4 mb-4 border rounded-lg shadow-sm bg-gray-100"
               >
-                <Link key={item._id?.toString()} href={`/product/${item.productId}`}>
-                    <div className="flex items-center m-2">
-                      <img
-                        src={item.image[0]}
-                        alt={item.name}
-                        className="w-20 h-24 object-cover mr-4"
-                        />
-                      <div className="flex justify-center items-center gap-5">
-                        <h2 className="text-lg font-semibold">{item.name}</h2>
-                        <p>Size: {item.size}</p>
-                      </div>
+                <div className="flex items-center mb-8 md:mb-0">
+                  <Link href={`/product/${item.productId}`}>
+                    <img
+                      src={item.image[0]}
+                      alt={item.name}
+                      className=" max-w-[100px] md:max-w-[150px] aspect-[3/4] object-cover rounded-lg mr-4"
+                    />
+                  </Link>
+                  <div className="flex flex-col gap-2 pt-2 pr-1">
+                    <Link href={`/product/${item.productId}`}>
+                      <h2 className="text-md md:text-xl font-semibold text-gray-800">{item.name}</h2>
+                    </Link>
+                    <p className="text-sm md:text-lg text-gray-800">Size: {item.size}</p>
+                    <div className="flex gap-2  ">
+                      <button
+                        onClick={() => handleQuantityChange("decrement", item)}
+                        className="px-3 py-2 bg-gray-200 rounded-l-md text-gray-700 hover:bg-gray-300"
+                        disabled={item.quantity <= 1}
+                      >
+                        -
+                      </button>
+                      <span className="px-4 py-1 text-lg font-medium">{item.quantity}</span>
+                      <button
+                        onClick={() => handleQuantityChange("increment", item)}
+                        className="px-3 py-2 bg-gray-200 rounded-r-md text-gray-700 hover:bg-gray-300"
+                      >
+                        +
+                      </button>
                     </div>
-                </Link>
-                <div className="flex items-center m-2">
-                  <span className="mr-4 font-mono text-xl">Price: ₹{item.price*item.quantity}</span>
-                  <button
-                    onClick={() => updateQuantity(item.productId, item.quantity - 1, item.size)}
-                    className="px-3 py-2 border bg-gray-200 rounded-l"
-                    disabled={item.quantity <= 1}
-                  >
-                    -
-                  </button>
-                  <span className="px-4 py-1">{item.quantity}</span>
-                  <button
-                    onClick={() => updateQuantity(item.productId, item.quantity + 1, item.size)}
-                    className="px-3 py-2 border bg-gray-200 rounded-r"
-                  >
-                    +
-                  </button>
-                  <button
-                    onClick={() => deleteCartItem(item.productId, item.quantity, item.size)}
-                    className="ml-4 text-red-600 bg-slate-200 p-1 rounded-lg"
-                  >
-                    <MdDeleteOutline size={25}/>
-                  </button>
+                  </div>
                 </div>
-             </div>
-          ))
-        )}
-      </div>
-
-      <div className="cart-summary w-full md:w-1/3 p-4 border-l border-gray-300">
-        <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
-        <div className="mb-4">
-          <p className="text-xl font-mono ">
-            Total: <span className="font-bold text-2xl ml-2">₹{calculateTotal()}</span>
-          </p>
+                <div className="flex absolute bottom-2 right-2 md:right-8 md:bottom-4 items-center justify-end w-full gap-3 md:">
+                  <span className="text-xl md:text-2xl font-normal text-gray-800">
+                   sub-total:{" "}{" "} ₹{item.price * item.quantity}
+                  </span>
+                </div>
+                <button
+                    onClick={() => deleteCartItem(item.productId, item.quantity, item.size)}
+                    className="text-red-600 absolute top-1 right-1 hover:text-red-800"
+                  >
+                    <MdDeleteOutline size={24} />
+                </button>
+              </div>
+            ))
+          )}
         </div>
-        <button
-          className="w-full py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700"
-          onClick={handleCheckout}
+  
+        {/* Order Summary Section */}
+        <div
+          className={`cart-summary bg-white shadow-lg rounded-lg p-6 md:relative md:top-auto md:w-full ${
+            cartItems.length > 0
+              ? "fixed bottom-0 left-0 w-full md:w-auto"
+              : "md:relative"
+          }`}
         >
-          Checkout
-        </button>
+          <h2 className=" text-xl underline decoration-1 underline-offset-8 md:text-3xl font-normal mb-4 md:mb-8 text-gray-800">Order Summary </h2>
+          <div className="mb-4 md:mb-6 flex justify-between">
+            <p className=" text-lg lg:text-2xl font-medium text-gray-700">
+              Total :{" "}({cartItems.length}{" "}items)
+            </p>
+            <span className=" text-2xl lg:text-3xl  font-normal text-gray-900">₹{calculateTotal()}</span>
+          </div>
+          <button
+            onClick={handleCheckout}
+            className="w-full py-3 bg-gray-800 text-white text-lg font-semibold rounded-md hover:bg-black"
+          >
+            Checkout
+          </button>
+        </div>
       </div>
+  
+      {/* Spacing to prevent content overlap */}
+      <div className="h-20 md:hidden"></div>
     </div>
   );
+  
 };
 
 export default CartPage;

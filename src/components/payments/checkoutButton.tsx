@@ -149,7 +149,7 @@ export default function CheckoutButton({ amount }: CheckoutButtonProps) {
     <div>
       <button
         onClick={handlePayment}
-        className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="w-full bg-indigo-600 text-white font-bold py-3 rounded-lg hover:bg-indigo-700 transition"
       >
         Pay ₹{amount}
       </button>

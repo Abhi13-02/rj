@@ -1,7 +1,7 @@
 "use client";
 import { MdDeleteOutline } from "react-icons/md";
 import React, { use, useEffect, useState } from "react";
-import { CartItem } from "@/models/Cart";
+import { CartItem, ICart } from "@/models/Cart";
 import { useSession, signIn } from "next-auth/react";
 import useOrderStore from "@/store/order";
 import { useRouter } from "next/navigation";
@@ -9,6 +9,7 @@ import useDBOrderStore from "@/store/dbOrders";
 import { OrderItem } from "@/models/Orders";
 import Link from "next/link";
 import useCartStore from "@/store/cartState";
+import useProductStore from "@/store/productState";
 
 const CartPage = () => {
   const router = useRouter();
@@ -22,6 +23,7 @@ const CartPage = () => {
   const resetDBOrder = useDBOrderStore((state) => state.resetOrder);
   const resetOrder = useOrderStore((state) => state.resetOrder);
   const fetchCart = useCartStore((state) => state.fetchCart);
+  const products = useProductStore((state) => state.products);
 
   useEffect(() => {
     if (session?.user?.id) {
@@ -93,6 +95,23 @@ const CartPage = () => {
     console.log(useDBOrderStore.getState());
     console.log(useOrderStore.getState());
   }, []);
+
+  const handleQuantityChange = (operation: "increment" | "decrement", cartProduct: CartItem) => { 
+    const product = products.find((p) => p._id.toString() === cartProduct.productId);
+    if (operation === "increment") {
+      const selectedsizeProduct = product?.sizes.find((availableSize: any) => availableSize.size === cartProduct.size);
+
+      if (!selectedsizeProduct) {
+        alert("Please select a size first.");
+        return;
+      }
+      if(!(cartProduct.quantity >= selectedsizeProduct.stock)) {
+        updateQuantity(cartProduct.productId, cartProduct.quantity + 1, cartProduct.size)
+      }
+    } else if (operation === "decrement" && cartProduct.quantity > 1) {
+      updateQuantity(cartProduct.productId, cartProduct.quantity - 1, cartProduct.size)
+    }
+  };
 
   
   const handleCheckout = async () => {
@@ -178,7 +197,7 @@ const CartPage = () => {
                 key={index}
                 className="flex relative items-center justify-between p-4 mb-4 border rounded-lg shadow-sm bg-gray-100"
               >
-                <div className="flex items-center mb-8">
+                <div className="flex items-center mb-8 md:mb-0">
                   <Link href={`/product/${item.productId}`}>
                     <img
                       src={item.image[0]}
@@ -193,7 +212,7 @@ const CartPage = () => {
                     <p className="text-sm md:text-lg text-gray-800">Size: {item.size}</p>
                     <div className="flex gap-2  ">
                       <button
-                        onClick={() => updateQuantity(item.productId, item.quantity - 1, item.size)}
+                        onClick={() => handleQuantityChange("decrement", item)}
                         className="px-3 py-2 bg-gray-200 rounded-l-md text-gray-700 hover:bg-gray-300"
                         disabled={item.quantity <= 1}
                       >
@@ -201,7 +220,7 @@ const CartPage = () => {
                       </button>
                       <span className="px-4 py-1 text-lg font-medium">{item.quantity}</span>
                       <button
-                        onClick={() => updateQuantity(item.productId, item.quantity + 1, item.size)}
+                        onClick={() => handleQuantityChange("increment", item)}
                         className="px-3 py-2 bg-gray-200 rounded-r-md text-gray-700 hover:bg-gray-300"
                       >
                         +

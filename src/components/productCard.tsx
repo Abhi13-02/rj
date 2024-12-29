@@ -5,12 +5,12 @@ import useCartStore from "@/store/cartState";
 import Link from "next/link";
 import SignIn from "./authComp/signInButton";
 
-const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
+const ProductCard: React.FC<{ product: IProduct, setShowLoginPanel: React.Dispatch<React.SetStateAction<boolean>> }> = ({ product ,setShowLoginPanel}  ) => {
   const { data: session } = useSession();
   const [quantity, setQuantity] = useState<number>(1);
-  const [size, setSize] = useState("");
+  const [size, setSize] = useState(product.sizes.filter((size) => size.stock > 0)[0].size);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
-  const { updateCart } = useCartStore();
+  const { updateCart, Cart } = useCartStore();
 
   const handleIncrease = () => {
     const selectedSize = product.sizes.find(
@@ -32,20 +32,28 @@ const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
   };
 
   const handleAddToCart = () => {
+    if (!session) {
+      setShowLoginPanel(true); // Show login panel if not logged in
+      return;
+    }
     setIsPanelOpen(true); // Open the size selection panel
   };
 
   const handleConfirmSize = async () => {
-    if (!size) {
-      alert("Please select a size before proceeding.");
-      return;
-    }
     setIsPanelOpen(false); // Close the size selection panel
+
+    const cartQuantity = Cart.items.find((item) => item.productId === product?._id.toString() && item.size === size)?.quantity || 0;
+    const selectedsizeProduct = product.sizes.find((availableSize) => availableSize.size === size)?.stock;
+    if(!selectedsizeProduct) return;
+      if( quantity + cartQuantity > selectedsizeProduct) {
+        alert("Quantity exceeds available stock.");
+        return;
+      }
 
     const orderItem = {
       userId: session?.user?.id,
-      image: product.images,
-      productId: product._id.toString(),
+      image: product.images[0],
+      productId: product._id,
       name: product.title,
       price: product.discountedPrice || product.price,
       quantity,
@@ -65,13 +73,16 @@ const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
         throw new Error("Failed to add product to cart");
       } else {
         console.log("Product added to cart successfully");
-        updateCart(orderItem);
+        updateCart(orderItem );
       }
     }
   };
 
   return (
+
     <div className="relative shadow-sm bg-slate-50 product-card hover:bg-slate-100 hover:shadow-2xl lg:hover:scale-[1.02] rounded-lg flex-grow max-w-[180px] sm:max-w-[230px] md:max-w-[250px] lg:max-w-[300px] lg:p-2  h-full aspect-[2/4] sm:aspect-[2/3] md:aspect-[3/5] lg:aspect-[3/7] xl:aspect-[5/9]">
+     
+
       {/* Product Image */}
       <Link href={`/product/${product._id.toString()}`}>
         <img
@@ -116,7 +127,7 @@ const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
       {/* Add to Cart Button */}
       <button
         onClick={handleAddToCart}
-        className="absolute flex items-center justify-center left-0 bottom-0 w-full h-8 sm:h-10 bg-black text-white py-2 hover:bg-gray-700"
+        className="absolute flex items-center justify-center left-0 bottom-0 w-full h-8 sm:h-10 bg-gray-800 text-white py-2 hover:bg-black"
       >
         Add to Cart
       </button>
@@ -134,9 +145,10 @@ const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
                       key={availableSize.size}
                       onClick={() => setSize(availableSize.size)}
                       className={`px-4 py-2 border rounded-md mr-2 ${
-                        size === availableSize.size
-                          ? "bg-pink-200 text-pink-800 "
-                          : "bg-gray-100 text-black hover:bg-gray-200"
+                        availableSize.stock > 0 ?
+                        (size === availableSize.size
+                          ? "bg-[#FFD8D8] text-[#a22a2a]"
+                          : "bg-gray-100 text-black hover:bg-gray-200"): "bg-gray-200 text-gray-400 cursor-not-allowed line-through"
                       }`}
                     >
                       {availableSize.size}

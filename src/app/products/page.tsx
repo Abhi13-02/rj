@@ -5,6 +5,7 @@ import { IProduct } from "@/models/Products";
 import useProductStore from "@/store/productState";
 import ProductCard from "@/components/productCard";
 import { FaBars, FaTimes } from "react-icons/fa";
+import LoginPanel from "@/components/loginPanel";
 
 const FilterPanel = ({
   onApplyFilters,
@@ -249,6 +250,7 @@ const ProductPage = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<IProduct[]>([]);
   const [showFilter, setShowFilter] = useState(false); // For mobile filter toggle
+  const [showLoginPanel, setShowLoginPanel] = useState(false);
 
   const applyFilters = ({
     priceRange,
@@ -329,9 +331,13 @@ const ProductPage = () => {
       {/* Product Grid */}
       <main className="w-full lg:w-3/4">
         <h1 className="text-xl sm:text-2xl mb-5 text-center">All Products</h1>
+
+         {/* Login Panel */}
+         {showLoginPanel && <LoginPanel onClose={() => setShowLoginPanel(false)} />}
+
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-3 sm:gap-5 place-items-center">
           {filteredProducts.map((product, index) => (
-            <ProductCard key={index} product={product} />
+            <ProductCard key={index} product={product} setShowLoginPanel={setShowLoginPanel}   />
           ))}
         </div>
       </main>

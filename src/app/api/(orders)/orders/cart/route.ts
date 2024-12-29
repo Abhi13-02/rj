@@ -57,10 +57,10 @@ export async function POST(req: NextRequest) {
         );
       }
 
-    // Clear the cart
-    userCart.items = [];
-    userCart.totalAmount = 0;
-    await userCart.save();
+    // // Clear the cart
+    // userCart.items = [];
+    // userCart.totalAmount = 0;
+    // await userCart.save();
 
     // Add order reference to the user
     await User.findByIdAndUpdate(userId, { $push: { yourOrders: order._id } });

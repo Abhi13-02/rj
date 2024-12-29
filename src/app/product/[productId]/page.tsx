@@ -35,6 +35,7 @@ const ProductPage = () => {
   const resetOrder = useOrderStore((state) => state.resetOrder);
   const addOrderItems = useOrderStore((state) => state.addOrderItems);
   const setItems = useDBOrderStore((state) => state.setItems);
+  const Cart = useCartStore((state) => state.Cart);
 
   useEffect(() => {
     fetchProducts();
@@ -48,7 +49,7 @@ const ProductPage = () => {
         .then((res) => res.json())
         .then((data) => {
           setProduct(data);
-          setSelectedSize(data.sizes[0].size);
+          setSelectedSize(data.sizes.filter((size:any) => size.stock > 0)[0].size);
           setMainImage(data.images[0]);
           setLoading(false);
         })
@@ -111,6 +112,14 @@ const ProductPage = () => {
       return;
     }
 
+    const cartQuantity = Cart.items.find((item) => item.productId === product?._id.toString() && item.size === selectedSize)?.quantity || 0;
+    const selectedsizeProduct = product.sizes.find((availableSize) => availableSize.size === selectedSize)?.stock;
+    if(!selectedsizeProduct) return;
+      if( quantity + cartQuantity > selectedsizeProduct) {
+        alert("Quantity exceeds available stock.");
+        return;
+      }
+    
     const response = await fetch(`/api/addCartItems`, {
       method: "POST",
       headers: {
@@ -118,7 +127,7 @@ const ProductPage = () => {
       },
       body: JSON.stringify({
         userId: session?.user?.id,
-        image: product?.images[0],
+        image: product.images[0],
         productId: product?._id,
         name: product?.title,
         price: product?.discountedPrice || product?.price,
@@ -182,7 +191,7 @@ const ProductPage = () => {
           price: product?.discountedPrice || product?.price,
         },
       ],
-      product?.discountedPrice || product?.price
+      (product?.discountedPrice || product?.price)*quantity
     );
 
     // Redirect to the buy page
@@ -243,10 +252,12 @@ const ProductPage = () => {
             {product?.sizes.map((size) => (
               <button
                 key={size.size}
-                className={`px-4 py-2  border rounded-full ${
-                  selectedSize === size.size ? "bg-[#FFD8D8] text-[#a22a2a]" : ""
+                className={`px-4 py-2  border rounded-full ${size.stock > 0 ?
+                  (selectedSize === size.size ? "bg-[#FFD8D8] text-[#a22a2a]" : "") :
+                  "bg-gray-200 text-gray-400 cursor-not-allowed line-through"
                 }`}
                 onClick={() => {
+                  if (size.stock === 0) return;
                   setSelectedSize(size.size);
                   setQuantity(1);
                 }}

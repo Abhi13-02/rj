@@ -71,24 +71,24 @@ const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
   };
 
   return (
-    <div className="relative shadow-sm bg-slate-50 product-card hover:bg-slate-100 lg:hover:scale-[1.02] rounded-lg flex-grow max-w-[180px] sm:max-w-[230px] md:max-w-[250px]  h-full aspect-[2/4] sm:aspect-[2/3] md:aspect-[3/5] lg:aspect-[3/7] xl:aspect-[5/9]">
+    <div className="relative shadow-sm bg-slate-50 product-card hover:bg-slate-100 hover:shadow-2xl lg:hover:scale-[1.02] rounded-lg flex-grow max-w-[180px] sm:max-w-[230px] md:max-w-[250px] lg:max-w-[300px] lg:p-2  h-full aspect-[2/4] sm:aspect-[2/3] md:aspect-[3/5] lg:aspect-[3/7] xl:aspect-[5/9]">
       {/* Product Image */}
       <Link href={`/product/${product._id.toString()}`}>
         <img
           src={product.images[0]}
           alt={product.title}
-          className="w-full h-[60%] sm:h-[65%]  object-cover rounded-md"
+          className="w-full h-[63%] sm:h-[65%]  object-cover rounded-md"
         />
       </Link>
 
       <div className="px-2">
         {/* Product Name */}
-        <h2 className="text-md md:text-lg text-gray-800 font-semibold xl:mt-2 line-clamp-2">
+        <h2 className="text-md md:text-lg  text-gray-800 font-semibold xl:mt-2 line-clamp-2">
           {product.title}
         </h2>
 
         {/* Product Price */}
-        <div className="text-green-800 mt-1">
+        <div className="text-green-800 mt-1 md:mt-2">
           {product.discountedPrice ? (
             <>
               <span className="line-through text-xs text-gray-500 mr-1">
@@ -123,11 +123,11 @@ const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
 
       {/* Sliding Side Panel */}
       {isPanelOpen && (
-        <div className="fixed top-0 right-0 h-full w-64 bg-white shadow-lg z-50 transition-transform duration-300">
+        <div className="absolute top-0 md:w-[80%] bg-opacity-90 bg-white shadow-lg z-50 transition-transform duration-300">
           <div className="p-4">
             {session?.user?.id ? (
               <>
-                <h3 className="text-xl font-bold mb-4">Select Size</h3>
+                <h3 className="text-xl font-normal mb-4">Select Size & Quantity</h3>
                 <div className="size-options mb-4">
                   {product.sizes.map((availableSize) => (
                     <button
@@ -135,7 +135,7 @@ const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
                       onClick={() => setSize(availableSize.size)}
                       className={`px-4 py-2 border rounded-md mr-2 ${
                         size === availableSize.size
-                          ? "bg-blue-600 text-white"
+                          ? "bg-pink-200 text-pink-800 "
                           : "bg-gray-100 text-black hover:bg-gray-200"
                       }`}
                     >
@@ -160,7 +160,7 @@ const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
                 </div>
                 <button
                   onClick={handleConfirmSize}
-                  className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 mt-4"
+                  className="w-full bg-gray-800 text-white py-2 rounded-md hover:bg-black mt-4"
                 >
                   Confirm
                 </button>
@@ -174,7 +174,7 @@ const ProductCard: React.FC<{ product: IProduct }> = ({ product }) => {
 
             <button
               onClick={() => setIsPanelOpen(false)}
-              className="w-full bg-red-600 text-white py-2 rounded-md mt-4 hover:bg-red-700"
+              className="w-full bg-red-500 text-white py-2 rounded-md mt-4 hover:bg-red-700"
             >
               Close
             </button>

@@ -3,7 +3,8 @@ import localFont from "next/font/local";
 import "./globals.css";
 import SignIn from "@/components/authComp/signInButton";
 import { SessionProvider } from "next-auth/react";
-import Navbar from "../components/Navbar"
+import Navbar from "../components/Navbar";
+import whatsapp from "../../public/utilityIcons/whatsapp.svg";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -34,12 +35,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <SessionProvider >
+      <SessionProvider>
         <body
           className={`${playFair.variable} ${playFair.variable} antialiased`}
         >
-          <Navbar/>
+          <Navbar />
           {children}
+          <a
+            href="https://wa.me/916002107608?text=Hi%20there!%20I%20want%20to%20know%20more%20about%20your%20services."
+            target="_blank"
+            rel="noopener noreferrer"
+            className="fixed bottom-4 right-4 bg-green-500 text-white rounded-full p-2 sm:p-4 shadow-lg hover:bg-green-600"
+            aria-label="Chat with us on WhatsApp"
+          >
+            <img src={whatsapp.src} alt="WhatsApp" className="w-8 h-8" />
+          </a>
         </body>
       </SessionProvider>
     </html>

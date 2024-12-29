@@ -8,8 +8,8 @@ const queryClient = new QueryClient();
 
 export interface CartItem {
   _id?: mongoose.Types.ObjectId | string;
-  productId: string;
-  image: string[];
+  productId: mongoose.Types.ObjectId | string;
+  image: string;
   name: string;
   price: number;
   quantity: number;

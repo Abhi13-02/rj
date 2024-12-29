@@ -171,6 +171,8 @@ const ProductPage = () => {
 
     //////setting in DB////
 
+    let pricefinal = product?.discountedPrice || product?.price;
+
     setItems(
       [
         {
@@ -182,7 +184,7 @@ const ProductPage = () => {
           price: product?.discountedPrice || product?.price,
         },
       ],
-      product?.discountedPrice || product?.price
+      pricefinal*quantity
     );
 
     // Redirect to the buy page

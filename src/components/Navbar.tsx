@@ -28,19 +28,19 @@ const Navbar = () => {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const products = useProductStore((state) => state.products);
   // Fetch the cart state directly from Zustand
-  const  fetchCart  = useCartStore((state) => state.fetchCart);
+  const fetchCart = useCartStore((state) => state.fetchCart);
   const cart = useCartStore((state) => state.Cart);
-  
+
   const [dropdownOpen, setDropdownOpen] = useState(false); // Dropdown toggle state
 
   useEffect(() => {
     const fetchCartData = async () => {
-        if (session?.user?.id) {
-            await fetchCart(session.user.id);
-        }
+      if (session?.user?.id) {
+        await fetchCart(session.user.id);
+      }
     };
     fetchCartData();
-}, [session, fetchCart]);
+  }, [session, fetchCart]);
 
   // Handle toggle
   const handleToggle = () => setDropdownOpen(!dropdownOpen);
@@ -88,15 +88,14 @@ const Navbar = () => {
       </button>
 
       {/* Logo */}
-      <div className={`text-2xl font-bold text-white ${playFair.className}`}>
+      <div className={`lg:text-2xl sm:text-base font-bold text-white ${playFair.className}`}>
         <Link href="/">RJ TRADITIONAL</Link>
       </div>
 
       {/* Navigation Links */}
       <nav
-        className={`absolute lg:static top-20 left-0 w-full lg:w-auto lg:flex bg-[#A0214D] text-black lg:bg-transparent flex-col lg:flex-row lg:items-center transition-all ${
-          isMenuOpen ? "block" : "hidden"
-        }`}
+        className={`absolute lg:static top-20 left-0 w-full lg:w-auto lg:flex bg-[#A0214D] text-black lg:bg-transparent flex-col lg:flex-row lg:items-center transition-all ${isMenuOpen ? "block" : "hidden"
+          }`}
       >
         <ul className="flex flex-col lg:flex-row gap-6 p-2">
           <li className="relative group">
@@ -119,10 +118,10 @@ const Navbar = () => {
       </nav>
 
       {/* Utility Icons */}
-      <div className="hidden lg:flex gap-6 items-center justify-center relative">
+      <div className="flex gap-4 items-center justify-center relative">
         <div>
           <BsSearch
-            size={30}
+            size={20}
             className="text-white cursor-pointer font-light"
             onClick={handleSearchIconClick}
           />
@@ -137,11 +136,11 @@ const Navbar = () => {
             {dropdownOpen && (
               <div className="absolute right-0 top-8 mt-2 w-40 flex flex-col items-center gap-2 bg-red-400 shadow-md rounded-md py-2 z-10">
                 <Link className="block w-4/5 rounded-md px-4 py-2 text-white hover:bg-gray-900" href="/yourOrders">
-                    Your Orders
+                  Your Orders
                 </Link>
                 <hr className="w-full bg-white" />
                 <Link href="/products" className="block w-4/5 rounded-md px-4 py-2 text-white hover:bg-gray-900">
-                     <SignOut/>
+                  <SignOut />
                 </Link>
               </div>
             )}
@@ -169,7 +168,7 @@ const Navbar = () => {
 
         {/* Search Bar */}
         {searchActive && (
-          <div className="absolute right-24 top-full bg-white shadow-md w-full sm:w-[500px] p-4 mt-2 rounded-md">
+          <div className="absolute top-full lg:right-[25%] md:right-[10%] sm:right-[2%] bg-white transition-all ease-in-out shadow-md w-[90vw] p-4 mt-2 rounded-md">
             <input
               type="text"
               value={searchQuery}

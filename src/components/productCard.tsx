@@ -8,7 +8,7 @@ import SignIn from "./authComp/signInButton";
 const ProductCard: React.FC<{ product: IProduct, setShowLoginPanel: React.Dispatch<React.SetStateAction<boolean>> }> = ({ product ,setShowLoginPanel}  ) => {
   const { data: session } = useSession();
   const [quantity, setQuantity] = useState<number>(1);
-  const [size, setSize] = useState(product.sizes.filter((size) => size.stock > 0)[0].size);
+  const [size, setSize] = useState(product.sizes.filter((size) => size.stock > 0)[0]?.size || "");
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const { updateCart, Cart } = useCartStore();
 

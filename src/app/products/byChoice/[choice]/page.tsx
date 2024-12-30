@@ -203,11 +203,11 @@ const ProductPage = () => {
     const filtered = filteredProducts.filter((product: IProduct) => {
       const price = product.discountedPrice ?? product.price;
       const inPriceRange = price >= priceRange[0] && price <= priceRange[1];
-      const matchesTags = selectedTags.length > 0
+      const matchesTags = selectedTags?.length > 0
         ? selectedTags.every((tag) => product.tags?.includes(tag))
         : true;
       const matchesSizes = selectedSizes.length > 0
-        ? selectedSizes.every((size) =>
+        ? selectedSizes.some((size) =>
             product.sizes?.some((s) => s.size === size)
           )
         : true;

@@ -72,12 +72,12 @@ const ProductPage = () => {
   }, [productId]);
 
   useEffect(() => {
-    const applyFilters = ({ selectedCategory }: { selectedCategory: string | undefined }) => {
+    const applyFilters = ({ title }: { title: string | undefined }) => {
       const filtered = products.filter((productt: IProduct) => {
-        const matchesCategory = selectedCategory
-          ? productt.category.toLowerCase() === selectedCategory.toLowerCase()
+        const matchesTitle = title
+          ? productt.title.toLowerCase() === title.toLowerCase()
           : true;
-        return matchesCategory && productt.title !== product?.title;
+        return matchesTitle && !productt.tags.every((tag) => product?.tags?.includes(tag));
       });
       setSimilarProducts(filtered);
 
@@ -86,9 +86,9 @@ const ProductPage = () => {
         const isLoved = productt.tags.includes("Most Loved");
         return isLoved && productt.title !== product?.title;
       });
-      setBestSellers(products);
+      setBestSellers(topProducts);
     };
-    applyFilters({ selectedCategory: product?.category });
+    applyFilters({ title: product?.title });
   }, [product]);
 
 

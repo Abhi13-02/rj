@@ -307,7 +307,7 @@ const ProductPage = () => {
         </div>
   
         {/* Payment Options */}
-        <div className="sm:flex mb-4 items-center gap-2">
+        <div className="xl:flex mb-4 items-center gap-2">
           <span className="text-black font-semibold mr-1">Pay With :</span>
             <div className="mr-2 flex items-center mt-2 justify-center gap-5">
               <img src="/special/gpay.png" alt="" width={40} />

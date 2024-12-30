@@ -53,15 +53,15 @@ const AddressPage: React.FC = () => {
 
   const validatePincode = async (pincode: string) => {
     try {
-      const response = await fetch(`https://api.zippopotam.us/IN/${pincode}`);
+      const response = await fetch(`https://api.postalpincode.in/pincode/${pincode}`);
       const data = await response.json();
+      console.log("Pincode data:", data);
+      
       if (response.ok && data) {
-      const state = data.places[0]["state"];
-
-
+      const info = data[0]["PostOffice"][0];
         setBillingDetails((prev) => ({
           ...prev,
-          state: state,
+          state: info["State"],
         }));
         setError(null);
       } else {

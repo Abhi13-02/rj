@@ -53,7 +53,7 @@ const AddressPage: React.FC = () => {
 
   const validatePincode = async (pincode: string) => {
     try {
-      const response = await fetch(`http://api.zippopotam.us/IN/${pincode}`);
+      const response = await fetch(`https://api.zippopotam.us/IN/${pincode}`);
       const data = await response.json();
       if (response.ok && data) {
       const state = data.places[0]["state"];

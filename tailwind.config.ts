@@ -27,7 +27,7 @@ export default {
         slide: "slide 23s infinite linear"
       },
       screens: {
-        'sm': '344px'
+        'sm': '319px'
       }
     },
   },

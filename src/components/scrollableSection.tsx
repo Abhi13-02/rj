@@ -22,7 +22,7 @@ const ScrollableRow = ({ title, products }: { title: string; products: IProduct[
 
   return (
     <div className="flex flex-col rounded-md  px-3 pt-2 bg-[#fcf7f7]">
-      <h2 className="text-2xl mb-4 text-center font-light  border-b-1 border-gray-900" >{title}</h2>
+      <h2 className=" text-lg md:text-2xl mb-4 text-center font-light  border-b-1 border-gray-900" >{title}</h2>
       <div className="relative">
         {/* Left Arrow */}
         <button

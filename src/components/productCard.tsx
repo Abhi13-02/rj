@@ -88,7 +88,7 @@ const ProductCard: React.FC<{ product: IProduct, setShowLoginPanel: React.Dispat
   };
 
   return (
-    <div className= {` ${isOutOfStock ? "opacity-70" : ""} relative shadow-sm product-card hover:bg-slate-100 hover:shadow-2xl lg:hover:scale-[1.02] rounded-lg flex-grow max-w-[180px] sm:max-w-[230px] md:max-w-[250px] lg:max-w-[300px] lg:p-2  max-h-[280px] md:max-h-[450px] aspect-[2/4] sm:aspect-[10/19] md:aspect-[2/3] lg:aspect-[6/9] xl:aspect-[6/10]`}>
+    <div className= {` ${isOutOfStock ? "opacity-70" : ""} relative shadow-sm product-card hover:bg-slate-100 hover:shadow-2xl lg:hover:scale-[1.02] rounded-lg flex-grow max-w-[180px] sm:max-w-[250px] md:max-w-[280px] lg:max-w-[300px] lg:p-2  max-h-[280px] md:max-h-[450px] aspect-[2/4] sm:aspect-[12/19] md:aspect-[2/3] lg:aspect-[6/9] xl:aspect-[6/10]`}>
       {/* Out of Stock Badge */}
       {isOutOfStock && (
         <div className="absolute top-2 right-2 opacity-100 z-8 bg-red-500 text-white text-xs font-bold py-1 px-2 rounded-md">
@@ -112,7 +112,7 @@ const ProductCard: React.FC<{ product: IProduct, setShowLoginPanel: React.Dispat
         </h2>
 
         {/* Product Price */}
-        <div className="text-green-800 sm:mt-[4px] md:mt-2">
+        <div className="text-green-800 mt-[2px] md:mt-2">
           {product.discountedPrice ? (
             <>
               <span className="line-through text-xs text-gray-500 mr-1">

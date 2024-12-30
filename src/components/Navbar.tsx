@@ -90,7 +90,7 @@ const Navbar = () => {
 
       {/* Logo */}
       <div className={`lg:text-2xl sm:text-base font-bold text-white ${playFair.className}`}>
-        <Link href="/">RJ TRADITIONAL</Link>
+        <Link href="/" className=" text-xl md:text-3xl">RJ TRADITIONAL</Link>
       </div>
 
       {/* Navigation Links */}

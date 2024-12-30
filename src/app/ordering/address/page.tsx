@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import useOrderStore from "@/store/order";
 import useDBOrderStore from "@/store/dbOrders";
 import { ShippingAddress } from "@/store/dbOrders";
+import { toast } from "react-toastify";
 
 const AddressPage: React.FC = () => {
   const router = useRouter();
@@ -72,7 +73,7 @@ const AddressPage: React.FC = () => {
         }));
       }
     } catch (error) {
-      setError("Error validating PIN code. Please try again later.");
+      setError("Error validating PIN code.");
       console.error(error);
     }
   };
@@ -83,8 +84,25 @@ const AddressPage: React.FC = () => {
       !billingDetails.state 
     ) {
       setError(
-        "Please enter a valid PIN code and ensure all fields are filled."
+        "Please enter a valid PIN code ."
       );
+      return;
+    }
+    if ( !billingDetails.customer_name ||
+      !billingDetails.last_name ||
+      !billingDetails.address ||
+      !billingDetails.city ||
+      !billingDetails.pincode ||
+      !billingDetails.state ||
+      !billingDetails.country ||
+      !billingDetails.email ||
+      !billingDetails.phone
+    ) {
+      toast.error("Please fill in all the required fields.",{autoClose: 5000, closeOnClick: false});
+      return;
+    }
+    if(billingDetails.phone.length !== 10){
+      toast.error("Please enter a valid phone number.",{autoClose: 5000, closeOnClick: false});
       return;
     }
     addAddress(billingDetails);

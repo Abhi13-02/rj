@@ -2,7 +2,7 @@ import React from 'react'
 
 const Footer = () => {
     return (
-        <footer className="bg-[#A0214D] h-[40vh] mt-10 flex justify-center items-end">
+        <footer className="bg-[#A0214D] h-[40vh] mt-10 flex bottom-0 justify-center items-end">
             <div className="w-full flex justify-center items-center overflow-hidden mt-6 mb-6">
                 <svg width="3000" height="20" viewBox="0 0 1329 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M0 14.2363H610.891" stroke="#F6E9E9" />

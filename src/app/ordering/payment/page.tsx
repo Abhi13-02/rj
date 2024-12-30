@@ -69,7 +69,7 @@ const PaymentPage: React.FC = () => {
         throw new Error("Failed to create order");
       }
 
-      toast.success("Order placed successfully with COD!");
+      toast.success("Order placed successfully with COD!",{autoClose: 5000, position: "top-center"});
 
       setDBPaymentMethod(paymentMethod);
       setShiprocketOrderId(data.order_id);
@@ -91,7 +91,7 @@ const PaymentPage: React.FC = () => {
 
       router.push("/yourOrders");
     } else {
-      toast.error("Please select a payment method!");
+      toast.error("Please select a payment method!",{autoClose: 3000});
     }
   };
 

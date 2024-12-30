@@ -44,7 +44,7 @@ export default function CheckoutButton({ amount }: CheckoutButtonProps) {
         body: JSON.stringify({ amount }),
       });
 
-      const { order } = await orderResponse.json();
+      const { order  }  = await orderResponse.json();
       console.log("Razorpay order data:", order);
 
       if (!order || !order.id) {
@@ -95,7 +95,7 @@ export default function CheckoutButton({ amount }: CheckoutButtonProps) {
               throw new Error("Failed to create shiprockrtOrder");
             }
       
-            toast.success("Order placed successfully ");
+            toast.success("Order placed successfully ",{autoClose: 5000, position: "top-center"});
 
             ////////DB connection here after correctly handeling address///////////
 

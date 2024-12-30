@@ -4,6 +4,8 @@ import { useSession } from "next-auth/react";
 import useCartStore from "@/store/cartState";
 import Link from "next/link";
 import SignIn from "./authComp/signInButton";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ProductCard: React.FC<{ product: IProduct, setShowLoginPanel: React.Dispatch<React.SetStateAction<boolean>> }> = ({ product, setShowLoginPanel }) => {
   const { data: session } = useSession();
@@ -74,9 +76,11 @@ const ProductCard: React.FC<{ product: IProduct, setShowLoginPanel: React.Dispat
       });
 
       if (!response.ok) {
+        toast.error("Failed to add product to cart.");
         throw new Error("Failed to add product to cart");
       } else {
         console.log("Product added to cart successfully");
+        toast.success("Product added to cart successfully!");
         updateCart(orderItem);
       }
     }

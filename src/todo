@@ -5,3 +5,14 @@
 4) dbOrders, change the make order api for database, create another global state, update the details from the products page, when we create the order after confirming the shiprocket order then we are going to add info from that global state to the api request body.
 
 5) all same product but diffrent sizes deketed in cart
+
+HOST = 89.116.33.125
+PORT = 1034
+USERNAME = pritam
+SSHKEY = -----BEGIN OPENSSH PRIVATE KEY-----
+b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
+QyNTUxOQAAACBFBOwPyj/5Y8kBnjXzYWRnG5aI3lxwzuSr2iCyYcQWmQAAAJhh63kxYet5
+MQAAAAtzc2gtZWQyNTUxOQAAACBFBOwPyj/5Y8kBnjXzYWRnG5aI3lxwzuSr2iCyYcQWmQ
+AAAECOmmEkJeBF+FinF18Pv6qa3e+xyg0vJtFNmCnteF15d0UE7A/KP/ljyQGeNfNhZGcb
+lojeXHDO5KvaILJhxBaZAAAAEGdpdGFjdGlvbmF1dG9kZXABAgMEBQ==
+-----END OPENSSH PRIVATE KEY-----

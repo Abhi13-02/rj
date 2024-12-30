@@ -231,32 +231,32 @@ function Page() {
                     </Link>
                 </div>
             </section>
-            <div className="w-full h-[20vh] bg-[#FFD8D8] flex justify-center items-center gap-20">
+            {/* <div className="w-full h-[20vh] bg-[#FFD8D8] flex justify-center items-center gap-10">
                 <div className="flex flex-col justify-center items-center">
-                    <svg width="57" height="41" viewBox="0 0 57 41" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="30" height="41" viewBox="0 0 57 41" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M38 28.6667V2.125H2.375V28.6667H38ZM38 28.6667H54.625V18.4583L47.5 12.3333H38V28.6667ZM19 33.7708C19 36.5898 16.3417 38.875 13.0625 38.875C9.78331 38.875 7.125 36.5898 7.125 33.7708C7.125 30.9519 9.78331 28.6667 13.0625 28.6667C16.3417 28.6667 19 30.9519 19 33.7708ZM49.875 33.7708C49.875 36.5898 47.2167 38.875 43.9375 38.875C40.6583 38.875 38 36.5898 38 33.7708C38 30.9519 40.6583 28.6667 43.9375 28.6667C47.2167 28.6667 49.875 30.9519 49.875 33.7708Z" stroke="#531314" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                     <span className="text-[#832729] text-center">demon text</span>
                 </div>
                 <div className="flex flex-col justify-center items-center">
-                    <svg width="47" height="45" viewBox="0 0 47 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="30" height="45" viewBox="0 0 47 45" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M16.625 42.9168V22.5002H30.375V42.9168M2.875 16.3752L23.5 2.0835L44.125 16.3752V38.8335C44.125 39.9165 43.6421 40.9551 42.7826 41.7208C41.923 42.4866 40.7572 42.9168 39.5417 42.9168H7.45833C6.24276 42.9168 5.07697 42.4866 4.21743 41.7208C3.35789 40.9551 2.875 39.9165 2.875 38.8335V16.3752Z" stroke="#531314" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                     <span className="text-[#832729] text-center">demon text</span>
                 </div>
                 <div className="flex flex-col justify-center items-center">
-                    <svg width="57" height="41" viewBox="0 0 57 41" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="30" height="41" viewBox="0 0 57 41" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M38 28.6667V2.125H2.375V28.6667H38ZM38 28.6667H54.625V18.4583L47.5 12.3333H38V28.6667ZM19 33.7708C19 36.5898 16.3417 38.875 13.0625 38.875C9.78331 38.875 7.125 36.5898 7.125 33.7708C7.125 30.9519 9.78331 28.6667 13.0625 28.6667C16.3417 28.6667 19 30.9519 19 33.7708ZM49.875 33.7708C49.875 36.5898 47.2167 38.875 43.9375 38.875C40.6583 38.875 38 36.5898 38 33.7708C38 30.9519 40.6583 28.6667 43.9375 28.6667C47.2167 28.6667 49.875 30.9519 49.875 33.7708Z" stroke="#531314" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                     <span className="text-[#832729] text-center">demon text</span>
                 </div>
                 <div className="flex flex-col justify-center items-center">
-                    <svg width="47" height="45" viewBox="0 0 47 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="30" height="45" viewBox="0 0 47 45" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M16.625 42.9168V22.5002H30.375V42.9168M2.875 16.3752L23.5 2.0835L44.125 16.3752V38.8335C44.125 39.9165 43.6421 40.9551 42.7826 41.7208C41.923 42.4866 40.7572 42.9168 39.5417 42.9168H7.45833C6.24276 42.9168 5.07697 42.4866 4.21743 41.7208C3.35789 40.9551 2.875 39.9165 2.875 38.8335V16.3752Z" stroke="#531314" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                     <span className="text-[#832729] text-center">demon text</span>
                 </div>
-            </div>
+            </div> */}
             <footer className="bg-[#A0214D] h-[40vh] mt-10 flex justify-center items-end">
                 <div className="w-full flex justify-center items-center overflow-hidden mt-6 mb-6">
                     <svg width="1329" height="28" viewBox="0 0 1329 28" fill="none" xmlns="http://www.w3.org/2000/svg">

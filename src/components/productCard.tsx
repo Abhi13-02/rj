@@ -83,7 +83,7 @@ const ProductCard: React.FC<{ product: IProduct, setShowLoginPanel: React.Dispat
   };
 
   return (
-    <div className={`${isOutOfStock ? "opacity-60" : ""}  relative shadow-sm bg-slate-50 product-card hover:bg-slate-100 hover:shadow-2xl lg:hover:scale-[1.02] rounded-lg flex-grow max-w-[180px] sm:max-w-[230px] md:max-w-[250px] lg:max-w-[300px] lg:p-2  h-full aspect-[2/4] sm:aspect-[2/3] md:aspect-[3/5] lg:aspect-[3/7] xl:aspect-[5/9]`}>
+    <div className= "relative shadow-sm bg-slate-50 product-card hover:bg-slate-100 hover:shadow-2xl lg:hover:scale-[1.02] rounded-lg flex-grow max-w-[180px] sm:max-w-[230px] md:max-w-[250px] lg:max-w-[300px] lg:p-2  h-full aspect-[2/4] sm:aspect-[10/19] md:aspect-[2/3] lg:aspect-[6/9] xl:aspect-[6/10]">
       {/* Out of Stock Badge */}
       {isOutOfStock && (
         <div className="absolute top-2 right-2 opacity-100 bg-red-500 text-white text-xs font-bold py-1 px-2 rounded-md">
@@ -96,18 +96,18 @@ const ProductCard: React.FC<{ product: IProduct, setShowLoginPanel: React.Dispat
         <img
           src={product.images[0]}
           alt={product.title}
-          className="w-full h-[63%] sm:h-[65%] object-cover rounded-md"
+          className="w-full h-[62%] sm:h-[62%] object-cover rounded-md"
         />
       </Link>
 
       <div className="px-2">
         {/* Product Name */}
-        <h2 className="text-md md:text-lg text-gray-800 font-semibold xl:mt-2 line-clamp-2">
+        <h2 className="text-md md:text-lg text-gray-700 font-semibold xl:mt-2 line-clamp-2">
           {product.title}
         </h2>
 
         {/* Product Price */}
-        <div className="text-green-800 mt-1 md:mt-2">
+        <div className="text-green-800 sm:mt-[4px] md:mt-2">
           {product.discountedPrice ? (
             <>
               <span className="line-through text-xs text-gray-500 mr-1">
@@ -142,7 +142,7 @@ const ProductCard: React.FC<{ product: IProduct, setShowLoginPanel: React.Dispat
 
       {/* Sliding Side Panel */}
       {isPanelOpen && (
-        <div className="absolute top-0 md:w-[80%] bg-opacity-90 bg-white shadow-lg z-50 transition-transform duration-300">
+        <div className="absolute top-0 md:w-[100%] bg-opacity-90 bg-white shadow-lg z-50 transition-transform duration-300">
           <div className="p-4">
             {session?.user?.id ? (
               <>

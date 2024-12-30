@@ -290,7 +290,7 @@ const ProductPage = () => {
   }, [products]);
 
   return (
-    <div className="p-4 flex flex-col lg:flex-row gap-6">
+    <div className="p-2 md:p-4 flex flex-col lg:flex-row gap-6">
       {/* Hamburger Menu */}
       <button
         className="lg:hidden flex items-center gap-2 bg-gray-100 text-black px-4 py-2 rounded shadow"
@@ -311,9 +311,9 @@ const ProductPage = () => {
       {/* Product Grid */}
       <main className="w-full lg:w-3/4">
         <h1 className=" text-xl sm:text-2xl mb-5 text-center">{category.toLocaleUpperCase()}</h1>
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-3 sm:gap-5 place-items-center">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4  gap-3 sm:gap-5 place-items-center">
           {filteredProductsbyPannel.map((product, index) => (
-            <ProductCard key={index} product={product} />
+            <ProductCard key={index} product={product} setShowLoginPanel={setShowFilter} />
           ))}
         </div>
       </main>

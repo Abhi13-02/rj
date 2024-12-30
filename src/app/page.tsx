@@ -63,7 +63,7 @@ function Page() {
                 </div>
                 <div className={`category-content w-full flex justify-center items-center ${playFair.className} font-bold grid  grid-cols-2 grid-rows-3 md:grid-cols-3 md:grid-rows-2 gap-x-7 gap-y-3 md:gap-y-7`}>
                     <div className="flex  w-full justify-center items-center flex-col">
-                        <Link href={"#"} >
+                        <Link href={"/products/saree"} >
                             <Image
                                 width={450}
                                 height={400}
@@ -74,7 +74,7 @@ function Page() {
                             <span className="text-[#832729] text-lg md:text-2xl text-center">SAREES</span>
                         </Link>
                     </div>
-                    <Link href={"#"} >
+                    <Link href={"/products/lehenga"} >
                         <div className="flex  justify-center items-center flex-col w-full h-full">
                             <Image
                                 width={450}
@@ -86,7 +86,7 @@ function Page() {
                             <span className="text-[#832729] text-lg md:text-2xl text-center">LEHENGA</span>
                         </div>
                     </Link>
-                    <Link href={"#"} >
+                    <Link href={"/products/suits"} >
                         <div className="flex  justify-center items-center flex-col w-full h-full">
                             <Image
                                 width={450}
@@ -98,7 +98,7 @@ function Page() {
                             <span className="text-[#832729] text-lg md:text-2xl text-center">SUITS</span>
                         </div>
                     </Link>
-                    <Link href={"#"} >
+                    <Link href={"/products/kurti"} >
                         <div className="flex  justify-center items-center flex-col w-full h-[200px]">
                             <Image
                                 width={450}
@@ -110,7 +110,7 @@ function Page() {
                             <span className="text-[#832729] text-lg md:text-2xl text-center">KURTIS</span>
                         </div>
                     </Link>
-                    <Link href={"#"} >
+                    <Link href={"/products/duppata"} >
                         <div className="flex  justify-center items-center flex-col w-full h-[200px]">
                             <Image
                                 width={450}
@@ -151,7 +151,7 @@ function Page() {
                     </svg>
                 </div>
                 <div className={`category-content w-full flex justify-center items-center ${playFair.className} font-bold text-md grid  grid-cols-2 md:grid-cols-3 md:grid-rows-2 gap-6`}>
-                    <Link href={"#"} >
+                    <Link href={"/products"} >
                         <div className="flex justify-center items-center flex-col">
                             <Image
                                 src={"/rjPics/ghatcholaSaree.png"}
@@ -162,7 +162,7 @@ function Page() {
                             />
                         </div>
                     </Link>
-                    <Link href={"#"} >
+                    <Link href={"/products"} >
                         <div className="flex justify-center items-center flex-col">
                             <Image
                                 src={"/rjPics/banarsiSaree.png"}
@@ -173,7 +173,7 @@ function Page() {
                             />
                         </div>
                     </Link>
-                    <Link href={"#"} >
+                    <Link href={"/products"} >
                         <div className="flex justify-center items-center flex-col">
                             <Image
                                 src={"/rjPics/artSilk.png"}
@@ -184,7 +184,7 @@ function Page() {
                             />
                         </div>
                     </Link>
-                    <Link href={"#"} >
+                    <Link href={"/products"} >
                         <div className="flex justify-center items-center flex-col">
                             <Image
                                 src={"/rjPics/dolaSilk.png"}
@@ -195,7 +195,7 @@ function Page() {
                             />
                         </div>
                     </Link>
-                    <Link href={"#"} >
+                    <Link href={"/products"}>
                         <div className="flex justify-center items-center flex-col">
                             <Image
                                 src={"/rjPics/georgette.png"}
@@ -206,7 +206,7 @@ function Page() {
                             />
                         </div>
                     </Link>
-                    <Link href={"#"} >
+                    <Link href={"/products"} >
                         <div className="flex justify-center items-center flex-col">
                             <Image
                                 src={"/rjPics/kotaDoriya.png"}

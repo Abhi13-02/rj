@@ -5,15 +5,16 @@ import useProductStore from "@/store/productState";
 import { IProduct } from "@/models/Products";
 import { set } from "mongoose";
 import ScrollableRow from "./scrollableSection";
+import Loading from "./loading";
 
 
 const Tabs: React.FC<{}> = () => {
     const [activeTab, setActiveTab] = useState(1);
     const [currentIndex, setCurrentIndex] = useState(0);
-    const itemsToShow = 3;
     const products = useProductStore((state) => state.products);
     const [LovedProducts, setLovedProducts] = useState<IProduct[]>([]);
     const [newProducts, setNewProducts] = useState<IProduct[]>([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         console.log("lovedddd",LovedProducts);
@@ -31,6 +32,7 @@ const Tabs: React.FC<{}> = () => {
               product.tags?.includes(selectedTag)
             );
             setLovedProducts(filteredLoved);
+            setLoading(false);
           };
          applyFilters({
             selectedTag: "Most Loved"
@@ -48,6 +50,10 @@ const Tabs: React.FC<{}> = () => {
           setNewProducts(sortProductsByDate(products));
         
     }, [products]);
+
+    if (loading) {
+        return <Loading />;
+      }
 
     return (
         <div className="flex justify-center items-center w-full h-full">

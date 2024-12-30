@@ -118,7 +118,7 @@ const Navbar = () => {
       </nav>
 
       {/* Utility Icons */}
-      <div className="flex gap-5 items-center justify-center relative">
+      <div className="flex gap-2 items-center justify-center relative">
         <div>
           <BsSearch
             size={28}
@@ -129,8 +129,7 @@ const Navbar = () => {
         {session ? (
           <>
             <BsPersonCircle
-              size={30}
-              className="text-white cursor-pointer font-light"
+              className="text-white cursor-pointer font-light  text-s md:text-2xl"
               onClick={handleToggle}
             />
             {dropdownOpen && (
@@ -146,7 +145,7 @@ const Navbar = () => {
             )}
           </>
         ) : (
-          <div className="ring-1 hover:bg-white hover:text-gray-900 ring-white px-4 py-2 rounded-2xl text-white">
+          <div className="ring-1 hover:bg-white text-xs sm:text-md hover:text-gray-900 ring-white px-4 py-2 rounded-2xl text-white">
             <SignInButton />
           </div>
         )}

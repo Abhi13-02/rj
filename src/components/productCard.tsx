@@ -88,7 +88,7 @@ const ProductCard: React.FC<{ product: IProduct, setShowLoginPanel: React.Dispat
   };
 
   return (
-    <div className= "relative shadow-sm bg-slate-50 product-card hover:bg-slate-100 hover:shadow-2xl lg:hover:scale-[1.02] rounded-lg flex-grow max-w-[180px] sm:max-w-[230px] md:max-w-[250px] lg:max-w-[300px] lg:p-2  h-full aspect-[2/4] sm:aspect-[10/19] md:aspect-[2/3] lg:aspect-[6/9] xl:aspect-[6/10]">
+    <div className= "relative shadow-sm product-card hover:bg-slate-100 hover:shadow-2xl lg:hover:scale-[1.02] rounded-lg flex-grow max-w-[180px] sm:max-w-[230px] md:max-w-[250px] lg:max-w-[300px] lg:p-2  max-h-[280px] md:max-h-[450px] aspect-[2/4] sm:aspect-[10/19] md:aspect-[2/3] lg:aspect-[6/9] xl:aspect-[6/10]">
       {/* Out of Stock Badge */}
       {isOutOfStock && (
         <div className="absolute top-2 right-2 opacity-100 bg-red-500 text-white text-xs font-bold py-1 px-2 rounded-md">
@@ -107,7 +107,7 @@ const ProductCard: React.FC<{ product: IProduct, setShowLoginPanel: React.Dispat
 
       <div className="px-2">
         {/* Product Name */}
-        <h2 className="text-md md:text-lg text-gray-700 font-semibold xl:mt-2 line-clamp-2">
+        <h2 className="text-sm md:text-lg text-gray-700 font-semibold xl:mt-2 line-clamp-2">
           {product.title}
         </h2>
 
@@ -118,7 +118,7 @@ const ProductCard: React.FC<{ product: IProduct, setShowLoginPanel: React.Dispat
               <span className="line-through text-xs text-gray-500 mr-1">
                 ₹{product.price}
               </span>
-              <span className="text-black text-md md:text-lg xl:text-xl font-medium">
+              <span className="text-black text-lg md:text-lg xl:text-xl font-medium">
                 ₹{product.discountedPrice}
               </span>{" "}
               |{" "}
@@ -139,7 +139,7 @@ const ProductCard: React.FC<{ product: IProduct, setShowLoginPanel: React.Dispat
       {/* Add to Cart Button */}
       <button
         onClick={handleAddToCart}
-        className="absolute flex items-center justify-center left-0 bottom-0 w-full h-8 sm:h-10 bg-gray-800 text-white py-2 hover:bg-black"
+        className="absolute flex items-center justify-center left-0 bottom-0 w-full text-sm md:text-lg h-7 md:h-10 bg-gray-800 text-white py-2 hover:bg-black"
         disabled={isOutOfStock}
       >
         {isOutOfStock ? "Out of Stock" : "Add to Cart"}

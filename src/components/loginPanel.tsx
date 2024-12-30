@@ -19,7 +19,7 @@ const LoginPanel = ({ onClose }: { onClose: () => void }) => {
         <p className="text-gray-600 text-center mb-6">
           Please log in to continue.
         </p>
-        <div className="flex justify-center bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded">
+        <div className="flex justify-center hover:cursor-pointer bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded">
           <Button />
         </div>
       </div>

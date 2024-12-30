@@ -27,6 +27,7 @@ const PaymentPage: React.FC = () => {
   const sub_total = useOrderStore((state) => state.sub_total);
   const [totalAmount, setTotalAmount] = useState(sub_total);
   const orderInfo = useOrderStore((state) => state);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     if (!orderInfo || !orderInfo.order_items?.length || !orderInfo.billing_address) {
@@ -100,11 +101,11 @@ const PaymentPage: React.FC = () => {
       <div className="lg:hidden bg-white p-4 shadow-md mb-4">
         <button
           className="w-full bg-gray-100 text-black py-2 hover:bg-gray-200 transition"
-          onClick={() => setPaymentMethod((prev) => (prev ? "" : "COD"))}
+          onClick={() => setOpen(!open)}
         >
           Order Summary (items: {items.length})
         </button>
-        {paymentMethod && (
+        {open && (
           <div className="mt-4 space-y-4">
             {items?.length === 0 ? (
               <p className="text-gray-600">Your cart is empty!</p>

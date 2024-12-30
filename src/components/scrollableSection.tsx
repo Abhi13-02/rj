@@ -1,10 +1,12 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import ProductCard from "@/components/productCard";
 import { IProduct } from "@/models/Products";
+import LoginPanel from "./loginPanel";
 
 const ScrollableRow = ({ title, products }: { title: string; products: IProduct[] }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [showLoginPanel, setShowLoginPanel] = useState(false);
 
   const scrollLeft = () => {
     if (scrollRef.current) {
@@ -19,7 +21,7 @@ const ScrollableRow = ({ title, products }: { title: string; products: IProduct[
   };
 
   return (
-    <div className="mt-10 flex flex-col px-3 pt-2 bg-[#fffafa]">
+    <div className="flex flex-col rounded-md  px-3 pt-2 bg-[#fcf7f7]">
       <h2 className="text-2xl mb-4 text-center font-light  border-b-1 border-gray-900" >{title}</h2>
       <div className="relative">
         {/* Left Arrow */}
@@ -30,6 +32,9 @@ const ScrollableRow = ({ title, products }: { title: string; products: IProduct[
         >
           <FaChevronLeft />
         </button>
+
+        {/* Login Panel */}
+        {showLoginPanel && <LoginPanel onClose={() => setShowLoginPanel(false)} />}
 
         {/* Product List */}
         <div
@@ -42,7 +47,7 @@ const ScrollableRow = ({ title, products }: { title: string; products: IProduct[
               key={index}
               className="flex-shrink-0" // Set a fixed width for each product card
             >
-              <ProductCard product={product} setShowLoginPanel={() => {}} />
+              <ProductCard product={product} setShowLoginPanel={setShowLoginPanel} />
             </div>
           ))}
         </div>

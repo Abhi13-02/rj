@@ -1,5 +1,6 @@
 'use client';
-
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import useOrderStore from "@/store/order";
@@ -67,7 +68,7 @@ const PaymentPage: React.FC = () => {
         throw new Error("Failed to create order");
       }
 
-      alert("Order placed successfully with COD!");
+      toast.success("Order placed successfully with COD!");
 
       setDBPaymentMethod(paymentMethod);
       setShiprocketOrderId(data.order_id);
@@ -89,7 +90,7 @@ const PaymentPage: React.FC = () => {
 
       router.push("/yourOrders");
     } else {
-      alert("Please select a payment method!");
+      toast.error("Please select a payment method!");
     }
   };
 

@@ -8,6 +8,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Script from "next/script";
 import { use } from "react";
+import { toast } from "react-toastify";
 
 declare global {
   interface Window {
@@ -74,7 +75,7 @@ export default function CheckoutButton({ amount }: CheckoutButtonProps) {
 
           const verifyData = await verifyResponse.json();
           if (verifyResponse.ok) {
-            alert("Payment successful");
+            // alert("Payment successful");
             setDBPaymentMethod("Prepaid");
             updatePaymentMethod("Prepaid");
             
@@ -94,7 +95,7 @@ export default function CheckoutButton({ amount }: CheckoutButtonProps) {
               throw new Error("Failed to create shiprockrtOrder");
             }
       
-            alert("Order placed successfully with razorpay!");
+            toast.success("Order placed successfully ");
 
             ////////DB connection here after correctly handeling address///////////
 
@@ -120,7 +121,7 @@ export default function CheckoutButton({ amount }: CheckoutButtonProps) {
             router.push("/yourOrders");
             console.log("Payment Verified:", verifyData);
           } else {
-            alert("Payment verification failed");
+            toast.error("Payment failed. Please try again.");
             console.error("Verification failed:", verifyData);
           }
         },

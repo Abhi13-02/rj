@@ -237,7 +237,7 @@ const FilterPanel = ({
 
       <button
         onClick={handleApplyFilters}
-        className="bg-red-500 mt-2 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600 transition"
+        className="bg-[#bd3564] mt-2 text-white px-4 py-2 rounded-lg shadow hover:bg-[#A0214D] transition"
       >
         Apply
       </button>
@@ -251,6 +251,7 @@ const ProductPage = () => {
   const [filteredProducts, setFilteredProducts] = useState<IProduct[]>([]);
   const [showFilter, setShowFilter] = useState(false); // For mobile filter toggle
   const [showLoginPanel, setShowLoginPanel] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const applyFilters = ({
     priceRange,
@@ -305,11 +306,13 @@ const ProductPage = () => {
       await fetchProducts();
       setProducts(useProductStore.getState().products);
       setFilteredProducts(useProductStore.getState().products);
+      setLoading(false);
     };
     initializeProducts();
   }, []);
 
   return (
+    
     <div className=" p-2 md:p-4 flex flex-col lg:flex-row gap-6">
       {/* Hamburger Menu */}
       <button

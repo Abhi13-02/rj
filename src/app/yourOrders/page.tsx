@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import { IOrder } from "@/models/Orders";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Loading from "@/components/loading";
 
 const YourOrders = () => {
   const { data: session } = useSession();
@@ -111,7 +112,7 @@ const YourOrders = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   if (orders.length === 0) {

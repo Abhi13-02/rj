@@ -7,6 +7,8 @@ import ProductCard from "@/components/productCard";
 import { useParams } from "next/navigation";
 import { FaBars, FaTimes } from "react-icons/fa";
 import LoginPanel from "@/components/loginPanel";
+import { set } from "mongoose";
+import Loading from "@/components/loading";
 
 
 const FilterPanel = ({
@@ -226,6 +228,7 @@ const ProductPage = () => {
   const { category } = useParams() as { category: string };
    const [showFilter, setShowFilter] = useState(false); // For mobile filter toggle
    const [showLoginPanel, setShowLoginPanel] = useState(false);
+   const [loading, setLoading] = useState(true);
 
   const applyFilters = ({
     priceRange,
@@ -287,9 +290,14 @@ const ProductPage = () => {
         });
         setFilteredProducts(filtered);
         setFilteredProductsbyPannel(filtered);
+        setLoading(false);
       };
       applyFilters({selectedCategory: category});
   }, [products]);
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <div className="p-2 md:p-4 flex flex-col lg:flex-row gap-6">

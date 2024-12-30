@@ -15,6 +15,8 @@ import { MdOutlinePayments } from "react-icons/md";
 import ImageZoom from "@/components/helpers/ImageZoom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Loading from "@/components/loading";
+import ErrorPage from "@/components/error";
 
 
 const ProductPage = () => {
@@ -46,19 +48,27 @@ const ProductPage = () => {
 
   useEffect(() => {
     if (productId) {
-      fetch(`/api/singleProduct/${productId}`)
-        .then((res) => res.json())
-        .then((data) => {
+      const fetchProduct = async () => {
+        try {
+          const response = await fetch(`/api/singleProduct/${productId}`);
+          if (!response.ok) {
+
+            throw new Error(`Failed to fetch product: ${response.status} ${response.statusText}`);
+          }
+          const data = await response.json();
           setProduct(data);
-          setSelectedSize(data.sizes.filter((size:any) => size.stock > 0)[0].size);
+          setSelectedSize(data?.sizes?.filter((size : any) => size.stock > 0)[0]?.size);
           setMainImage(data.images[0]);
-          setLoading(false);
-        })
-        .catch((err) => {
+        } catch (err) {
           console.error("Error fetching product:", err);
+        } finally {
           setLoading(false);
-        });
+        }
+      };
+    
+      fetchProduct();
     }
+    
   }, [productId]);
 
   useEffect(() => {
@@ -83,11 +93,11 @@ const ProductPage = () => {
 
 
   if (loading) {
-    return <div className="text-center">Loading...</div>;
+    return <Loading />;
   }
 
   if (!product) {
-    return <div className="text-center">Product not found!</div>;
+    return <ErrorPage />;
   }
 
   const handleQuantityChange = (operation: "increment" | "decrement") => { 
@@ -95,7 +105,7 @@ const ProductPage = () => {
       const selectedsizeProduct = product.sizes.find((availableSize) => availableSize.size === selectedSize);
 
       if (!selectedsizeProduct) {
-        alert("Please select a size first.");
+        toast.error("Please select a size first.");
         return;
       }
     
@@ -113,11 +123,16 @@ const ProductPage = () => {
       return;
     }
 
+    if (!selectedSize) {
+      toast.error("Please select a size first.",{autoClose:2000});
+      return;
+    }
+
     const cartQuantity = Cart.items.find((item) => item.productId === product?._id.toString() && item.size === selectedSize)?.quantity || 0;
     const selectedsizeProduct = product.sizes.find((availableSize) => availableSize.size === selectedSize)?.stock;
     if(!selectedsizeProduct) return;
       if( quantity + cartQuantity > selectedsizeProduct) {
-        toast.error("Quantity exceeds available stock.");
+        toast.error("Quantity exceeds available stock.",{autoClose:2000});
         return;
       }
     
@@ -149,6 +164,11 @@ const ProductPage = () => {
   const handleBuyNow = () => {
     if (!session) {
       setShowLoginPanel(true); // Show login panel if not logged in
+      return;
+    }
+
+    if (!selectedSize) {
+      toast.error("Please select a size first.",{autoClose:2000});
       return;
     }
 

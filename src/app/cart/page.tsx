@@ -10,6 +10,7 @@ import { OrderItem } from "@/models/Orders";
 import Link from "next/link";
 import useCartStore from "@/store/cartState";
 import useProductStore from "@/store/productState";
+import Loading from "@/components/loading";
 
 const CartPage = () => {
   const router = useRouter();
@@ -167,7 +168,7 @@ const CartPage = () => {
     return cartItems?.reduce((total, item) => total + item.price * item.quantity, 0);
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <Loading />;
 
   if (!session) {
     return (

@@ -4,6 +4,8 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { IOrder } from "@/models/Orders";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const YourOrders = () => {
   const { data: session } = useSession();
@@ -89,12 +91,14 @@ const YourOrders = () => {
           )
         );
         console.log("Order cancelled:", data);
-        alert("Order canceled successfully!");
+        toast.success("Order cancelled successfully");
         updateDataBase(orderId, "CANCELED");
       } else {
+        toast.error("Failed to cancel order");
         console.error("Error cancelling order:", data.message);
       }
     } catch (error) {
+      toast.error("Failed to cancel order");
       console.error("Error cancelling order:", error);
     }
   };

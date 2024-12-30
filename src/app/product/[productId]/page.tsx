@@ -6,7 +6,6 @@ import { IProduct } from "@/models/Products";
 import { useSession } from "next-auth/react";
 import useProductStore from "@/store/productState";
 import useCartStore from "@/store/cartState";
-import ProductCard from "@/components/productCard";
 import LoginPanel from "@/components/loginPanel"; // Import your Login Panel component
 import useDBOrderStore from "@/store/dbOrders";
 import useOrderStore from "@/store/order";
@@ -14,6 +13,8 @@ import ScrollableRow from "@/components/scrollableSection";
 import { IoBagHandleOutline } from "react-icons/io5";
 import { MdOutlinePayments } from "react-icons/md";
 import ImageZoom from "@/components/helpers/ImageZoom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 const ProductPage = () => {
@@ -116,7 +117,7 @@ const ProductPage = () => {
     const selectedsizeProduct = product.sizes.find((availableSize) => availableSize.size === selectedSize)?.stock;
     if(!selectedsizeProduct) return;
       if( quantity + cartQuantity > selectedsizeProduct) {
-        alert("Quantity exceeds available stock.");
+        toast.error("Quantity exceeds available stock.");
         return;
       }
     
@@ -136,7 +137,13 @@ const ProductPage = () => {
       }),
     });
 
-    if (response.ok && session?.user?.id) fetchCart(session.user.id);
+    if (response.ok && session?.user?.id){
+       fetchCart(session.user.id);
+      toast.success("Product added to cart successfully!");
+    }
+    else{
+      toast.error("Failed to add product to cart.");
+    }
   };
 
   const handleBuyNow = () => {

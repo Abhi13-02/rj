@@ -4,6 +4,8 @@ import { useSession } from "next-auth/react";
 import useCartStore from "@/store/cartState";
 import Link from "next/link";
 import SignIn from "./authComp/signInButton";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ProductCard: React.FC<{ product: IProduct, setShowLoginPanel: React.Dispatch<React.SetStateAction<boolean>> }> = ({ product, setShowLoginPanel }) => {
   const { data: session } = useSession();
@@ -14,7 +16,7 @@ const ProductCard: React.FC<{ product: IProduct, setShowLoginPanel: React.Dispat
 
   const isOutOfStock = product.sizes.filter((size) => size.stock > 0).length === 0;
 
-  console.log( product.title,isOutOfStock);
+  // console.log( product.title,isOutOfStock);
 
   const handleIncrease = () => {
     const selectedSize = product.sizes.find(
@@ -50,7 +52,7 @@ const ProductCard: React.FC<{ product: IProduct, setShowLoginPanel: React.Dispat
     const selectedsizeProduct = product.sizes.find((availableSize) => availableSize.size === size)?.stock;
     if (!selectedsizeProduct) return;
     if (quantity + cartQuantity > selectedsizeProduct) {
-      alert("Quantity exceeds available stock.");
+      toast.error("Quantity exceeds available stock.");
       return;
     }
 
@@ -74,9 +76,12 @@ const ProductCard: React.FC<{ product: IProduct, setShowLoginPanel: React.Dispat
       });
 
       if (!response.ok) {
+        console.error("Failed to add product to cart");
+        toast.error("Failed to add product to cart.");
         throw new Error("Failed to add product to cart");
       } else {
         console.log("Product added to cart successfully");
+        toast.success("Product added to cart successfully!");
         updateCart(orderItem);
       }
     }

@@ -5,6 +5,8 @@ import SignIn from "@/components/authComp/signInButton";
 import { SessionProvider } from "next-auth/react";
 import Navbar from "../components/Navbar";
 import whatsapp from "../../public/utilityIcons/whatsapp.svg";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -40,6 +42,7 @@ export default function RootLayout({
           className={`${playFair.variable} ${playFair.variable} antialiased`}
         >
           <Navbar />
+          <ToastContainer />
           {children}
           <a
             href="https://wa.me/919649142770?text=Hi%20there!%20I%20want%20to%20know%20more%20about%20your%20services."

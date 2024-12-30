@@ -19,29 +19,6 @@ function Page() {
     ];
 
 
-    const tabsdata = [
-        {
-            title: "NEW ARRIVALS",
-            content: [
-                "/product1.png",
-                "/product2.png",
-                "/product3.png",
-                "/product2.png",
-                "/product1.png"
-            ]
-        },
-        {
-            title: "MOST LOVED",
-            content: [
-                "/product2.png",
-                "/product1.png",
-                "/product3.png",
-                "/product1.png",
-                "/product3.png"
-            ]
-        }
-    ]
-
     const { fetchProducts } = useProductStore();
 
     useEffect(() => {
@@ -147,11 +124,14 @@ function Page() {
                     </Link>
                 </div>
             </section>
+
+            {/* most loved section */}
             <section className="h-screen w-full mt-10">
                 <div className={`${playFair.className} text-[#832729] font-extrabold flex justify-center items-center text-2xl w-[100%] h-[100%]`}>
-                    <Tabs tabs={tabsdata} />
+                    <Tabs />
                 </div>
             </section>
+
             <section className="">
                 <div className="w-full">
                     <Link href="#">
@@ -159,7 +139,9 @@ function Page() {
                     </Link>
                 </div>
             </section>
-            <section className="shop_by_category text-2xl text-[#832729] py-8 text-center font-bold">
+
+            {/* shop by choicee */}
+            <section className="shop_by_choice text-2xl text-[#832729] py-8 text-center font-bold">
                 <span className={`${playFair.className}`}>SHOP BY CHOICE</span>
                 <div className="w-full flex justify-center items-center overflow-hidden mt-6 mb-6">
                     <svg width="1204" height="19" viewBox="0 0 1204 19" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -257,7 +239,7 @@ function Page() {
                     <span className="text-[#832729] text-center">demon text</span>
                 </div>
             </div> */}
-            <footer className="bg-[#A0214D] h-[40vh] mt-10 flex justify-center items-end">
+            <footer className="bg-[#A0214D] h-[40vh] md:mt-10 flex justify-center items-end">
                 <div className="w-full flex justify-center items-center overflow-hidden mt-6 mb-6">
                     <svg width="1329" height="28" viewBox="0 0 1329 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M0 14.2363H610.891" stroke="#F6E9E9" />

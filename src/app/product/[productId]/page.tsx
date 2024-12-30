@@ -208,7 +208,7 @@ const ProductPage = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto p-6">
+    <div className="max-w-7xl mx-auto py-4 px-2 md:p-6">
     {/* Login Panel */}
     {showLoginPanel && <LoginPanel onClose={() => setShowLoginPanel(false)} />}
   
@@ -330,17 +330,17 @@ const ProductPage = () => {
         </div>
   
         {/* Product Description */}
-        <div className="mb-6">
+        <div className="mb-6 text-sm md:text-md">
           <label className="font-medium text-black">Product Description:</label>
           <p className="text-gray-700">{product?.description}</p>
         </div>
-        <div className="flex gap-20">
+        <div className="flex  justify-center  text-xs md:text-md gap-14 md:gap-20">
           <div className="flex flex-col justify-center items-center space-y-2">
             <img src="/special/quality.png" alt="Fast Delivery" width={80} height={80} />
             <p className="mt-2">Superior Quality</p>
           </div>
           <div className="flex flex-col justify-center items-center space-y-2">
-            <img src="/special/truck1.png" alt="Lowest Price" width={75} height={75} />
+            <img src="/special/truck1.png" alt="Lowest Price" width={70} height={65} />
             <p>Delivery within 7 days</p>
           </div>
           <div>
@@ -351,8 +351,9 @@ const ProductPage = () => {
       </div>
     </div>
   
-    <div className="max-w-full mx-auto ">
+    <div className="max-w-full mx-auto mt-5 ">
       <ScrollableRow title="Similar Products" products={similarProducts} />
+      <br/>
       <ScrollableRow title="Best Sellers" products={bestSellers} />
     </div>
   </div>

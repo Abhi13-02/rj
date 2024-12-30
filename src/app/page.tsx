@@ -71,7 +71,7 @@ function Page() {
                                 alt="category1"
                                 className="rounded-[50px] ring-2 md:ring-4 ring-[#832729] object-fill "
                             />
-                            <span className="text-[#832729] text-lg md:text-2xl text-center">SAREES</span>
+                            <span className="text-[#832729] text-lg md:text-2xl text-center">SARES</span>
                         </Link>
                     </div>
                     <Link href={"#"} >

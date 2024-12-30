@@ -5,6 +5,7 @@ import SignIn from "@/components/authComp/signInButton";
 import { SessionProvider } from "next-auth/react";
 import Navbar from "../components/Navbar";
 import whatsapp from "../../public/utilityIcons/whatsapp.svg";
+import Footer from "@/components/Footer";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -41,6 +42,7 @@ export default function RootLayout({
         >
           <Navbar />
           {children}
+          <Footer/>
           <a
             href="https://wa.me/916002107608?text=Hi%20there!%20I%20want%20to%20know%20more%20about%20your%20services."
             target="_blank"

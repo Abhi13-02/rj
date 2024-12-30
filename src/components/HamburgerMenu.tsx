@@ -2,33 +2,32 @@
 
 import React, { useState } from "react";
 
-const HamburgerMenu = () => {
-  const [isOpen, setIsOpen] = useState(false);
-
+const HamburgerMenu = ( {isMenuOpen, setIsMenuOpen} : {isMenuOpen: boolean, setIsMenuOpen: React.Dispatch<React.SetStateAction<boolean>>} ) => {
+ 
   const toggleMenu = () => {
-    setIsOpen((prev) => !prev);
+    setIsMenuOpen((prev) => !prev);
   };
 
   return (
     <div
-      className={`relative w-6 h-6 flex flex-col justify-between items-center cursor-pointer ${
-        isOpen ? "open" : ""
+      className={`relative w-6 h-3 flex flex-col justify-between items-center cursor-pointer ${
+        isMenuOpen ? "open" : ""
       }`}
       onClick={toggleMenu}
     >
       <span
-        className={`block w-6 h-1 rounded bg-white transition-all duration-300 ease-in-out transform ${
-          isOpen ? "rotate-45 translate-y-2" : ""
+        className={`block w-5 h-[2px] rounded bg-white transition-all duration-300 ease-in-out transform ${
+          isMenuOpen ? "rotate-45 translate-y-[1px]" : ""
         }`}
       ></span>
       <span
-        className={`block w-6 h-1 rounded bg-white transition-all duration-300 ease-in-out ${
-          isOpen ? "opacity-0" : ""
+        className={`block w-5 h-[2px] rounded bg-white transition-all duration-300 ease-in-out ${
+          isMenuOpen ? "opacity-0" : ""
         }`}
       ></span>
       <span
-        className={`block w-6 h-1 rounded bg-white transition-all duration-300 ease-in-out transform ${
-          isOpen ? "-rotate-45 -translate-y-3" : ""
+        className={`block w-5 h-[2px] rounded bg-white transition-all duration-300 ease-in-out transform ${
+          isMenuOpen ? "-rotate-45 -translate-y-[9px]" : ""
         }`}
       ></span>
     </div>

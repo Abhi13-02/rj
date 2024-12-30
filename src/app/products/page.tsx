@@ -12,7 +12,7 @@ const FilterPanel = ({
 }: {
   onApplyFilters: (filters: any) => void;
 }) => {
-  const [priceRange, setPriceRange] = useState([0, 10000]);
+  const [priceRange, setPriceRange] = useState([0, 6000]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
@@ -79,14 +79,14 @@ const FilterPanel = ({
             <input
               type="range"
               min={0}
-              max={10000}
+              max={6000}
               value={priceRange[1]}
               onChange={handlePriceChange}
               className="w-full "
             />
             <div className="flex w-full justify-between text-sm mt-2">
-              <span>$0</span>
-              <span>${priceRange[1]}</span>
+              <span>₹0</span>
+              <span>₹{priceRange[1]}</span>
             </div>
           </div>
         )}
@@ -335,7 +335,7 @@ const ProductPage = () => {
          {/* Login Panel */}
          {showLoginPanel && <LoginPanel onClose={() => setShowLoginPanel(false)} />}
 
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4  gap-2 md:gap-5 place-items-center">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4  gap-y-5 gap-x-2 md:gap-5 place-items-center">
           {filteredProducts.map((product, index) => (
             <ProductCard key={index} product={product} setShowLoginPanel={setShowLoginPanel}   />
           ))}

@@ -79,26 +79,26 @@ const Navbar = () => {
   };
 
   return (
-    <header className="bg-[#A0214D] w-full h-20 sticky top-0 flex items-center justify-between px-2 md:px-6 z-20">
+    <header className="bg-[#A0214D] w-full h-16 md:h-20 sticky top-0 flex items-center justify-between px-2 md:px-6 z-20">
       {/* Hamburger Icon */}
       <button
         className="text-white lg:hidden focus:outline-none"
         onClick={toggleMenu}
       >
-        <HamburgerMenu />
+        <HamburgerMenu isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
       </button>
 
       {/* Logo */}
-      <div className={`lg:text-2xl sm:text-base font-bold text-white ${playFair.className}`}>
-        <Link href="/" className=" text-xl md:text-3xl">RJ TRADITIONAL</Link>
+      <div className={`sm:text-base font-bold text-white ${playFair.className}`}>
+        <Link href="/" className=" text-[25px] md:text-3xl" >RJ TRADITIONAL</Link>
       </div>
 
       {/* Navigation Links */}
       <nav
-        className={`absolute lg:static top-20 left-0 w-full lg:w-auto lg:flex bg-[#A0214D] text-black lg:bg-transparent flex-col lg:flex-row lg:items-center transition-all ${isMenuOpen ? "block" : "hidden"
+        className={`absolute lg:static top-16 left-0 w-full lg:w-auto lg:flex bg-[#A0214D] text-black lg:bg-transparent flex-col lg:flex-row lg:items-center transition-all ${isMenuOpen ? "block" : "hidden"
           }`}
       >
-        <ul className="flex flex-col lg:flex-row gap-6 p-2">
+        <ul className="flex flex-col items-center lg:flex-row gap-6 p-2">
           <li className="relative group">
             <Link href={`/products`}>
               <button className="text-white flex items-center" onClick={toggleMenu}>All</button>
@@ -119,17 +119,17 @@ const Navbar = () => {
       </nav>
 
       {/* Utility Icons */}
-      <div className="flex gap-2 md:gap-5 items-center justify-center relative">
+      <div className="flex gap-3 md:gap-5 items-center justify-center relative">
         <div>
           <BsSearch
-            className="text-white cursor-pointer font-light text-2xl "
+            className="text-white cursor-pointer font-light text-xl md:text-2xl "
             onClick={handleSearchIconClick}
           />
         </div>
         {session ? (
           <>
             <BsPersonCircle
-              className="text-white cursor-pointer font-light text-2xl"
+              className="text-white cursor-pointer font-light text-xl md:text-2xl "
               onClick={handleToggle}
             />
             {dropdownOpen && (
@@ -150,7 +150,7 @@ const Navbar = () => {
           </div>
         )}
          <Link href="/cart" className="relative flex ">
-                   <IoBagHandleOutline className=" text-white" size={30} />
+                   <IoBagHandleOutline className=" text-white text-2xl md:text-3xl"/>
                     {cart?.items?.length > 0 && (
                         <div className="relative flex">
                             {/* Item count badge */}
@@ -158,7 +158,7 @@ const Navbar = () => {
                                 {cart?.items.length}
                             </span>
                             {/* Total amount */}
-                            <span className=" text-white font-thin text-md px-1 pt-2  rounded-md">
+                            <span className=" text-white font-thin text-sm hidden md:block px-1 pt-2  rounded-md">
                                 ₹{cart?.totalAmount}
                             </span>
                         </div>

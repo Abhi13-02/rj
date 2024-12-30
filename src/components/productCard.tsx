@@ -81,7 +81,7 @@ const ProductCard: React.FC<{ product: IProduct, setShowLoginPanel: React.Dispat
         throw new Error("Failed to add product to cart");
       } else {
         console.log("Product added to cart successfully");
-        toast.success("Product added to cart successfully!");
+        toast.success("Product added to cart successfully!",{autoClose: 2000});
         updateCart(orderItem);
       }
     }

@@ -15,7 +15,6 @@ const FilterPanel = ({
   onApplyFilters: (filters: any) => void;
 }) => {
   const [priceRange, setPriceRange] = useState([0, 6000]);
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
   const [expandedSections, setExpandedSections] = useState<{
@@ -55,7 +54,6 @@ const FilterPanel = ({
   const handleApplyFilters = () => {
     onApplyFilters({
       priceRange,
-      selectedTags,
       selectedSizes,
       selectedColors,
     });
@@ -97,45 +95,6 @@ const FilterPanel = ({
 
     <hr className="bg-pink-800 h-[1.5px]" />
     
-
-    {/* Tags Filter */}
-    <div className="mb-6">
-      <div className="flex justify-between items-center">
-        <h3 className="font-medium text-gray-600">Tags</h3>
-        <button
-          onClick={() => toggleSection("tags")}
-          className="text-gray-500 text-4xl hover:text-gray-700 focus:outline-none"
-        >
-          {expandedSections.tags ? "−" : "+"}
-        </button>
-      </div>
-      {expandedSections.tags && (
-        <div className="flex flex-wrap gap-3 mt-2">
-          {[
-            "Banarsi Saree",
-            "Ghatchola Saree",
-            "Georgette",
-            "Dola Silk Lehenga",
-            "Kota Doirya Lehenga",
-            "Art Silk Lehenga",
-          ].map((tag) => (
-            <label key={tag} className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                checked={selectedTags.includes(tag)}
-                onChange={() => toggleSelection(tag, setSelectedTags)}
-                className="rounded focus:ring-red-500 text-red-500"
-              />
-              <span className="text-sm text-gray-700">{tag}</span>
-            </label>
-          ))}
-        </div>
-      )}
-    </div>
-
-    <hr className="bg-pink-800 h-[1.5px]" />
-    
-
     {/* Sizes Filter */}
     <div className="mb-6">
       <div className="flex justify-between items-center">
@@ -223,7 +182,8 @@ const ProductPage = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<IProduct[]>([]);
   const [filteredProductsbyPannel, setFilteredProductsbyPannel] = useState<IProduct[]>([]);
-  const { category } = useParams() as { category: string };
+  const { choice } = useParams() as { choice: string };
+  const choicee = choice.replace(/%20/g, " ");
    const [showFilter, setShowFilter] = useState(false); // For mobile filter toggle
    const [showLoginPanel, setShowLoginPanel] = useState(false);
 
@@ -274,21 +234,17 @@ const ProductPage = () => {
 
   useEffect(() => {
     const applyFilters = ({
-        selectedCategory
+        selectedChoice
       }: {
-        selectedCategory: string
+        selectedChoice: string
       }) => {
-        const filtered = products.filter((product: IProduct) => {
-          const matchesCategory = selectedCategory
-            ? product.category.toLowerCase() === selectedCategory.toLowerCase()
-            : true;
-
-          return matchesCategory ;
-        });
-        setFilteredProducts(filtered);
-        setFilteredProductsbyPannel(filtered);
+         const filteredChoice = products.filter((product: IProduct) => 
+                      product.tags?.includes(selectedChoice)
+         );
+        setFilteredProducts(filteredChoice);
+        setFilteredProductsbyPannel(filteredChoice);
       };
-      applyFilters({selectedCategory: category});
+      applyFilters({selectedChoice: choicee});
   }, [products]);
 
   return (
@@ -312,7 +268,7 @@ const ProductPage = () => {
 
       {/* Product Grid */}
       <main className="w-full lg:w-3/4">
-        <h1 className=" text-xl sm:text-2xl mb-5 text-center">{category.toLocaleUpperCase()}</h1>
+        <h1 className=" text-xl sm:text-2xl mb-5 text-center">{choicee.toLocaleUpperCase().replace(/%20/g, " ")}</h1>
 
         {/* Login Panel */}
         {showLoginPanel && <LoginPanel onClose={() => setShowLoginPanel(false)} />}

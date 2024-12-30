@@ -139,7 +139,7 @@ const ProductPage = () => {
 
     if (response.ok && session?.user?.id){
        fetchCart(session.user.id);
-      toast.success("Product added to cart successfully!");
+      toast.success("Product added to cart successfully!",{autoClose:2000});
     }
     else{
       toast.error("Failed to add product to cart.");
@@ -215,8 +215,8 @@ const ProductPage = () => {
     {/* Product Details Section */}
     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
       {/* Product Images */}
-      <div className="flex flex-col md:flex-row">
-        <div className="flex  md:flex-col space-x-2 md:space-x-0 md:space-y-2 order-2 md:order-1 mt-4 md:mt-0">
+      <div className="flex flex-col md:flex-row lg:h-[85vh]">
+        <div className="flex overflow-y-auto p-1 md:flex-col space-x-2 md:space-x-0 md:space-y-3 order-2 md:order-1 mt-4 md:mt-0">
           {product?.images.map((img, index) => (
             <img
               key={index}
@@ -228,11 +228,6 @@ const ProductPage = () => {
           ))}
         </div>
         <div className="flex-1 md:ml-5 order-1 md:order-2">
-          {/* <img
-            src={mainImage}
-            alt={product?.title}
-            className="w-full h-[300px] md:h-[600px] object-contain border"
-          /> */}
           <ImageZoom imageSrc={mainImage} altText={product?.title} />
         </div>
       </div>

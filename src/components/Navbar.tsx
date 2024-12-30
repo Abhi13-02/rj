@@ -16,6 +16,7 @@ import { IProduct } from "@/models/Products";
 import useCartStore, { ICart } from "@/store/cartState";
 import SignOut from "./authComp/signOutButton";
 import { IoBagHandleOutline } from "react-icons/io5";
+import { set } from "mongoose";
 
 const playFair = Playfair_Display({ subsets: ["latin"], weight: "400" });
 
@@ -100,14 +101,14 @@ const Navbar = () => {
         <ul className="flex flex-col lg:flex-row gap-6 p-2">
           <li className="relative group">
             <Link href={`/products`}>
-              <button className="text-white flex items-center">All</button>
+              <button className="text-white flex items-center" onClick={toggleMenu}>All</button>
             </Link>
           </li>
           {["SAREE", "LEHENGA", "SUITS", "KURTI", "DUPATTA"].map(
             (item) => (
               <li key={item} className="relative group ">
-                <Link href={`/products/${item.toLowerCase()}`}>
-                  <button className="text-white flex items-center">
+                <Link href={`/products/${item.toLowerCase()}`} >
+                  <button className="text-white flex items-center" onClick={toggleMenu}>
                     {item}
                   </button>
                 </Link>
@@ -133,11 +134,11 @@ const Navbar = () => {
             />
             {dropdownOpen && (
               <div className="absolute right-0 top-8 mt-2 w-40 flex flex-col items-center gap-2 bg-white shadow-md rounded-md py-2 z-10">
-                <Link className="block w-4/5 rounded-md px-4 py-2 text-black hover:bg-gray-200" href="/yourOrders">
+                <Link onClick={() => setDropdownOpen(false)} className="block w-4/5 rounded-md px-4 py-2 text-black hover:bg-gray-200" href="/yourOrders">
                   Your Orders
                 </Link>
                 <hr className="w-full bg-white" />
-                <Link href="/products" className="block w-4/5 rounded-md px-4 py-2 text-white bg-red-500 hover:bg-red-600">
+                <Link onClick={() => setDropdownOpen(false)} href="/products" className="block w-4/5 rounded-md px-4 py-2 text-white bg-red-500 hover:bg-red-600">
                   <SignOut />
                 </Link>
               </div>
@@ -178,7 +179,7 @@ const Navbar = () => {
               <ul className="mt-2 bg-white shadow-md rounded-md max-h-40 overflow-y-auto">
                 {searchResults.map((result, index) => (
                   <li key={index} className="hover:bg-pink-200 cursor-pointer">
-                    <Link href={`/product/${result._id.toString()}`}>
+                    <Link href={`/product/${result._id.toString()}`} onClick={() => setSearchActive(false)}>
                       <div className="flex items-center p-2 jestify-center space-x-10">
                         <Image
                           src={result.images[0]}

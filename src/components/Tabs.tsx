@@ -54,7 +54,7 @@ const Tabs: React.FC<{}> = () => {
             <div className="w-[100%] h-[100%] py-4 md:p-8  flex flex-col">
                 {/* Tabs */}
                 <div className="flex flex-col justify-center items-center ">
-                    <div className="relative h-[20%] flex items-center justify-center mb-3 md:mb-6  w-[80%] md:w-[50%] ">
+                    <div className="relative h-[20%] flex items-center justify-center md:mb-6  w-[80%] md:w-[50%] ">
                        
                                 <div key={"1"} className="h-full w-full flex flex-col justify-center items-center">
                                     <button
@@ -63,7 +63,7 @@ const Tabs: React.FC<{}> = () => {
                                             setActiveTab(1);
                                             setCurrentIndex(0); // Reset the index on tab change
                                         }}
-                                        className={`z-10 font-semibold text-lg py-4 ${activeTab === 1 ? "text-white" : "text-[#832729]"
+                                        className={`z-10 font-semibold text-lg md:text-2xl  ${activeTab === 1 ? "text-white" : "text-[#832729]"
                                             } transition-colors`}
                                     >
                                         Most Loved
@@ -77,7 +77,7 @@ const Tabs: React.FC<{}> = () => {
                                             setActiveTab(2);
                                             setCurrentIndex(0); // Reset the index on tab change
                                         }}
-                                        className={`z-10 font-semibold text-lg py-4 ${activeTab === 2 ? "text-white" : "text-[#832729]"
+                                        className={`z-10 font-semibold text-lg md:text-2xl  ${activeTab === 2 ? "text-white" : "text-[#832729]"
                                             } transition-colors`}
                                     >
                                         New Arrivals
@@ -95,7 +95,7 @@ const Tabs: React.FC<{}> = () => {
                     </div>
 
                     {/* decor line */}
-                            <div className=" w-full flex justify-center items-center overflow-hidden">
+                            <div className=" w-full flex justify-center items-center overflow-hidden my-2 md:my-6">
                                 <svg width="1204" height="19" viewBox="0 0 1204 19" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M0 9.55804H553.293" stroke="#832729" />
                                     <path d="M649.899 9.55792H1203.19" stroke="#832729" />

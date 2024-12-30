@@ -118,18 +118,17 @@ const Navbar = () => {
       </nav>
 
       {/* Utility Icons */}
-      <div className="flex gap-2 items-center justify-center relative">
+      <div className="flex gap-2 md:gap-5 items-center justify-center relative">
         <div>
           <BsSearch
-            size={28}
-            className="text-white cursor-pointer font-light"
+            className="text-white cursor-pointer font-light text-2xl "
             onClick={handleSearchIconClick}
           />
         </div>
         {session ? (
           <>
             <BsPersonCircle
-              className="text-white cursor-pointer font-light  text-s md:text-2xl"
+              className="text-white cursor-pointer font-light text-2xl"
               onClick={handleToggle}
             />
             {dropdownOpen && (

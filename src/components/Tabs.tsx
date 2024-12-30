@@ -1,6 +1,5 @@
 "use client";
-import React, { useState } from "react";
-import Image from "next/image";
+import React, { useState, useEffect } from "react";
 
 interface TabsProps {
     tabs: { title: string; content: string[] }[]; // Each tab has a title and an array of content (image URLs)
@@ -9,7 +8,25 @@ interface TabsProps {
 const Tabs: React.FC<TabsProps> = ({ tabs }) => {
     const [activeTab, setActiveTab] = useState(0);
     const [currentIndex, setCurrentIndex] = useState(0);
-    const itemsToShow = 3;
+    const [itemsToShow, setItemsToShow] = useState(3); // Default is `lg` (3 items)
+
+    const updateItemsToShow = () => {
+        if (window.matchMedia("(max-width: 768px)").matches) {
+            setItemsToShow(1); // `sm`: 1 item
+        } else if (window.matchMedia("(max-width: 1024px)").matches) {
+            setItemsToShow(2); // `md`: 2 items
+        } else {
+            setItemsToShow(3); // `lg` and above: 3 items
+        }
+    };
+
+    useEffect(() => {
+        updateItemsToShow(); // Set items on initial render
+        window.addEventListener("resize", updateItemsToShow); // Update on resize
+        return () => {
+            window.removeEventListener("resize", updateItemsToShow);
+        };
+    }, []);
 
     const handleNext = () => {
         if (currentIndex + itemsToShow < tabs[activeTab].content.length) {
@@ -28,14 +45,12 @@ const Tabs: React.FC<TabsProps> = ({ tabs }) => {
             <div className="w-[100%] h-[90%] p-8">
                 {/* Tabs */}
                 <div className="relative h-[10%] flex items-center justify-around mb-6">
-                {tabs.map((tab, index) => (
-                    
+                    {tabs.map((tab, index) => (
                         <div key={index} className="h-full w-full flex flex-col justify-center items-center">
                             <button
-                                
                                 onClick={() => {
                                     setActiveTab(index);
-                                    setCurrentIndex(0); // Reset the index on tab change
+                                    setCurrentIndex(0); // Reset index on tab change
                                 }}
                                 className={`z-10 font-semibold text-lg py-4 ${activeTab === index ? "text-white" : "text-[#832729]"
                                     } transition-colors`}
@@ -43,10 +58,10 @@ const Tabs: React.FC<TabsProps> = ({ tabs }) => {
                                 {tab.title}
                             </button>
                         </div>
-                ))}
-                    
-                    
-                    <div className="absolute top-full w-full flex justify-center items-center overflow-hidden mt-6 mb-6">
+                    ))}
+
+
+                    <div className="absolute top-[60%] w-full flex justify-center items-center overflow-hidden mt-6 mb-6">
                         <svg width="1204" height="19" viewBox="0 0 1204 19" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M0 9.55804H553.293" stroke="#832729" />
                             <path d="M649.899 9.55792H1203.19" stroke="#832729" />
@@ -64,8 +79,8 @@ const Tabs: React.FC<TabsProps> = ({ tabs }) => {
                 </div>
 
                 {/* Content */}
-                <div className="relative overflow-hidden h-[90%] w-full">
-                    <div className="flex items-center gap-4 h-full">
+                <div className="relative overflow-hidden h-full w-full">
+                    <div className="flex items-center gap-4 h-full w-full">
                         {/* Previous Button */}
                         <button
                             onClick={handlePrev}
@@ -90,19 +105,18 @@ const Tabs: React.FC<TabsProps> = ({ tabs }) => {
                         </button>
 
                         {/* Content Items */}
-
                         <div className="flex gap-4 h-full w-full overflow-hidden">
                             {tabs[activeTab].content
                                 .slice(currentIndex, currentIndex + itemsToShow)
                                 .map((src, index) => (
                                     <div
                                         key={index}
-                                        className="flex justify-center items-center lg:h-[90%] md:h-[80%] lg:w-[33%] md:w-[40%] rounded-md shadow-sm transition-opacity duration-500"
+                                        className="flex justify-center items-center lg:h-full md:h-[80%] sm:h-[90%] lg:w-[33%] md:w-[40%] rounded-md shadow-sm transition-opacity duration-500"
                                     >
                                         <img
                                             src={src}
                                             alt={`Content ${index}`}
-                                            className="rounded-lg h-full w-[50%] object-cover"
+                                            className="rounded-lg lg:h-[90%] sm:h-full w-full lg:object-conatin sm:object-cover"
                                         />
                                     </div>
                                 ))}
@@ -111,9 +125,7 @@ const Tabs: React.FC<TabsProps> = ({ tabs }) => {
                         {/* Next Button */}
                         <button
                             onClick={handleNext}
-                            disabled={
-                                currentIndex + itemsToShow >= tabs[activeTab].content.length
-                            }
+                            disabled={currentIndex + itemsToShow >= tabs[activeTab].content.length}
                             className={`p-2 ${currentIndex + itemsToShow >= tabs[activeTab].content.length
                                 ? "opacity-50 cursor-not-allowed"
                                 : ""

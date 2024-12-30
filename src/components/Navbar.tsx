@@ -78,7 +78,7 @@ const Navbar = () => {
   };
 
   return (
-    <header className="bg-[#A0214D] w-full h-20 sticky top-0 flex items-center justify-between px-6 z-10">
+    <header className="bg-[#A0214D] w-full h-20 sticky top-0 flex items-center justify-between px-6 z-20">
       {/* Hamburger Icon */}
       <button
         className="text-white lg:hidden focus:outline-none"

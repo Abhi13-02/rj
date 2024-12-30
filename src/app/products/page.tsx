@@ -335,7 +335,7 @@ const ProductPage = () => {
          {/* Login Panel */}
          {showLoginPanel && <LoginPanel onClose={() => setShowLoginPanel(false)} />}
 
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-3 sm:gap-5 place-items-center">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-2 sm:gap-5 place-items-center">
           {filteredProducts.map((product, index) => (
             <ProductCard key={index} product={product} setShowLoginPanel={setShowLoginPanel}   />
           ))}

@@ -42,7 +42,7 @@ const ScrollableRow = ({ title, products }: { title: string; products: IProduct[
               key={index}
               className="flex-shrink-0" // Set a fixed width for each product card
             >
-              <ProductCard product={product} />
+              <ProductCard product={product} setShowLoginPanel={() => {}} />
             </div>
           ))}
         </div>

@@ -313,7 +313,7 @@ const ProductPage = () => {
         <h1 className=" text-xl sm:text-2xl mb-5 text-center">{category.toLocaleUpperCase()}</h1>
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-3 sm:gap-5 place-items-center">
           {filteredProductsbyPannel.map((product, index) => (
-            <ProductCard key={index} product={product} />
+            <ProductCard key={index} product={product} setShowLoginPanel={setShowFilter} />
           ))}
         </div>
       </main>

@@ -118,10 +118,10 @@ const Navbar = () => {
       </nav>
 
       {/* Utility Icons */}
-      <div className="flex gap-4 items-center justify-center relative">
+      <div className="flex gap-5 items-center justify-center relative">
         <div>
           <BsSearch
-            size={20}
+            size={28}
             className="text-white cursor-pointer font-light"
             onClick={handleSearchIconClick}
           />
@@ -134,12 +134,12 @@ const Navbar = () => {
               onClick={handleToggle}
             />
             {dropdownOpen && (
-              <div className="absolute right-0 top-8 mt-2 w-40 flex flex-col items-center gap-2 bg-red-400 shadow-md rounded-md py-2 z-10">
-                <Link className="block w-4/5 rounded-md px-4 py-2 text-white hover:bg-gray-900" href="/yourOrders">
+              <div className="absolute right-0 top-8 mt-2 w-40 flex flex-col items-center gap-2 bg-white shadow-md rounded-md py-2 z-10">
+                <Link className="block w-4/5 rounded-md px-4 py-2 text-black hover:bg-gray-200" href="/yourOrders">
                   Your Orders
                 </Link>
                 <hr className="w-full bg-white" />
-                <Link href="/products" className="block w-4/5 rounded-md px-4 py-2 text-white hover:bg-gray-900">
+                <Link href="/products" className="block w-4/5 rounded-md px-4 py-2 text-white bg-red-500 hover:bg-red-600">
                   <SignOut />
                 </Link>
               </div>

@@ -252,7 +252,7 @@ const CartPage = () => {
               : "md:relative"
           }`}
         >
-          <h2 className=" text-xl underline decoration-1 underline-offset-8 md:text-3xl font-normal mb-4 md:mb-8 text-gray-800">Order Summary </h2>
+          <h2 className=" text-xl underline decoration-1 underline-offset-8 md:text-2xl font-normal mb-4 md:mb-8 text-gray-800">Order Summary </h2>
           <div className="mb-4 md:mb-6 flex justify-between">
             <p className=" text-lg lg:text-2xl font-medium text-gray-700">
               Total :{" "}({cartItems.length}{" "}items)

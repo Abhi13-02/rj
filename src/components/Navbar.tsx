@@ -90,7 +90,7 @@ const Navbar = () => {
 
       {/* Logo */}
       <div className={`sm:text-base font-bold text-white ${playFair.className}`}>
-        <Link href="/" className=" text-[25px] md:text-3xl" >RJ TRADITIONAL</Link>
+        <Link href="/" className=" pl-2 flex text-[25px] md:text-3xl" >RJ TRADITIONAL</Link>
       </div>
 
       {/* Navigation Links */}
@@ -145,7 +145,7 @@ const Navbar = () => {
             )}
           </>
         ) : (
-          <div className="ring-1 hover:bg-white text-xs sm:text-md hover:text-gray-900 ring-white px-4 py-2 rounded-2xl text-white">
+          <div className="ring-1 hover:bg-white text-xs sm:text-md hover:text-gray-900 ring-white px-3 md:px-4 py-2 rounded-2xl text-white">
             <SignInButton />
           </div>
         )}
@@ -187,14 +187,14 @@ const Navbar = () => {
                           width={50}
                           height={50}
                         />
-                        <span className="ml-2">{result.title}</span>
+                        <span className=" md:ml-2 text-sm line-clamp-2">{result.title}</span>
                         <p className="text-lg font-semibold text-gray-700 mb-2  ">
                           {result.discountedPrice ? (
                             <>
-                              <span className="line-through text-gray-500 mr-2">
+                              <span className="line-through text-xs text-gray-500 mr-1">
                                 ₹{result.price}
                               </span>
-                              <span className="text-green-600 font-bold">
+                              <span className="text-green00 font-bold">
                                 ₹{result.discountedPrice}
                               </span>
                             </>

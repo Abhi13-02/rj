@@ -19,11 +19,7 @@ function Page() {
     ];
 
 
-    const { fetchProducts } = useProductStore();
-
-    useEffect(() => {
-        fetchProducts();
-    }, []);
+    
 
 
 

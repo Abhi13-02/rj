@@ -30,6 +30,7 @@ const Navbar = () => {
   const products = useProductStore((state) => state.products);
   // Fetch the cart state directly from Zustand
   const fetchCart = useCartStore((state) => state.fetchCart);
+  const fetchProducts  = useProductStore((state) => state.fetchProducts);
   const cart = useCartStore((state) => state.Cart);
 
   const [dropdownOpen, setDropdownOpen] = useState(false); // Dropdown toggle state
@@ -38,10 +39,13 @@ const Navbar = () => {
     const fetchCartData = async () => {
       if (session?.user?.id) {
         await fetchCart(session.user.id);
+        await fetchProducts();
       }
     };
     fetchCartData();
-  }, [session, fetchCart]);
+  }, [session, fetchCart, fetchProducts]);
+
+
 
   // Handle toggle
   const handleToggle = () => setDropdownOpen(!dropdownOpen);

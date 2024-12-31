@@ -1,7 +1,7 @@
 "use client";
 import { MdDeleteOutline } from "react-icons/md";
 import React, { use, useEffect, useState } from "react";
-import { CartItem, ICart } from "@/models/Cart";
+import { CartItem, ICart } from "@/store/cartState";
 import { useSession, signIn } from "next-auth/react";
 import useOrderStore from "@/store/order";
 import { useRouter } from "next/navigation";
@@ -11,6 +11,9 @@ import Link from "next/link";
 import useCartStore from "@/store/cartState";
 import useProductStore from "@/store/productState";
 import Loading from "@/components/loading";
+import { toast } from "react-toastify";
+import { set } from "mongoose";
+import { IProduct } from "@/models/Products";
 
 const CartPage = () => {
   const router = useRouter();
@@ -23,8 +26,10 @@ const CartPage = () => {
   let totalAmount: number = useDBOrderStore((state) => state.totalAmount);
   const resetDBOrder = useDBOrderStore((state) => state.resetOrder);
   const resetOrder = useOrderStore((state) => state.resetOrder);
-  const fetchCart = useCartStore((state) => state.fetchCart);
-  const products = useProductStore((state) => state.products);
+  const {fetchCart, Cart } = useCartStore((state) => state);
+  const {products,fetchProducts} = useProductStore((state) => state);
+  const [outOfStockItems, setOutOfStockItems] = useState<CartItem[]>([]);
+  const [inStockItems, setInStockItems] = useState<CartItem[]>([]);
 
   useEffect(() => {
     if (session?.user?.id) {
@@ -32,19 +37,49 @@ const CartPage = () => {
     } else {
       setLoading(false);
     }
-  }, [session]);
+  }, [session, products, Cart]);
 
   const fetchCartt = async () => {
-    try {
-      const response = await fetch(`/api/showCart?userId=${session?.user?.id}`);
-      const data = await response.json();
-      console.log("Cart data:", data);
-      setCartItems(data.items);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching cart:", error);
-    }
+    // try {
+    //   const response = await fetch(`/api/showCart?userId=${session?.user?.id}`);
+    //   const data = await response.json();
+    //   console.log("Cart data:", data);
+
+    //   if (!response.ok) {
+    //     toast.error("Failed to fetch cart");
+    //     throw new Error(data.error || "Failed to fetch cart");
+    //   }
+    
+      setCartItems(Cart.items);
+
+      const oosItems = Cart.items.filter((item : CartItem) => {
+        const product = products.find((p) => p._id.toString() === item.productId);
+        // console.log("oosItems...",product,products);
+        const selectedsizeProduct = product?.sizes.find((availableSize : any) => availableSize.size === item.size);
+        if(!selectedsizeProduct) return false;
+        console.log("oosItems...",selectedsizeProduct.stock, item.quantity);
+        return selectedsizeProduct?.stock < 1 || selectedsizeProduct?.stock < item.quantity || selectedsizeProduct === undefined;
+      });
+
+      const inItems = Cart.items.filter((item : CartItem) => {
+        const product = products.find((p:IProduct) => p._id.toString() === item.productId);
+        // console.log("oosItems...",product,products);
+        const selectedsizeProduct = product?.sizes.find((availableSize : any) => availableSize.size === item.size);
+        if(!selectedsizeProduct) return false;
+        console.log("inItems...",selectedsizeProduct.stock, item.quantity);
+        return !(selectedsizeProduct?.stock < 1) && !(selectedsizeProduct?.stock < item.quantity) && !(selectedsizeProduct === undefined);
+      });
+
+      setInStockItems(inItems);
+      setOutOfStockItems(oosItems);
+      
   };
+
+  useEffect(() => {
+    console.log("outOfStockItems...",outOfStockItems);
+    console.log("inStockItems...",inStockItems);
+    setLoading(false);
+  }, [outOfStockItems,inStockItems]);
 
   const updateQuantity = async (productId: any, quantity: number, size: string) => {
     try {
@@ -117,7 +152,7 @@ const CartPage = () => {
   
   const handleCheckout = async () => {
     ///storing the shipRocketorder
-    const newOrderItems = cartItems.map((item) => ({
+    const newOrderItems = inStockItems.map((item) => ({
       name: item.name,
       sku: item.name.substring(0, 10),
       units: item.quantity,
@@ -143,29 +178,29 @@ const CartPage = () => {
       newOrderItems,
       Date.now().toString(),
       formattedDate,
-      cartItems.reduce((total, item) => total + item.price * item.quantity, 0)
+      inStockItems.reduce((total, item) => total + item.price * item.quantity, 0)
     );
 
     ///// storing the order in Db
     const items: OrderItem[] = orderItems;
-    cartItems.forEach((item) => {
+    inStockItems.forEach((item) => {
       items.push({
         name: item.name,
-        productId: item.productId,
+        productId: item.productId.toString(),
         quantity: item.quantity,
         size: item.size,
-        images: item.image,
+        images: [item.image],
         price: item.price,
       });
     });
 
-    const total = totalAmount + cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+    const total = totalAmount + inStockItems.reduce((total, item) => total + item.price * item.quantity, 0);
     setItems(items, total);
     router.push("/ordering/address");
   };
 
   const calculateTotal = () => {
-    return cartItems?.reduce((total, item) => total + item.price * item.quantity, 0);
+    return inStockItems?.reduce((total, item) => total + item.price * item.quantity, 0);
   };
 
   if (loading) return <Loading />;
@@ -190,10 +225,12 @@ const CartPage = () => {
         {/* Cart Items Section */}
         <div className="cart-items col-span-2 bg-white shadow-lg rounded-lg p-2 md:p-6">
           <h1 className="text-3xl font-normal underline decoration-1 underline-offset-8 mb-6 text-gray-800">Your Cart</h1>
+
           {cartItems.length === 0 ? (
             <p className="text-gray-600 text-lg">Your cart is empty!</p>
-          ) : (
-            cartItems.map((item, index) => (
+            ) : (
+            inStockItems.map((item, index) => (
+              console.log("inStockItems", item),
               <div
                 key={index}
                 className="flex relative items-center justify-between p-4 mb-4 border rounded-lg shadow-sm bg-gray-100"
@@ -241,14 +278,58 @@ const CartPage = () => {
                     <MdDeleteOutline size={24} />
                 </button>
               </div>
+            )))
+          }
+
+          {
+            outOfStockItems.length > 0 && ( outOfStockItems.map((item, index) => (
+              <div
+              key={index}
+              className="flex relative items-center justify-between p-4 mb-4 border rounded-lg shadow-sm bg-opacity-50"
+            >
+              <div className="absolute top-2 left-2 opacity-100 z-8 bg-red-500 text-white text-xs font-bold py-1 px-2 rounded-md">
+                Out of Stock
+              </div>
+
+              <div className="flex items-center mb-8 md:mb-0 bg-opacity-60">
+                <Link href={`/product/${item.productId}`}>
+                  <img
+                    src={item.image[0]}
+                    alt={item.name}
+                    className=" max-w-[100px] md:max-w-[150px] aspect-[3/4] object-cover rounded-lg mr-4"
+                  />
+                </Link>
+                <div className="flex flex-col gap-2 pt-2 pr-1">
+                  <Link href={`/product/${item.productId}`}>
+                    <h2 className="text-md md:text-xl font-semibold text-gray-800">{item.name}</h2>
+                  </Link>
+                  <p className="text-sm md:text-lg text-gray-800">Size: {item.size}</p>
+                  <p className="text-sm md:text-lg text-gray-800">Quantity: {item.quantity}</p>
+                </div>
+              </div>
+              <div className="flex absolute bottom-2 right-2 md:right-8 md:bottom-4 items-center justify-end w-full gap-3 md:">
+                <span className="text-xl md:text-2xl font-normal text-gray-800">
+                 sub-total:{" "}{" "} ₹{item.price * item.quantity}
+                </span>
+              </div>
+              <button
+                  onClick={() => deleteCartItem(item.productId, item.quantity, item.size)}
+                  className="text-red-600 absolute top-1 right-1 hover:text-red-800"
+                >
+                  <MdDeleteOutline size={24} />
+              </button>
+            </div>
             ))
-          )}
+              
+            )
+          }
+
         </div>
   
         {/* Order Summary Section */}
         <div
           className={`cart-summary bg-white shadow-lg rounded-lg p-6 md:relative md:top-auto md:w-full ${
-            cartItems.length > 0
+            inStockItems.length > 0
               ? "fixed bottom-0 left-0 w-full md:w-auto"
               : "md:relative"
           }`}
@@ -256,7 +337,7 @@ const CartPage = () => {
           <h2 className=" text-xl underline decoration-1 underline-offset-8 md:text-2xl font-normal mb-4 md:mb-8 text-gray-800">Order Summary </h2>
           <div className="mb-4 md:mb-6 flex justify-between">
             <p className=" text-lg lg:text-2xl font-medium text-gray-700">
-              Total :{" "}({cartItems.length}{" "}items)
+              Total :{" "}({inStockItems.length}{" "}items)
             </p>
             <span className=" text-2xl lg:text-3xl  font-normal text-gray-900">₹{calculateTotal()}</span>
           </div>

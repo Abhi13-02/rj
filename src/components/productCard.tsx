@@ -7,13 +7,14 @@ import SignIn from "./authComp/signInButton";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+
+
 const ProductCard: React.FC<{ product: IProduct, setShowLoginPanel: React.Dispatch<React.SetStateAction<boolean>> }> = ({ product, setShowLoginPanel }) => {
   const { data: session } = useSession();
   const [quantity, setQuantity] = useState<number>(1);
   const [size, setSize] = useState(product.sizes.filter((size) => size.stock > 0)[0]?.size || "");
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const { updateCart, Cart } = useCartStore();
-
   const isOutOfStock = product.sizes.filter((size) => size.stock > 0).length === 0;
 
   // console.log( product.title,isOutOfStock);
@@ -107,7 +108,7 @@ const ProductCard: React.FC<{ product: IProduct, setShowLoginPanel: React.Dispat
 
       <div className="px-2">
         {/* Product Name */}
-        <h2 className="text-sm md:text-lg text-gray-700 font-semibold xl:mt-2 line-clamp-2">
+        <h2 className={`text-sm md:text-lg text-gray-700 font-semibold xl:mt-2 line-clamp-2`}>
           {product.title}
         </h2>
 
@@ -147,7 +148,7 @@ const ProductCard: React.FC<{ product: IProduct, setShowLoginPanel: React.Dispat
 
       {/* Sliding Side Panel */}
       {isPanelOpen && (
-        <div className="absolute top-0 md:w-[100%] bg-opacity-90 bg-white shadow-lg z-50 transition-transform duration-300">
+        <div className="absolute top-0 md:w-[100%] bg-opacity-90 bg-white shadow-lg z-250 transition-transform duration-300">
           <div className="p-4">
             {session?.user?.id ? (
               <>
@@ -157,7 +158,7 @@ const ProductCard: React.FC<{ product: IProduct, setShowLoginPanel: React.Dispat
                     <button
                       key={availableSize.size}
                       onClick={() => setSize(availableSize.size)}
-                      className={`px-4 py-2 border rounded-md mr-2 ${
+                      className={`px-4 py-2 border rounded-md mr-2 text-sm md:text-lg ${
                         availableSize.stock > 0
                           ? size === availableSize.size
                             ? "bg-[#FFD8D8] text-[#a22a2a]"
@@ -186,7 +187,7 @@ const ProductCard: React.FC<{ product: IProduct, setShowLoginPanel: React.Dispat
                 </div>
                 <button
                   onClick={handleConfirmSize}
-                  className="w-full bg-gray-800 text-white py-2 rounded-md hover:bg-black mt-4"
+                  className="w-full bg-gray-800 text-white py-1 md:py-2 rounded-md hover:bg-black mt-4 text-sm md:text-lg"
                 >
                   Confirm
                 </button>
@@ -200,7 +201,7 @@ const ProductCard: React.FC<{ product: IProduct, setShowLoginPanel: React.Dispat
 
             <button
               onClick={() => setIsPanelOpen(false)}
-              className="w-full bg-red-500 text-white py-2 rounded-md mt-4 hover:bg-red-700"
+              className="w-full bg-red-500 text-white py-1 md:py-2 text-sm md:text-lg rounded-md mt-4 hover:bg-red-700"
             >
               Close
             </button>

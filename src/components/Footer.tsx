@@ -14,7 +14,7 @@ const Footer = () => {
   const [isContactVisible, setIsContactVisible] = useState(false);
 
   return (
-    <footer className="bg-[#A0214D] text-white px-6 md:px-16 py-10">
+    <footer className="bg-[#A0214D] text-white px-6 md:px-16 py-10 z-30">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Business Details Section */}
         <div className="flex font-semibold flex-col">

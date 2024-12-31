@@ -106,7 +106,7 @@ const Navbar = () => {
 
       {/* Navigation Links */}
       <nav
-        className={`absolute lg:static top-16 left-0 w-full lg:w-auto lg:flex bg-[#A0214D] text-black lg:bg-transparent flex-col lg:flex-row lg:items-center transition-all ${isMenuOpen ? "block" : "hidden"
+        className={`absolute lg:static top-[63px] md:top-20 left-0 w-full lg:w-auto lg:flex bg-[#A0214D] text-black lg:bg-transparent flex-col lg:flex-row lg:items-center transition-all ${isMenuOpen ? "block" : "hidden"
           }`}
       >
         <ul className="flex flex-col items-center lg:flex-row gap-6 p-2">

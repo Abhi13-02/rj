@@ -313,7 +313,7 @@ const ProductPage = () => {
 
   return (
     
-    <div className=" p-2 md:p-4 flex flex-col lg:flex-row gap-6">
+    <div className=" p-2 md:p-4 flex flex-col lg:flex-row gap-6 h-min-screen">
       {/* Hamburger Menu */}
       <button
         className="lg:hidden flex items-center gap-2 bg-gray-100 text-black px-4 py-2 rounded shadow"
@@ -333,12 +333,40 @@ const ProductPage = () => {
 
       {/* Product Grid */}
       <main className="w-full lg:w-3/4">
-        <h1 className="text-xl sm:text-2xl mb-5 text-center">All Products</h1>
+      <h1 className="text-xl sm:text-2xl mb-8 text-center font-serif text-gray-900 relative">
+        All PRODUCTS
+        <span className="absolute left-1/2 transform -translate-x-1/2 bottom-0 w-24 sm:w-32 h-[2px] bg-gray-700">
+          <span className="block w-8 sm:w-12 h-[2px] bg-blue-600 mx-auto mt-1"></span>
+        </span>
+      </h1>
+
+
 
          {/* Login Panel */}
          {showLoginPanel && <LoginPanel onClose={() => setShowLoginPanel(false)} />}
 
+         {
+            filteredProducts.length === 0 && (
+              <div className="flex justify-center items-center w-full h-max  p-4">
+              <div className="text-center space-y-4">
+                <p className="text-gray-800 text-xl md:text-4xl font-semibold animate-pulse">
+                  More Products Coming Soon... 😉
+                </p>
+                <p className="text-gray-600 text-sm md:text-lg">
+                  Stay tuned! 
+                </p>
+                <div className="flex justify-center items-center space-x-2 mt-6">
+                  <span className="w-4 h-4 bg-gray-400 rounded-full animate-bounce delay-100"></span>
+                  <span className="w-4 h-4 bg-gray-400 rounded-full animate-bounce delay-200"></span>
+                  <span className="w-4 h-4 bg-gray-400 rounded-full animate-bounce delay-300"></span>
+                </div>
+              </div>
+            </div>
+            )
+          }
+
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4  gap-y-5 gap-x-2 md:gap-5 place-items-center">
+       
           {filteredProducts.map((product, index) => (
             <ProductCard key={index} product={product} setShowLoginPanel={setShowLoginPanel}   />
           ))}

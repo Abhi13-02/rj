@@ -152,9 +152,9 @@ const CartPage = () => {
   
   const handleCheckout = async () => {
     ///storing the shipRocketorder
-    const newOrderItems = inStockItems.map((item) => ({
+    const newOrderItems = inStockItems.map((item, index) => ({
       name: item.name,
-      sku: item.name.substring(0, 10),
+      sku: item.name.substring(0, 10)+ index.toString(),
       units: item.quantity,
       selling_price: item.price.toString(),
       discount: "0",
@@ -189,7 +189,7 @@ const CartPage = () => {
         productId: item.productId.toString(),
         quantity: item.quantity,
         size: item.size,
-        images: [item.image],
+        images: item.image as any,
         price: item.price,
       });
     });
@@ -223,11 +223,43 @@ const CartPage = () => {
     <div className="cart-page lg:max-w-screen-xl mx-auto px-2 py-10 bg-gray-50 relative">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Cart Items Section */}
-        <div className="cart-items col-span-2 bg-white shadow-lg rounded-lg p-2 md:p-6">
+        <div className="cart-items col-span-2 bg-white shadow-lg rounded-lg px-2 py-4 md:p-6">
           <h1 className="text-3xl font-normal underline decoration-1 underline-offset-8 mb-6 text-gray-800">Your Cart</h1>
 
           {cartItems.length === 0 ? (
-            <p className="text-gray-600 text-lg">Your cart is empty!</p>
+             <div className="relative flex flex-col items-center justify-center w-full h-screen p-6 space-y-6 bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg shadow-lg overflow-hidden">
+             {/* Animated Cart Icon */}
+             <div className="text-5xl md:text-6xl animate-bounce">
+               🛍️
+             </div>
+           
+             {/* Heading */}
+             <p className="text-gray-800 text-2xl md:text-4xl font-bold">
+               Your bag is empty!
+             </p>
+           
+             {/* Subtext */}
+             <p className="text-gray-600 text-sm md:text-lg text-center max-w-md">
+               It looks like you haven’t added anything yet. Explore our amazing collection and fill your cart with incredible finds!
+             </p>
+           
+             {/* Call-to-Action Button */}
+             <a
+                href="/products"
+                className="mt-4 px-10 py-4 text-lg bg-gradient-to-r from-blue-600 to-indigo-500 text-white font-semibold rounded-full shadow-lg transform hover:scale-110 transition-all duration-300 hover:shadow-xl animate-fade-in delay-200"
+              >
+                Shop Now
+              </a>
+           
+             {/* Decorative Animation */}
+             <div className="absolute inset-0 flex justify-between place-items-stretch overflow-hidden">
+               <div className="w-72 h-72 rounded-full bg-blue-200 opacity-50 animate-pulse"></div>
+               <div className="w-48 h-48 rounded-full bg-blue-500 opacity-30 animate-pulse"></div>
+             </div>
+           </div>
+           
+        
+         
             ) : (
             inStockItems.map((item, index) => (
               console.log("inStockItems", item),

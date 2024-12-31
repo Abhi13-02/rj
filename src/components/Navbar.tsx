@@ -80,7 +80,7 @@ const Navbar = () => {
 
   return (
     <header className="bg-[#A0214D] w-full h-16 md:h-20 sticky top-0 flex items-center justify-between px-2 md:px-6 z-30">
-      <div className="flex items-center gap-3">
+      {/* <div className="flex items-center gap-3"> */}
         {/* Hamburger Icon */}
         <button
           className="text-white lg:hidden focus:outline-none"
@@ -92,12 +92,13 @@ const Navbar = () => {
         {/* Logo */}
         <div className={`sm:text-base h-full flex items-center gap-2 font-bold text-white ${playFair.className}`}>
           {/* <Image src="/logo.png" alt="logo" className="rounded-md text-lg" width={60} height={60} /> */}
-          <div className="flex flex-col items-center justify-center md:gap-3 sm:gap-2  mt-2 ">
-            <Link href="/" className=" pl-2 justify-cente flex text-[35px] sm:text-[40px] md:text-[50px]" >RJT</Link>
-            <Link href="/" className="pl-2 flex text-[8px] sm:text-[10px] md:text-[12px]" >Rj Traditional</Link>
+          <div className="flex flex-col items-center justify-center md:gap-3 sm:gap-2  sm:mt-2 ">
+            <Link href="/" className=" pl-2 justify-cente flex text-[32px] sm:text-[40px] md:text-[50px]" >RJT</Link>
+            <Link href="/" className="pl-2 flex text-[8px] sm:text-[12px] md:text-[12px]" >Rj Traditional</Link>
           </div>
         </div>
-      </div>
+
+      {/* </div> */}
 
       {/* Navigation Links */}
       <nav

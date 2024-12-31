@@ -96,21 +96,21 @@ const Footer = () => {
 
       {/* Footer Bottom Section */}
       <div className="flex flex-wrap justify-between items-center">
-        <p className="text-sm">© 2024 RJ Traditional</p>
+        <p className="text-sm">© 2024 RJTraditional</p>
         <div className="flex flex-wrap space-x-4 text-sm">
-          <Link href="#" className="hover:text-blue-400">
+          <Link href="/ourInfo/aboutUs" className="hover:text-blue-400">
             About Us
           </Link>
-          <Link href="#" className="hover:text-blue-400">
+          <Link href="/ourInfo/privacyPolicy" className="hover:text-blue-400">
             Privacy Policy
           </Link>
-          <Link href="#" className="hover:text-blue-400">
+          <Link href="/ourInfo/returnPolicy" className="hover:text-blue-400">
             Return Policy
           </Link>
-          <Link href="#" className="hover:text-blue-400">
+          <Link href="/ourInfo/shippingPolicy" className="hover:text-blue-400">
             Shipping Policy
           </Link>
-          <Link href="#" className="hover:text-blue-400">
+          <Link href="/ourInfo/termsAndConditions" className="hover:text-blue-400">
             Terms and Conditions
           </Link>
         </div>

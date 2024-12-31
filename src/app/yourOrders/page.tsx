@@ -7,6 +7,7 @@ import { IOrder } from "@/models/Orders";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loading from "@/components/loading";
+import LoginPanel from "@/components/loginPanel";
 
 const YourOrders = () => {
   const { data: session } = useSession();
@@ -14,10 +15,12 @@ const YourOrders = () => {
   const [loading, setLoading] = useState(true);
   const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
   const fetchCart = useCartStore((state) => state.fetchCart);
+  const [showLoginPanel, setShowLoginPanel] = useState(true);
 
   useEffect(() => {
     if (session?.user?.id) {
       fetchYourOrders();
+      setShowLoginPanel(false);
       fetchCart(session.user.id);
     }
   }, [session?.user?.id]);
@@ -111,13 +114,45 @@ const YourOrders = () => {
     setExpandedOrder((prev) => (prev === orderId ? null : orderId));
   };
 
+  if (showLoginPanel) {
+    return <LoginPanel  onClose={() => setShowLoginPanel(false)} />;
+  }
+
   if (loading) {
     return <Loading />;
   }
 
   if (orders.length === 0) {
-    return <div>No orders found</div>;
+    return (
+      <div className="flex flex-col items-center justify-center h-screen p-6 text-center bg-gray-100 rounded-lg shadow-md">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="w-16 h-16 text-gray-400 mb-4"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={2}
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M9 14l-2-2m0 0l2-2m-2 2h6m-6 0l2-2m4 0l2 2m-2-2l2 2m4 0a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+        <h2 className="text-xl font-semibold text-gray-700">No Orders Found</h2>
+        <p className="mt-2 text-gray-500">
+          Looks like you haven't placed any orders yet. Browse our products and get started!
+        </p>
+        <a
+          href="/products"
+          className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+        >
+          Shop Now
+        </a>
+      </div>
+    );
   }
+  
 
   return (
     <div className="min-h-screen p-6 bg-gray-100">

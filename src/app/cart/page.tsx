@@ -270,7 +270,7 @@ const CartPage = () => {
                 <div className="flex items-center mb-8 md:mb-0">
                   <Link href={`/product/${item.productId}`}>
                     <img
-                      src={item.image[0]}
+                      src={item.image}
                       alt={item.name}
                       className=" max-w-[100px] md:max-w-[150px] aspect-[3/4] object-cover rounded-lg mr-4"
                     />

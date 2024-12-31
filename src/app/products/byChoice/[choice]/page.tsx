@@ -278,7 +278,7 @@ const ProductPage = () => {
       <h1 className="text-xl sm:text-2xl mb-8 text-center font-serif text-gray-900 relative">
         {choicee.toUpperCase()}
         <span className="absolute left-1/2 transform -translate-x-1/2 bottom-0 w-24 sm:w-32 h-[2px] bg-gray-700">
-          <span className="block w-8 sm:w-12 h-[2px] bg-blue-600 mx-auto mt-1"></span>
+          <span className="block w-8 sm:w-12 h-[2px] bg-pink-400 mx-auto mt-1"></span>
         </span>
       </h1>
 

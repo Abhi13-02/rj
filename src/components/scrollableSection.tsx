@@ -44,7 +44,7 @@ const ScrollableRow = ({ title, products }: { title: string; products: IProduct[
         >
           {
             products.length === 0 && (
-              <div className="flex justify-center items-center w-full h-full bg-gray-100 p-4">
+              <div className="flex justify-center items-center w-full h-full p-4">
               <div className="text-center space-y-4">
                 <p className="text-gray-800 text-xl md:text-4xl font-semibold animate-pulse">
                   More Products Coming Soon... 😉

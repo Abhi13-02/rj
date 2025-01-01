@@ -346,9 +346,27 @@ const ProductPage = () => {
   
         {/* Product Description */}
         <div className="mb-6 text-sm md:text-md">
-          <label className="font-medium text-black">Product Description:</label>
-          <p className="text-gray-700">{product?.description}</p>
+          <label className="font-bold text-black block mb-1  md:mb-2">Product Description:</label>
+          <p className="text-gray-700 whitespace-pre-line">
+            {product?.description?.split(",").map((segment, index) => {
+              const parts = segment.split(":");
+              return (
+                <span key={index} className="block mb-[3px]">
+                  {parts.length > 1 ? (
+                    <>
+                      <span className="font-semibold">{parts[0]}:</span>
+                      {parts.slice(1).join(":")}
+                    </>
+                  ) : (
+                    segment
+                  )}
+                </span>
+              );
+            })}
+          </p>
         </div>
+
+
         <div className="flex  justify-center  text-xs md:text-md gap-14 md:gap-20">
           <div className="flex flex-col justify-center items-center space-y-2">
             <img src="/special/quality.png" alt="Fast Delivery" width={80} height={80} />

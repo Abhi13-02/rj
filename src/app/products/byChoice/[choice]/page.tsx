@@ -287,7 +287,7 @@ const ProductPage = () => {
 
         {
             filteredProductsbyPannel.length === 0 && (
-              <div className="flex justify-center items-center w-full h-max  p-4">
+              <div className="flex justify-center items-center w-full min-h-[300px] p-4">
               <div className="text-center space-y-4">
                 <p className="text-gray-800 text-xl md:text-4xl font-semibold animate-pulse">
                   More Products Coming Soon... 😉

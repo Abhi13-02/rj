@@ -79,8 +79,8 @@ const useOrderStore = create<OrderStore>(
   zukeper((set: any) => ({
     order_id: "",
     order_date: "",
-    pickup_location: "Primary",
-    channel_id: "5900002",
+    pickup_location: "Home",
+    channel_id: "5899362",
     comment: "",
     billing_customer_name: "",
     billing_last_name: "",

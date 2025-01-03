@@ -9,13 +9,14 @@ const razorpay = new Razorpay({
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
-
-    console.log("Razorpay:", razorpay);
     
     const body = await req.json();
+    console.log("Verify 0", body);
+    
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = body;
 
     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+      console.log("Missing required payment details at verify");
       return NextResponse.json(
         { error: "Missing required payment details" },
         { status: 400 }

@@ -63,6 +63,8 @@ export default function CheckoutButton({ amount }: CheckoutButtonProps) {
 
         handler: async function (response: any) {
           // Step 3: Verify payment on the server
+
+          console.log("Razorpay response:", response);       
           const verifyResponse = await fetch("/api/payment/verify", {
             method: "POST",
             headers: { "Content-Type": "application/json" },

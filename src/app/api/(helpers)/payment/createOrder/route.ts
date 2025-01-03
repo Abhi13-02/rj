@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { log } from "node:console";
 import Razorpay from "razorpay";
 
 const razorpay = new Razorpay({
@@ -8,6 +9,8 @@ const razorpay = new Razorpay({
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
+
+    console.log("Razorpay:", razorpay);
     const body = await req.json(); // Parse the request body
     const { amount } = body;
 
@@ -27,6 +30,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     };
 
     const order = await razorpay.orders.create(options);
+
+    console.log("Razorpay order created:", order);
 
     return NextResponse.json({ order }, { status: 200 });
   } catch (error: any) {

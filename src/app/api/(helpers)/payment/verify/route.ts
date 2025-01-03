@@ -9,6 +9,9 @@ const razorpay = new Razorpay({
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
+
+    console.log("Razorpay:", razorpay);
+    
     const body = await req.json();
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = body;
 
@@ -18,12 +21,15 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         { status: 400 }
       );
     }
-
+    console.log("verify 1");
+    
     // Verify signature
     const expectedSignature = crypto
       .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET || "")
       .update(`${razorpay_order_id}|${razorpay_payment_id}`)
       .digest("hex");
+
+    console.log("verify 2", expectedSignature, razorpay_signature);
 
     if (expectedSignature !== razorpay_signature) {
       console.log("Invalid signature");

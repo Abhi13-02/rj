@@ -9,6 +9,8 @@ const razorpay = new Razorpay({
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
+    console.log("Razorpay Key ID:", process.env.RAZORPAY_KEY_ID);
+console.log("Razorpay Key Secret:", process.env.RAZORPAY_KEY_SECRET);
 
     console.log("Razorpay:", razorpay);
     const body = await req.json(); // Parse the request body

@@ -80,6 +80,8 @@ export default function CheckoutButton({ amount }: CheckoutButtonProps) {
             // alert("Payment successful");
             setDBPaymentMethod("Prepaid");
             updatePaymentMethod("Prepaid");
+
+            console.log("Payment Verified:", verifyData);
             
             //////creating shiprocketorder/////////
             const response = await fetch("/api/ship/createOrder", {
@@ -94,6 +96,7 @@ export default function CheckoutButton({ amount }: CheckoutButtonProps) {
             console.log(data);
       
             if(!response.ok){
+              console.log("Failed to create shiprockrtOrder");       
               throw new Error("Failed to create shiprockrtOrder");
             }
       

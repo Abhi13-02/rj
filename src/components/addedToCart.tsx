@@ -15,7 +15,7 @@ import { toast } from "react-toastify";
 import { set } from "mongoose";
 import { IProduct } from "@/models/Products";
 
-const CartPage = () => {
+const AddedToCart = ({ toggleCart , isCartOpen }: { toggleCart: () => void , isCartOpen: boolean}) => {
   const router = useRouter();
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -30,7 +30,6 @@ const CartPage = () => {
   const {products,fetchProducts} = useProductStore((state) => state);
   const [outOfStockItems, setOutOfStockItems] = useState<CartItem[]>([]);
   const [inStockItems, setInStockItems] = useState<CartItem[]>([]);
-  const cart = useCartStore((state) => state.Cart);
 
   useEffect(() => {
     if (session?.user?.id) {
@@ -221,173 +220,152 @@ const CartPage = () => {
   }
 
   return (
-    <div className="cart-page lg:max-w-screen-xl mx-auto px-2 py-10 bg-gray-50 relative">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* Cart Items Section */}
-        <div className="cart-items col-span-2 bg-white shadow-lg rounded-lg px-2 py-4 md:p-6">
-          <h1 className="text-3xl font-normal underline decoration-1 underline-offset-8 mb-6 text-gray-800">Your Cart</h1>
+    <>
+    {/* Overlay */}
+    {isCartOpen && (
+      <div
+        onClick={toggleCart}
+        className="fixed inset-0 bg-black bg-opacity-50 z-40"
+      ></div>
+    )}
 
-          {cartItems.length === 0 ? (
-             <div className="relative flex flex-col items-center justify-center  w-full h-[70vh] p-6 space-y-6 bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg shadow-lg overflow-hidden">
-             {/* Animated Cart Icon */}
-             <div className="text-5xl md:text-6xl animate-bounce z-10">
-               🛍️
-             </div>
-           
-             {/* Heading */}
-             <p className="text-gray-800 text-2xl md:text-4xl font-bold z-10">
-               Your bag is empty!
-             </p>
-           
-             {/* Subtext */}
-             <p className="text-gray-600 text-sm md:text-lg text-center max-w-md z-10">
-               It looks like you haven’t added anything yet. Explore our amazing collection and fill your cart with incredible finds!
-             </p>
-           
-             {/* Call-to-Action Button */}
-             <a
-                href="/products"
-                className="mt-4 px-10 py-4 text-lg bg-gradient-to-r from-blue-600 to-indigo-500 text-white font-semibold rounded-full shadow-lg transform hover:scale-110 transition-all duration-300 hover:shadow-xl animate-fade-in delay-200"
-              >
-                Shop Now
-              </a>
-           
-             {/* Decorative Animation */}
-             <div className="absolute inset-0 flex justify-between place-items-stretch overflow-hidden">
-               <div className="w-72 h-72 rounded-full bg-blue-200 opacity-50 animate-pulse"></div>
-               <div className="w-48 h-48 rounded-full bg-blue-500 opacity-30 animate-pulse"></div>
-             </div>
-           </div>
-           
-        
-         
+    {/* Cart Panel */}
+    <div
+      className={` fixed top-0 right-0 h-full w-80 md:w-96 bg-gray-50 shadow-lg z-50 transform ${
+        isCartOpen ? "translate-x-0" : "translate-x-full"
+      } transition-transform duration-300`}
+    >
+      {/* Close Button */}
+      <button
+        onClick={toggleCart}
+        className="absolute top-4 right-4 text-gray-700 text-2xl hover:text-gray-800"
+      >
+        x
+      </button>
+
+      {/* Cart Content */}
+      <div className="p-6 flex flex-col h-full">
+
+        <div className="h-[10%]">
+          {
+            cartItems.length === 0 ? (
+              <div className="text-center underline underline-offset-8 text-xl md:text-2xl  text-gray-700">
+                Your Cart is empty! 
+              </div>
             ) : (
-              [...inStockItems].reverse().map((item, index) => (
-              console.log("inStockItems", item),
-              <div
-                key={index}
-                className="flex relative items-center justify-between p-4 mb-4 border rounded-lg shadow-sm bg-gray-100"
-              >
-                <div className="flex items-center mb-8 md:mb-0">
-                  <Link href={`/product/${item.productId}`}>
+              
+            <h2 className="flex items-center mt-4 text-xl md:text-2xl font-bold mb-4 text-gray-800 space-x-3 ">
+              {/* Circle with Tick */}
+              <div className="flex items-center justify-center w-10 h-10 bg-green-100 rounded-full animate-pop">
+                  <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={2}
+                  stroke="currentColor"
+                  className="w-6 h-6 text-green-600"
+                  >
+                  <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M4.5 12.75l6 6L20.25 7.5"
+                  />
+                  </svg>
+              </div>
+
+              {/* Text */}
+              <span className="animate-fade-in font-normal underline underline-offset-8 decoration-green-500 ">Item Added to Cart!</span>
+              </h2>
+            )
+          }
+        </div>
+
+
+
+        {cartItems.length === 0 ? (
+          <div className="text-center text-gray-600 mt-10">
+            <a
+              href="/products"
+              className="mt-4 block px-4 py-2 bg-blue-600 text-white rounded-md"
+            >
+              Shop Now
+            </a>
+          </div>
+        ) : (
+          <div className="h-[90%]">
+
+            <div className="mt-2 flex flex-col  h-[75%] overflow-y-scroll">
+              {/* In-Stock Items */}
+              {[...inStockItems].reverse().map((item, index) => (
+                <div
+                  key={index}
+                  className="flex items-center justify-between mb-4 border p-2 rounded-lg"
+                >
+                  <div className="flex items-center">
                     <img
                       src={item.image}
                       alt={item.name}
-                      className=" max-w-[100px] md:max-w-[150px] aspect-[3/4] object-cover rounded-lg mr-4"
+                      className="w-16 h-16 rounded-md mr-4"
                     />
-                  </Link>
-                  <div className="flex flex-col gap-2 pt-2 pr-1">
-                    <Link href={`/product/${item.productId}`}>
-                      <h2 className="text-md md:text-xl font-semibold text-gray-800">{item.name}</h2>
-                    </Link>
-                    <p className="text-sm md:text-lg text-gray-800">Size: {item.size}</p>
-                    <div className="flex gap-2  ">
-                      <button
-                        onClick={() => handleQuantityChange("decrement", item)}
-                        className="px-3 py-2 bg-gray-200 rounded-l-md text-gray-700 hover:bg-gray-300"
-                        disabled={item.quantity <= 1}
-                      >
-                        -
-                      </button>
-                      <span className="px-4 py-1 text-lg font-medium">{item.quantity}</span>
-                      <button
-                        onClick={() => handleQuantityChange("increment", item)}
-                        className="px-3 py-2 bg-gray-200 rounded-r-md text-gray-700 hover:bg-gray-300"
-                      >
-                        +
-                      </button>
+                    <div>
+                      <p className="font-semibold">{item.name}</p>
+                      <p className="text-gray-600 text-sm">Size: {item.size}</p>
+                      <div className="flex items-center mt-1">
+                        <button
+                          onClick={() => handleQuantityChange("decrement", item)}
+                          className="px-2 py-1 bg-gray-200 rounded-l text-gray-600"
+                          disabled={item.quantity <= 1}
+                        >
+                          -
+                        </button>
+                        <span className="px-4">{item.quantity}</span>
+                        <button
+                          onClick={() => handleQuantityChange("increment", item)}
+                          className="px-2 py-1 bg-gray-200 rounded-r text-gray-600"
+                        >
+                          +
+                        </button>
+                      </div>
                     </div>
                   </div>
+                  <div>
+                    <p>₹{item.price * item.quantity}</p>
+                    <button
+                      onClick={() =>
+                        deleteCartItem(item.productId, item.quantity, item.size)
+                      }
+                      className="text-red-600 text-sm"
+                    >
+                      Remove
+                    </button>
+                  </div>
                 </div>
-                <div className="flex absolute bottom-2 right-2 md:right-8 md:bottom-4 items-center justify-end w-full gap-3 md:">
-                  <span className="text-xl md:text-2xl font-normal text-gray-800">
-                   sub-total:{" "}{" "} ₹{item.price * item.quantity}
-                  </span>
+              ))}
+            </div>
+
+            <div>
+              {/* Order Summary */}
+              <div className="mt-6 h-[20%] bg-white px-4">
+                <h3 className="text-lg font-semibold">Order Summary</h3>
+                <div className="flex justify-between mt-2">
+                  <p>Total ({inStockItems.length} items)</p>
+                  <p>₹{calculateTotal()}</p>
                 </div>
                 <button
-                    onClick={() => deleteCartItem(item.productId, item.quantity, item.size)}
-                    className="text-red-600 absolute top-1 right-1 hover:text-red-800"
-                  >
-                    <MdDeleteOutline size={24} />
+                  onClick={handleCheckout}
+                  className="mt-4 w-full py-2 bg-gray-800 text-white rounded-md"
+                >
+                  Checkout
                 </button>
               </div>
-            )))
-          }
-
-          {
-            outOfStockItems.length > 0 && ( outOfStockItems.map((item, index) => (
-              <div
-              key={index}
-              className="flex relative items-center justify-between p-4 mb-4 border rounded-lg shadow-sm bg-opacity-50"
-            >
-              <div className="absolute top-2 left-2 opacity-100 z-8 bg-red-500 text-white text-xs font-bold py-1 px-2 rounded-md">
-                Out of Stock
-              </div>
-
-              <div className="flex items-center mb-8 md:mb-0 bg-opacity-60">
-                <Link href={`/product/${item.productId}`}>
-                  <img
-                    src={item.image[0]}
-                    alt={item.name}
-                    className=" max-w-[100px] md:max-w-[150px] aspect-[3/4] object-cover rounded-lg mr-4"
-                  />
-                </Link>
-                <div className="flex flex-col gap-2 pt-2 pr-1">
-                  <Link href={`/product/${item.productId}`}>
-                    <h2 className="text-md md:text-xl font-semibold text-gray-800">{item.name}</h2>
-                  </Link>
-                  <p className="text-sm md:text-lg text-gray-800">Size: {item.size}</p>
-                  <p className="text-sm md:text-lg text-gray-800">Quantity: {item.quantity}</p>
-                </div>
-              </div>
-              <div className="flex absolute bottom-2 right-2 md:right-8 md:bottom-4 items-center justify-end w-full gap-3 md:">
-                <span className="text-xl md:text-2xl font-normal text-gray-800">
-                 sub-total:{" "}{" "} ₹{item.price * item.quantity}
-                </span>
-              </div>
-              <button
-                  onClick={() => deleteCartItem(item.productId, item.quantity, item.size)}
-                  className="text-red-600 absolute top-1 right-1 hover:text-red-800"
-                >
-                  <MdDeleteOutline size={24} />
-              </button>
+             </div>
             </div>
-            ))
-              
-            )
-          }
-
-        </div>
-  
-        {/* Order Summary Section */}
-        <div
-          className={`cart-summary bg-white shadow-lg rounded-lg p-6 md:relative md:top-auto md:w-full ${
-            inStockItems.length > 0
-              ? "fixed bottom-0 left-0 w-full md:w-auto"
-              : "md:relative"
-          }`}
-        >
-          <h2 className=" text-xl underline decoration-1 underline-offset-8 md:text-2xl font-normal mb-4 md:mb-8 text-gray-800">Order Summary </h2>
-          <div className="mb-4 md:mb-6 flex justify-between">
-            <p className=" text-lg lg:text-2xl font-medium text-gray-700">
-              Total :{" "}({inStockItems.length}{" "}items)
-            </p>
-            <span className=" text-2xl lg:text-3xl  font-normal text-gray-900">₹{calculateTotal()}</span>
-          </div>
-          <button
-            onClick={handleCheckout}
-            className="w-full py-3 bg-gray-800 text-white text-lg font-semibold rounded-md hover:bg-black"
-          >
-            Checkout
-          </button>
-        </div>
+        )}
       </div>
-  
-      {/* Spacing to prevent content overlap */}
-      <div className="h-20 md:hidden"></div>
     </div>
+  </>
   );
   
 };
 
-export default CartPage;
+export default AddedToCart;

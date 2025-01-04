@@ -1,5 +1,6 @@
 import dbConnect from "@/libs/dbConnect";
 import Cart from "@/models/Cart";
+import Products from "@/models/Products";
 import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -17,13 +18,37 @@ export async function GET(req: NextRequest) {
 
   try {
     await dbConnect();
+
+    // Fetch the cart for the user
     const cart = await Cart.findOne({ userId });
+
     if (!cart) {
       return NextResponse.json(
         { message: "Cart not found for the user" },
         { status: 404 }
       );
     }
+
+    // Fetch all product IDs in the cart
+    const productIdsInCart = cart.items.map((item : any) => item.productId);
+
+    // Validate if products exist in the database
+    const validProducts = await Products.find({ _id: { $in: productIdsInCart } });
+    const validProductIds = validProducts.map((product) => product._id.toString());
+
+    // Filter out invalid items
+    const validItems = cart.items.filter((item: any) =>
+      validProductIds.includes(item.productId.toString())
+    );
+
+    // Check if any items were removed
+    if (validItems.length !== cart.items.length) {
+      cart.items = validItems;
+
+      // Save the updated cart
+      await cart.save();
+    }
+
     return NextResponse.json(cart);
   } catch (error) {
     console.error("Error fetching cart:", error);
@@ -33,6 +58,7 @@ export async function GET(req: NextRequest) {
     );
   }
 }
+
 
 // PUT: Update quantity of a cart item
 // export async function PUT(req: NextRequest) {

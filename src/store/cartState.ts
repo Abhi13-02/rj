@@ -87,7 +87,7 @@ const useCartStore = create<CartState>((set) => ({
         0
       );
 
-      console.log("hiiiiiibro",updatedItems, updatedTotalAmount);
+      console.log("cart state",updatedItems, updatedTotalAmount);
 
       return {
         Cart: {

@@ -17,6 +17,8 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Loading from "@/components/loading";
 import ErrorPage from "@/components/error";
+import AddedToCart from "@/components/addedToCart";
+import { set } from "mongoose";
 
 
 const ProductPage = () => {
@@ -39,6 +41,12 @@ const ProductPage = () => {
   const addOrderItems = useOrderStore((state) => state.addOrderItems);
   const setItems = useDBOrderStore((state) => state.setItems);
   const Cart = useCartStore((state) => state.Cart);
+
+  const [isCartOpen, setIsCartOpen] = useState(false);
+
+  const toggleCart = () => {
+    setIsCartOpen(!isCartOpen);
+  };
 
   useEffect(() => {
     fetchProducts();
@@ -154,7 +162,7 @@ const ProductPage = () => {
 
     if (response.ok && session?.user?.id){
        fetchCart(session.user.id);
-      toast.success("Product added to cart successfully!",{autoClose:2000});
+       setIsCartOpen(true);
     }
     else{
       toast.error("Failed to add product to cart.");
@@ -229,6 +237,8 @@ const ProductPage = () => {
 
   return (
     <div className="max-w-7xl mx-auto py-4 px-2 md:p-6">
+
+    <AddedToCart  toggleCart={toggleCart} isCartOpen={isCartOpen} />
     {/* Login Panel */}
     {showLoginPanel && <LoginPanel onClose={() => setShowLoginPanel(false)} />}
   
@@ -346,12 +356,12 @@ const ProductPage = () => {
   
         {/* Product Description */}
         <div className="mb-6 text-sm md:text-md">
-          <label className="font-bold text-black block mb-1  md:mb-2">Product Description:</label>
+          <label className="font-bold text-black block mb-3  md:mb-5">Product Description:</label>
           <p className="text-gray-700 whitespace-pre-line">
             {product?.description?.split(",").map((segment, index) => {
               const parts = segment.split(":");
               return (
-                <span key={index} className="block mb-[3px]">
+                <span key={index} className="block">
                   {parts.length > 1 ? (
                     <>
                       <span className="font-semibold">{parts[0]}:</span>

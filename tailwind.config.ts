@@ -22,9 +22,20 @@ export default {
           "86.66%": { transform: "translateX(-200vw)" }, // Pause on the third video
           "100%": { transform: "translateX(-300vw)" },
         },
+        pop: {
+          '0%': { transform: 'scale(0.5)', opacity: '0' },
+          '80%': { transform: 'scale(1.2)', opacity: '1' },
+          '100%': { transform: 'scale(1)', opacity: '1' },
+        },
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
       },
       animation: {
-        slide: "slide 23s infinite linear"
+        slide: "slide 23s infinite linear",
+        pop: 'pop 0.5s ease-out',
+        'fade-in': 'fadeIn 0.8s ease-in',
       },
       screens: {
         'sm': '319px'
@@ -33,3 +44,5 @@ export default {
   },
   plugins: [],
 } satisfies Config;
+
+

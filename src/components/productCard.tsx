@@ -204,7 +204,7 @@ const ProductCard: React.FC<{ product: IProduct, setShowLoginPanel: React.Dispat
                 </>
               ) : (
                 <div className="text-center">
-                  <h3 className="text-xl font-bold mb-4">Login Required</h3>
+                  <h3 className="text-xl font-bold mb-4">Login Required dytcgvjhbknk</h3>
                   <SignIn />
                 </div>
               )}

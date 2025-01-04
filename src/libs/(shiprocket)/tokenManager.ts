@@ -17,6 +17,12 @@ export const getShiprocketToken = async (): Promise<string|null> => {
     password: "Rohit@123",
   });
 
+  //  // Re-authenticate and update the cache
+  //  const response = await axios.post("https://apiv2.shiprocket.in/v1/external/auth/login", {
+  //   email: "abhidev200513@gmail.com",
+  //   password: "13@Abhinav13",
+  // });
+
   const { token } = response.data as ShiprocketAuthResponse;
    console.log("Token created:", token);
 

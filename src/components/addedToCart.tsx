@@ -207,7 +207,9 @@ const AddedToCart = ({ toggleCart , isCartOpen }: { toggleCart: () => void , isC
 
   if (!session) {
     return (
-      <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
+      <div className={` fixed top-0 right-0 h-full w-80 md:w-96 bg-gray-50 shadow-lg z-50 transform ${
+        isCartOpen ? "translate-x-0" : "translate-x-full"
+      } transition-transform duration-300`}>
         <p className="mb-4 text-lg">Please log in to view your cart.</p>
         <button
           onClick={() => signIn()}

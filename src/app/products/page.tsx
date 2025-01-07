@@ -138,7 +138,8 @@ const ProductPage = () => {
             {filteredProducts.map((product) => (
               // <ProductCard key={product._id.toString()} product={product} setShowLoginPanel={setShowLoginPanel} />
               <div className="p-2 border-black border-2">
-              {product.title}
+                <p>{product.title}</p>
+                <img src={product.images[0]} alt="hello" />
               </div>
             ))}
           </div>

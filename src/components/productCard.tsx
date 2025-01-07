@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useState } from "react";
 import { IProduct } from "@/models/Products";
 import { useSession } from "next-auth/react";

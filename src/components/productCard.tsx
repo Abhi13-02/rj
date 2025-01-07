@@ -112,6 +112,7 @@ const ProductCard: React.FC<{ product: IProduct, setShowLoginPanel: React.Dispat
           <img
             src={product.images[0]}
             alt={product.title}
+            loading="lazy"
             className="w-full h-[62%] sm:h-[62%] object-cover rounded-md"
           />
         </Link>

@@ -136,7 +136,10 @@ const ProductPage = () => {
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {filteredProducts.map((product) => (
-              <ProductCard key={product._id.toString()} product={product} setShowLoginPanel={setShowLoginPanel} />
+              // <ProductCard key={product._id.toString()} product={product} setShowLoginPanel={setShowLoginPanel} />
+              <div className="p-2 border-black border-2">
+              {product.title}
+              </div>
             ))}
           </div>
         )}

@@ -14,9 +14,7 @@ const playFair = Playfair_Display({ subsets: ["latin"], weight: "400" });
 function Page() {
     const products = useProductStore((state) => state.products);
     const images : any= [
-        // "/rj.mp41.mp4",
-        // "rj.mp42.mp4",
-        // "rj.mp4 3.mp4",
+        "/rj.mp41.mp4",
     ];
 
     useEffect(() => {
@@ -31,7 +29,7 @@ function Page() {
         <main className="relative w-full">
             {/* Image Slider Section */}
             <section className="relative w-full lg:h-screen md:h-[30%] overflow-hidden">
-                <div className="flex animate-slide">
+                <div className="flex animate-slid">
                     {[...images, ...images].map((src, index) => (
                         <div
                             key={index}

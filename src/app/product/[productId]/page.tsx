@@ -100,9 +100,9 @@ const ProductPage = () => {
   }, [product]);
 
 
-  // if (loading) {
-  //   return <Loading />;
-  // }
+  if (loading) {
+    return <Loading />;
+  }
 
   if (!product) {
     return <ErrorPage />;

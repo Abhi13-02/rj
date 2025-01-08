@@ -12,14 +12,17 @@ import useProductStore from "@/store/productState";
 const playFair = Playfair_Display({ subsets: ["latin"], weight: "400" });
 
 function Page() {
+    const products = useProductStore((state) => state.products);
     const images = [
         "/rj.mp41.mp4",
         "rj.mp42.mp4",
         "rj.mp4 3.mp4",
     ];
 
-
-    
+    useEffect(() => {
+        const state = useProductStore.getState();
+        console.log('State size:', JSON.stringify(state).length / 1024, 'KB');
+    },[products]);
 
 
 

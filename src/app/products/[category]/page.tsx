@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { IProduct } from "@/models/Products";
 import useProductStore from "@/store/productState";
 import ProductCard from "@/components/productCard";
@@ -9,6 +9,7 @@ import { FaBars, FaTimes } from "react-icons/fa";
 import LoginPanel from "@/components/loginPanel";
 import { set } from "mongoose";
 import Loading from "@/components/loading";
+import Skeleton from "@/components/Skeleton";
 
 
 const FilterPanel = ({
@@ -295,9 +296,6 @@ const ProductPage = () => {
       applyFilters({selectedCategory: category});
   }, [products]);
 
-  if (loading) {
-    return <Loading />;
-  }
 
   return (
     <div className="p-2 md:p-4 flex flex-col lg:flex-row gap-6 ">
@@ -315,7 +313,9 @@ const ProductPage = () => {
           showFilter ? "block" : "hidden"
         } lg:block lg:w-1/4 bg-white shadow-lg p-4 max-w-[330px]`}
       >
-        <FilterPanel onApplyFilters={applyFilters} />
+        <Suspense fallback={<Skeleton type="filter" />}>
+          <FilterPanel onApplyFilters={applyFilters} />
+        </Suspense>
       </aside>
 
       {/* Product Grid */}
@@ -327,8 +327,12 @@ const ProductPage = () => {
         </span>
       </h1>
 
-        {/* Login Panel */}
-        {showLoginPanel && <LoginPanel onClose={() => setShowLoginPanel(false)} />}
+       {/* Login Panel */}
+       {showLoginPanel && (
+          <Suspense fallback={<Skeleton type="panel" />}>
+            <LoginPanel onClose={() => setShowLoginPanel(false)} />
+          </Suspense>
+        )}
 
         {
             filteredProductsbyPannel.length === 0 && (

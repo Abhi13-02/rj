@@ -3,9 +3,7 @@ import React, { use, useEffect, useState } from "react";
 import Image from "next/image";
 import useProductStore from "@/store/productState";
 import { IProduct } from "@/models/Products";
-import { set } from "mongoose";
 import ScrollableRow from "./scrollableSection";
-import Loading from "./loading";
 
 
 const Tabs: React.FC<{}> = () => {
@@ -51,9 +49,6 @@ const Tabs: React.FC<{}> = () => {
         
     }, [products]);
 
-    if (loading) {
-        return <Loading />;
-      }
 
     return (
         <div className="flex justify-center items-center w-full h-full">

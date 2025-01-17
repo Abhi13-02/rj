@@ -230,7 +230,7 @@ const CartPage = () => {
           {cartItems.length === 0 ? (
                 <div className="relative flex flex-col items-center justify-center w-full h-[70vh] p-6 space-y-6 bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg shadow-lg overflow-hidden">
                   {/* Simplified Cart Icon */}
-                  <div className="text-5xl md:text-6xl z-10">
+                  <div className="text-5xl md:text-6xl z-10 ">
                     🛍️
                   </div>
 
@@ -247,15 +247,17 @@ const CartPage = () => {
                   {/* Call-to-Action Button */}
                   <Link
                     href="/products"
-                    className="mt-4 px-8 py-3  text-lg bg-blue-600 text-white font-semibold rounded-full shadow-md hover:bg-blue-700 transition duration-200"
+                    className="mt-4 px-8 py-3 cursor-pointer z-20  text-lg bg-blue-500 text-white font-semibold rounded-full shadow-md hover:bg-blue-700 transition duration-200"
                   >
                     Shop Now
                   </Link>
 
                   {/* Minimal Decorative Background */}
-                  <div className="absolute inset-0 flex justify-between items-center">
-                    <div className="w-48 h-48 rounded-full bg-blue-200 opacity-40"></div>
+                  <div className="absolute animate-pulse inset-0 flex justify-between items-center">
+                    <div className="w-48 h-48 rounded-full bg-blue-300 opacity-40"></div>
+                    <div className="w-72 h-72 rounded-full bg-blue-200 opacity-40"></div>
                   </div>
+                  
                 </div>
               ) : (
               [...inStockItems].reverse().map((item, index) => (

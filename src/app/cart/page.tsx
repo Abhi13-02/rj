@@ -77,8 +77,8 @@ const CartPage = () => {
   };
 
   useEffect(() => {
-    console.log("outOfStockItems...",outOfStockItems);
-    console.log("inStockItems...",inStockItems);
+    console.log("cart outOfStockItems...",outOfStockItems);
+    console.log("cart inStockItems...",inStockItems);
     setLoading(false);
   }, [outOfStockItems,inStockItems]);
 

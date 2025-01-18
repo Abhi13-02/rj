@@ -42,7 +42,7 @@ const Tabs: React.FC<{}> = () => {
               const dateB = new Date(b.createdAt).getTime();
               return dateB - dateA; // Sort in descending order (newest first)
             });
-            return sortedProducts;
+            return sortedProducts.slice(0, 10); // Get the first 10 products
           };
 
           setNewProducts(sortProductsByDate(products));

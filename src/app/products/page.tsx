@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense, use, useEffect, useState } from "react";
 import { IProduct } from "@/models/Products";
 import useProductStore from "@/store/productState";
 import dynamic from "next/dynamic";
@@ -68,6 +68,10 @@ const ProductPage = () => {
 
     setFilteredProducts(filtered);
   };
+
+  useEffect(() => {
+   console.log("filteredProducts",filteredProducts, "loading",loading);
+  }, [filteredProducts]);
 
   useEffect(() => {
     const initializeProducts = async () => {

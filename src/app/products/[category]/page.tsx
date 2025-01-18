@@ -273,8 +273,8 @@ const ProductPage = () => {
   }, []); 
 
   useEffect(() => {
-    console.log("filteredProducts:", filteredProducts);
-  }, [filteredProducts]);
+    console.log("filteredProductsbyPannel:", filteredProductsbyPannel, "loading:", loading);
+  }, [filteredProductsbyPannel]);
 
   useEffect(() => {
     const applyFilters = ({
@@ -291,9 +291,9 @@ const ProductPage = () => {
         });
         setFilteredProducts(filtered);
         setFilteredProductsbyPannel(filtered);
-        setLoading(false);
+        setTimeout(() => setLoading(false), 400);
       };
-      applyFilters({selectedCategory: category});
+       applyFilters({selectedCategory: category});
   }, [products]);
 
 
@@ -334,13 +334,13 @@ const ProductPage = () => {
           </Suspense>
         )}
 
-       {loading ? (
+       {loading ?(
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {Array.from({ length: 12 }).map((_, index) => (
               <Skeleton key={index} type="card" />
             ))}
           </div>
-        ) : filteredProductsbyPannel.length === 0 ? (
+        ) : filteredProductsbyPannel.length === 0  ? (
           <div className="flex justify-center items-center w-full min-h-[300px] p-4">
             <div className="text-center space-y-4">
               <p className="text-gray-800 text-xl md:text-4xl font-semibold animate-pulse">

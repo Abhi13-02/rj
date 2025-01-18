@@ -39,8 +39,8 @@ const Navbar = () => {
     const fetchCartData = async () => {
       if (session?.user?.id) {
         await fetchCart(session.user.id);
-        await fetchProducts();
       }
+      await fetchProducts();
     };
     fetchCartData();
   }, [session, fetchCart, fetchProducts]);

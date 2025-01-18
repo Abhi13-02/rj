@@ -9,7 +9,7 @@ const Skeleton: React.FC<SkeletonProps> = ({ type }) => {
 
   switch (type) {
     case "card":
-      skeletonClasses = "h-80 w-full bg-gray-200 rounded shadow animate-pulse";
+      skeletonClasses = "h-80 w-full bg-gray-300 rounded shadow animate-pulse";
       break;
     case "filter":
       skeletonClasses = "h-80 w-full bg-gray-200 rounded shadow animate-pulse";

@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Playfair_Display } from "next/font/google";
 import Link from "next/link";
@@ -13,27 +13,25 @@ const playFair = Playfair_Display({ subsets: ["latin"], weight: "400" });
 
 function Page() {
     const products = useProductStore((state) => state.products);
-    const images : any= [
-        "/rj.mp41.mp4",
-    ];
+
+    const vids : any= ["/1rj.mp4","/rjb2.mp4","/rjb3.mp4"];
 
     useEffect(() => {
         const state = useProductStore.getState();
+        console.log("vids", vids);
         console.log('State size:', JSON.stringify(state).length / 1024, 'KB');
     },[products]);
-
-
 
 
     return (
         <main className="relative w-full">
             {/* Image Slider Section */}
-            <section className="relative w-full lg:h-screen md:h-[30%] overflow-hidden">
-                <div className="flex animate-slid">
-                    {[...images, ...images].map((src, index) => (
+            <section className="relative w-full  overflow-hidden">
+                <div className="flex animate-slide">
+                    {[...vids].map((src, index) => (
                         <div
                             key={index}
-                            className="w-screen lg:h-screen md:h-[30%] flex-shrink-0 relative"
+                            className="w-screen flex-shrink-0 relative"
                         >
                             <video
                                 src={src}
@@ -42,6 +40,10 @@ function Page() {
                                 playsInline={true}
                                 loop={true}
                                 className="object-fill"
+                                onError={(e) => {
+                                    console.error(`Failed to load video: ${src}`);
+                                    console.error("Error event:", e);
+                                }}
                             ></video>
                         </div>
                     ))}
@@ -132,8 +134,8 @@ function Page() {
 
             <section className="my-5 md:my-8">
                 <div className="w-full">
-                    <Link href="#">
-                        <video src="/rj.mp4 65.mp4" autoPlay={true} muted={true} playsInline={true} loop={true}></video>
+                    <Link href="/products">
+                       <video autoPlay={true} loop={true} muted={true} className="w-full" src="/rjbb.mp4" />
                     </Link>
                 </div>
             </section>

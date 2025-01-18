@@ -33,7 +33,7 @@ export default {
         },
       },
       animation: {
-        slide: "slide 23s infinite linear",
+        slide: "slide 18s infinite linear",
         pop: 'pop 0.5s ease-out',
         'fade-in': 'fadeIn 0.8s ease-in',
       },

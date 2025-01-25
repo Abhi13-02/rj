@@ -50,6 +50,7 @@ function Page() {
                 </div>
             </section>
 
+
             {/* Shop By Category Section */}
             <section className="shop_by_category text-2xl text-[#832729] pt-2 md:py-8 px-2 text-center font-bold">
                 <span className={`${playFair.className} text-xl md:text-3xl `}>SHOP BY CATEGORY</span>
@@ -109,7 +110,7 @@ function Page() {
                             <span className="text-[#832729] mt-2 text-lg md:text-2xl text-center">KURTIS</span>
                         </div>
                     </Link>
-                    <Link href={"/products/duppata"} className="justify-self-center">
+                    <Link href={"/products/dupatta"} className="justify-self-center">
                         <div className="flex justify-center items-center flex-col w-full h-[200px]">
                             <Image
                                 width={450}

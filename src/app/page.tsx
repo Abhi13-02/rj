@@ -14,7 +14,7 @@ const playFair = Playfair_Display({ subsets: ["latin"], weight: "400" });
 function Page() {
     const products = useProductStore((state) => state.products);
 
-    const vids : any= ["/1rj.mp4","/rjb2.mp4","/rjb3.mp4"];
+    const vids : any= ["/rjb1.mp4","/rjb2.mp4","/rjb3.mp4"];
 
     useEffect(() => {
         const state = useProductStore.getState();
@@ -28,7 +28,7 @@ function Page() {
             {/* Image Slider Section */}
             <section className="relative w-full  overflow-hidden">
                 <div className="flex animate-slide">
-                    {[...vids].map((src, index) => (
+                    {[...vids, ...vids].map((src, index) => (
                         <div
                             key={index}
                             className="w-screen flex-shrink-0 relative"

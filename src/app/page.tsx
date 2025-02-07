@@ -27,7 +27,7 @@ function Page() {
     return (
         <main className="relative w-full">
             {/* Image Slider Section */}
-            <section className="relative w-full lg:h-screen md:h-[30%] overflow-hidden">
+            {/* <section className="relative w-full lg:h-screen md:h-[30%] overflow-hidden">
                 <div className="flex animate-slide">
                     {[...images, ...images].map((src, index) => (
                         <div
@@ -45,7 +45,7 @@ function Page() {
                         </div>
                     ))}
                 </div>
-            </section>
+            </section> */}
 
             {/* Shop By Category Section */}
             <section className="shop_by_category text-2xl text-[#832729] pt-2 md:py-8 px-2 text-center font-bold">

@@ -77,8 +77,8 @@ const CartPage = () => {
   };
 
   useEffect(() => {
-    console.log("outOfStockItems...",outOfStockItems);
-    console.log("inStockItems...",inStockItems);
+    console.log("cart outOfStockItems...",outOfStockItems);
+    console.log("cart inStockItems...",inStockItems);
     setLoading(false);
   }, [outOfStockItems,inStockItems]);
 
@@ -228,40 +228,38 @@ const CartPage = () => {
           <h1 className="text-3xl font-normal underline decoration-1 underline-offset-8 mb-6 text-gray-800">Your Cart</h1>
 
           {cartItems.length === 0 ? (
-             <div className="relative flex flex-col items-center justify-center  w-full h-[70vh] p-6 space-y-6 bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg shadow-lg overflow-hidden">
-             {/* Animated Cart Icon */}
-             <div className="text-5xl md:text-6xl animate-bounce z-10">
-               🛍️
-             </div>
-           
-             {/* Heading */}
-             <p className="text-gray-800 text-2xl md:text-4xl font-bold z-10">
-               Your bag is empty!
-             </p>
-           
-             {/* Subtext */}
-             <p className="text-gray-600 text-sm md:text-lg text-center max-w-md z-10">
-               It looks like you haven’t added anything yet. Explore our amazing collection and fill your cart with incredible finds!
-             </p>
-           
-             {/* Call-to-Action Button */}
-             <a
-                href="/products"
-                className="mt-4 px-10 py-4 text-lg bg-gradient-to-r from-blue-600 to-indigo-500 text-white font-semibold rounded-full shadow-lg transform hover:scale-110 transition-all duration-300 hover:shadow-xl animate-fade-in delay-200"
-              >
-                Shop Now
-              </a>
-           
-             {/* Decorative Animation */}
-             <div className="absolute inset-0 flex justify-between place-items-stretch overflow-hidden">
-               <div className="w-72 h-72 rounded-full bg-blue-200 opacity-50 animate-pulse"></div>
-               <div className="w-48 h-48 rounded-full bg-blue-500 opacity-30 animate-pulse"></div>
-             </div>
-           </div>
-           
-        
-         
-            ) : (
+                <div className="relative flex flex-col items-center justify-center w-full h-[70vh] p-6 space-y-6 bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg shadow-lg overflow-hidden">
+                  {/* Simplified Cart Icon */}
+                  <div className="text-5xl md:text-6xl z-10 ">
+                    🛍️
+                  </div>
+
+                  {/* Heading */}
+                  <p className="text-gray-800 text-2xl md:text-4xl font-bold z-10">
+                    Your bag is empty!
+                  </p>
+
+                  {/* Subtext */}
+                  <p className="text-gray-600 text-sm md:text-lg text-center max-w-md z-10">
+                    It looks like you haven’t added anything yet. Explore our amazing collection and fill your cart with incredible finds!
+                  </p>
+
+                  {/* Call-to-Action Button */}
+                  <Link
+                    href="/products"
+                    className="mt-4 px-8 py-3 cursor-pointer z-20  text-lg bg-blue-500 text-white font-semibold rounded-full shadow-md hover:bg-blue-700 transition duration-200"
+                  >
+                    Shop Now
+                  </Link>
+
+                  {/* Minimal Decorative Background */}
+                  <div className="absolute animate-pulse inset-0 flex justify-between items-center">
+                    <div className="w-48 h-48 rounded-full bg-blue-300 opacity-40"></div>
+                    <div className="w-72 h-72 rounded-full bg-blue-200 opacity-40"></div>
+                  </div>
+                  
+                </div>
+              ) : (
               [...inStockItems].reverse().map((item, index) => (
               console.log("inStockItems", item),
               <div

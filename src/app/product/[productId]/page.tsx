@@ -83,13 +83,13 @@ const ProductPage = () => {
     const applyFilters = ({ title }: { title: string | undefined }) => {
       const filtered = products.filter((productt: IProduct) => {
         const matchesTitle = title
-          ? productt.title.toLowerCase() === title.toLowerCase()
+          ? productt.title.toLowerCase().trim() === title.toLowerCase().trim()
           : true;
-        return matchesTitle && !productt.tags.every((tag) => product?.tags?.includes(tag));
+        return matchesTitle && productt.images[0] !== product?.images[0];
       });
       setSimilarProducts(filtered);
 
-      // For simplicity, fetching best sellers as top products by price
+      
       const topProducts = products.filter((productt: IProduct) => {
         const isLoved = productt.tags.includes("Most Loved");
         return isLoved && productt.title !== product?.title;
@@ -97,7 +97,7 @@ const ProductPage = () => {
       setBestSellers(topProducts);
     };
     applyFilters({ title: product?.title });
-  }, [product]);
+  }, [product, products]);
 
 
   if (loading) {

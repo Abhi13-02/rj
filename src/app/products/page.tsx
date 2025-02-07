@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense, use, useEffect, useState } from "react";
 import { IProduct } from "@/models/Products";
 import useProductStore from "@/store/productState";
 import dynamic from "next/dynamic";
@@ -70,6 +70,10 @@ const ProductPage = () => {
   };
 
   useEffect(() => {
+   console.log("filteredProducts",filteredProducts, "loading",loading);
+  }, [filteredProducts]);
+
+  useEffect(() => {
     const initializeProducts = async () => {
       await fetchProducts();
       setProducts(useProductStore.getState().products);
@@ -119,7 +123,7 @@ const ProductPage = () => {
           </Suspense>
         )}
 
-{loading ? (
+         {loading ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {Array.from({ length: 12 }).map((_, index) => (
               <Skeleton key={index} type="card" />
@@ -137,10 +141,6 @@ const ProductPage = () => {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {filteredProducts.map((product) => (
               <ProductCard key={product._id.toString()} product={product} setShowLoginPanel={setShowLoginPanel} />
-              // <div className="p-2 border-black border-2">
-              //   <p>{product.title}</p>
-              //   <img src={product.images[0]} alt="hello" />
-              // </div>
             ))}
           </div>
         )}

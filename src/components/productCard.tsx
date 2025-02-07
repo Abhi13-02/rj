@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AddedToCart from "./addedToCart";
 import { set } from "mongoose";
+import Image from "next/image";
 
 
 
@@ -99,7 +100,7 @@ const ProductCard: React.FC<{ product: IProduct, setShowLoginPanel: React.Dispat
 
   return (
     <>
-      <AddedToCart  toggleCart={toggleCart} isCartOpen={isCartOpen} />
+      {/* <AddedToCart  toggleCart={toggleCart} isCartOpen={isCartOpen} /> */}
       <div className= {` ${isOutOfStock ? "opacity-70" : ""} relative shadow-sm product-card hover:bg-slate-100 hover:shadow-2xl lg:hover:scale-[1.02] rounded-lg flex-grow max-w-[180px] sm:max-w-[250px] md:max-w-[280px] lg:max-w-[300px] lg:p-2  max-h-[280px] md:max-h-[450px] aspect-[2/4] sm:aspect-[12/19] md:aspect-[2/3] lg:aspect-[6/9] xl:aspect-[6/10]`}>
         
         {/* Out of Stock Badge */}
@@ -107,11 +108,13 @@ const ProductCard: React.FC<{ product: IProduct, setShowLoginPanel: React.Dispat
           <div className="absolute top-2 right-2 opacity-100 z-8 bg-red-500 text-white text-xs font-bold py-1 px-2 rounded-md">
             Out of Stock
           </div>
-        )}
+        )} 
 
         {/* Product Image */}
         <Link href={`/product/${product._id.toString()}`}>
-          <img
+          <Image
+            width={500}
+            height={500}
             src={product.images[0]}
             alt={product.title}
             loading="lazy"
@@ -151,7 +154,7 @@ const ProductCard: React.FC<{ product: IProduct, setShowLoginPanel: React.Dispat
         </div>
 
         {/* Add to Cart Button */}
-        <button
+        {/* <button
           onClick={handleAddToCart}
           className="absolute flex items-center justify-center left-0 bottom-0 w-full text-sm md:text-lg h-7 md:h-10 bg-gray-800 text-white py-2 hover:bg-black"
           disabled={isOutOfStock}
@@ -159,7 +162,6 @@ const ProductCard: React.FC<{ product: IProduct, setShowLoginPanel: React.Dispat
           {isOutOfStock ? "Out of Stock" : "Add to Cart"}
         </button>
 
-        {/* Sliding Side Panel */}
         {isPanelOpen && (
           <div className="absolute top-0 md:w-[100%] bg-opacity-90 bg-white shadow-lg z-250 transition-transform duration-300">
             <div className="p-4">
@@ -220,7 +222,7 @@ const ProductCard: React.FC<{ product: IProduct, setShowLoginPanel: React.Dispat
               </button>
             </div>
           </div>
-        )}
+        )} */}
       </div>
     </>
   );

@@ -38,10 +38,21 @@ const useProductStore = create<ProductState>((set) => ({
         },
       });
 
-      console.log("ProductStore",data);
+      const sortProductsByDate = (products: IProduct[]) => {
+        const sortedProducts = products.sort((a, b) => {
+          const dateA = new Date(a.createdAt).getTime();
+          const dateB = new Date(b.createdAt).getTime();
+          return dateB - dateA; // Sort in descending order (newest first)
+        });
+        return sortedProducts;
+      };
+
+      const sortedProducts = sortProductsByDate(data);
+
+      console.log("ProductStore sorted", sortedProducts);
 
       // Update the Zustand store
-      set(() => ({ products: data }));
+      set(() => ({ products: sortedProducts }));
     },
 
   }))

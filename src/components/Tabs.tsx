@@ -3,9 +3,7 @@ import React, { use, useEffect, useState } from "react";
 import Image from "next/image";
 import useProductStore from "@/store/productState";
 import { IProduct } from "@/models/Products";
-import { set } from "mongoose";
 import ScrollableRow from "./scrollableSection";
-import Loading from "./loading";
 
 
 const Tabs: React.FC<{}> = () => {
@@ -44,16 +42,13 @@ const Tabs: React.FC<{}> = () => {
               const dateB = new Date(b.createdAt).getTime();
               return dateB - dateA; // Sort in descending order (newest first)
             });
-            return sortedProducts;
+            return sortedProducts.slice(0, 10); // Get the first 10 products
           };
 
           setNewProducts(sortProductsByDate(products));
         
     }, [products]);
 
-    if (loading) {
-        return <Loading />;
-      }
 
     return (
         <div className="flex justify-center items-center w-full h-full">

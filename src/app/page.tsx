@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Playfair_Display } from "next/font/google";
 import Link from "next/link";
@@ -12,16 +12,15 @@ import useProductStore from "@/store/productState";
 const playFair = Playfair_Display({ subsets: ["latin"], weight: "400" });
 
 function Page() {
-    const images = [
-        "/rj.mp41.mp4",
-        "rj.mp42.mp4",
-        "rj.mp4 3.mp4",
-    ];
+    const products = useProductStore((state) => state.products);
 
+    const vids : any= ["/rjb1.mp4","/rjb2.mp4","/rjb3.mp4"];
 
-    
-
-
+    useEffect(() => {
+        const state = useProductStore.getState();
+        console.log("vids", vids);
+        console.log('State size:', JSON.stringify(state).length / 1024, 'KB');
+    },[products]);
 
 
     return (
@@ -29,10 +28,10 @@ function Page() {
             {/* Image Slider Section */}
             {/* <section className="relative w-full lg:h-screen md:h-[30%] overflow-hidden">
                 <div className="flex animate-slide">
-                    {[...images, ...images].map((src, index) => (
+                    {[...vids, ...vids].map((src, index) => (
                         <div
                             key={index}
-                            className="w-screen lg:h-screen md:h-[30%] flex-shrink-0 relative"
+                            className="w-screen flex-shrink-0 relative"
                         >
                             <video
                                 src={src}
@@ -41,11 +40,16 @@ function Page() {
                                 playsInline={true}
                                 loop={true}
                                 className="object-fill"
+                                onError={(e) => {
+                                    console.error(`Failed to load video: ${src}`);
+                                    console.error("Error event:", e);
+                                }}
                             ></video>
                         </div>
                     ))}
                 </div>
             </section> */}
+
 
             {/* Shop By Category Section */}
             <section className="shop_by_category text-2xl text-[#832729] pt-2 md:py-8 px-2 text-center font-bold">
@@ -106,7 +110,7 @@ function Page() {
                             <span className="text-[#832729] mt-2 text-lg md:text-2xl text-center">KURTIS</span>
                         </div>
                     </Link>
-                    <Link href={"/products/duppata"} className="justify-self-center">
+                    <Link href={"/products/dupatta"} className="justify-self-center">
                         <div className="flex justify-center items-center flex-col w-full h-[200px]">
                             <Image
                                 width={450}
@@ -131,8 +135,8 @@ function Page() {
 
             <section className="my-5 md:my-8">
                 <div className="w-full">
-                    <Link href="#">
-                        <video src="/rj.mp4 65.mp4" autoPlay={true} muted={true} playsInline={true} loop={true}></video>
+                    <Link href="/products">
+                       <video autoPlay={true} loop={true} muted={true} className="w-full" src="/rjbb.mp4" />
                     </Link>
                 </div>
             </section>

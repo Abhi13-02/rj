@@ -26,7 +26,7 @@ function Page() {
     return (
         <main className="relative w-full">
             {/* Image Slider Section */}
-            <section className="relative w-full  overflow-hidden">
+            {/* <section className="relative w-full lg:h-screen md:h-[30%] overflow-hidden">
                 <div className="flex animate-slide">
                     {[...vids, ...vids].map((src, index) => (
                         <div
@@ -48,7 +48,7 @@ function Page() {
                         </div>
                     ))}
                 </div>
-            </section>
+            </section> */}
 
 
             {/* Shop By Category Section */}

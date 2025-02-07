@@ -211,7 +211,7 @@ const ProductPage = () => {
       newOrderItems,
       Date.now().toString(),
       formattedDate,
-      product?.discountedPrice || product?.price
+      (product?.discountedPrice || product?.price)*quantity
     );
 
     //////setting in DB////

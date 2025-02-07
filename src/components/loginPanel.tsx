@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import Button from "@/components/authComp/signInButton"; // Assuming your Button component is here
+import SignInButton from "./authComp/signInButton"; // Assuming your Button component is here
 
 const LoginPanel = ({ onClose }: { onClose: () => void }) => {
   return (
@@ -19,9 +19,9 @@ const LoginPanel = ({ onClose }: { onClose: () => void }) => {
         <p className="text-gray-600 text-center mb-6">
           Please log in to continue.
         </p>
-        <div className="flex justify-center hover:cursor-pointer bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded">
-          <Button />
-        </div>
+        <button className="flex justify-center hover:cursor-pointer bg-blue-600 w-12 mx-auto px-4 hover:bg-blue-700 text-white py-1  rounded-md">
+          <SignInButton />
+        </button>
       </div>
     </div>
   );

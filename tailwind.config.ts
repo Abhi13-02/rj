@@ -14,17 +14,14 @@ export default {
       },
       keyframes: {
         slide: {
-          "0%": { transform: "translateX(0)" },
-          "30%": { transform: "translateX(0)" }, // Pause on the first video
-          "37%": { transform: "translateX(-100vw)" },
-          "60%": { transform: "translateX(-100vw)" }, // Pause on the second video
-          "67%": { transform: "translateX(-200vw)" },
-          "93%": { transform: "translateX(-200vw)" }, // Pause on the third video
+          "0%, 30%": { transform: "translateX(0)" }, 
+          "37%, 60%": { transform: "translateX(-100vw)" }, 
+          "67%, 93%": { transform: "translateX(-200vw)" }, 
           "100%": { transform: "translateX(-300vw)" },
         },
         pop: {
           "0%": { transform: "scale(0.5)", opacity: "0" },
-          "80%": { transform: "scale(1.2)", opacity: "1" },
+          "80%": { transform: "scale(1.1)", opacity: "1" },
           "100%": { transform: "scale(1)", opacity: "1" },
         },
         fadeIn: {
@@ -33,11 +30,10 @@ export default {
         },
       },
       animation: {
-        slide: "slide 25s infinite linear",
+        slide: "slide 25s infinite ease-in-out",
         pop: "pop 0.5s ease-out",
         "fade-in": "fadeIn 0.8s ease-in",
       },
-      
       screens: {
         'sm': '319px'
       }
@@ -45,5 +41,3 @@ export default {
   },
   plugins: [],
 } satisfies Config;
-
-

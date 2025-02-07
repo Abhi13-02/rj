@@ -5,10 +5,15 @@ export default function SignIn() {
 
   let {data : session} = useSession();
 
+  const handle = () => {
+    console.log("google signin",session);
+    signIn("google")
+  }
+
 
   return (
     <div>
-     <button onClick={() => signIn("google")}>Login</button>
+     <button onClick={handle}>Login</button>
     </div>
   )
 } 

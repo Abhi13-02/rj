@@ -19,6 +19,7 @@ import Loading from "@/components/loading";
 import ErrorPage from "@/components/error";
 import AddedToCart from "@/components/addedToCart";
 import { set } from "mongoose";
+import Image from "next/image";
 
 
 const ProductPage = () => {
@@ -248,7 +249,9 @@ const ProductPage = () => {
       <div className="flex flex-col md:flex-row lg:h-[85vh]">
         <div className="flex overflow-y-auto p-1 md:flex-col space-x-2 md:space-x-0 md:space-y-3 order-2 md:order-1 mt-4 md:mt-0">
           {product?.images.map((img, index) => (
-            <img
+            <Image
+              width={100}
+              height={100}
               key={index}
               src={img}
               alt={`Image ${index + 1}`}

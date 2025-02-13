@@ -9,7 +9,6 @@ import SignIn from "./authComp/signInButton";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AddedToCart from "./addedToCart";
-import { set } from "mongoose";
 import Image from "next/image";
 
 

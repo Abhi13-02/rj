@@ -6,9 +6,9 @@ import 'react-medium-image-zoom/dist/styles.css';
 const ImageZoom = ({ imageSrc, altText }:{imageSrc: string, altText: string}) => {
   return (
       <Zoom>
-        <img
-          width={50}
-          height={50}
+        <Image
+          width={500}
+          height={500}
           src={imageSrc} 
           alt={altText} 
           className="w-full h-[300px] md:h-[600px] object-contain border"

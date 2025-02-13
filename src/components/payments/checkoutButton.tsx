@@ -3,7 +3,6 @@
 "use client";
 import useDBOrderStore from "@/store/dbOrders";
 import useOrderStore from "@/store/order";
-import { set } from "mongoose";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Script from "next/script";
@@ -37,7 +36,7 @@ export default function CheckoutButton({ amount }: CheckoutButtonProps) {
 
   const handlePayment = async () => {
     try {
-      // Step 1: Create an order on the server
+      // Step 1: Create an razorpay order on the server
       const orderResponse = await fetch("/api/payment/createOrder", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -64,7 +63,7 @@ export default function CheckoutButton({ amount }: CheckoutButtonProps) {
         handler: async function (response: any) {
           // Step 3: Verify payment on the server
 
-          console.log("Razorpay response:", response);       
+          // console.log("Razorpay response:", response);       
           const verifyResponse = await fetch("/api/payment/verify", {
             method: "POST",
             headers: { "Content-Type": "application/json" },

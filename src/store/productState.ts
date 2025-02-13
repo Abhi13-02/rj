@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 import { QueryClient } from '@tanstack/react-query';
 import { IProduct } from '@/models/Products';
-import { useSession } from 'next-auth/react';
-import { ICart } from '@/models/Cart';
+
+
 
 // Initialize the React Query client
 const queryClient = new QueryClient();

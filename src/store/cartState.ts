@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { QueryClient } from "@tanstack/react-query";
 import mongoose from "mongoose";
-import { Console } from "console";
+
 
 // Initialize the React Query client
 const queryClient = new QueryClient();

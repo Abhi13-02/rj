@@ -203,51 +203,52 @@ const PaymentPage: React.FC = () => {
     </div>
   </div>
 
-  {/* Payment Method Selection */}
-  <div className="mt-6">
-    <p className="text-lg font-medium mb-3">Select Payment Method:</p>
-    <div className="flex items-center space-x-4">
-      <label
-        className={`flex items-center cursor-pointer px-4 py-3 rounded-lg border ${
-          paymentMethod === "COD"
-            ? "bg-indigo-100 border-indigo-500"
-            : "border-gray-300"
-        }`}
-      >
-        <input
-          type="radio"
-          value="COD"
-          checked={paymentMethod === "COD"}
-          onChange={() => {
-            setPaymentMethod("COD");
-            handleCODcharges();
-          }}
-          className="hidden"
-        />
-        <span className="text-gray-800 font-medium">Cash on Delivery</span>
-      </label>
 
-      <label
-        className={`flex items-center cursor-pointer px-4 py-3 rounded-lg border ${
-          paymentMethod === "Prepaid"
-            ? "bg-indigo-100 border-indigo-500"
-            : "border-gray-300"
-        }`}
-      >
-        <input
-          type="radio"
-          value="Prepaid"
-          checked={paymentMethod === "Prepaid"}
-          onChange={() => {
-            setPaymentMethod("Prepaid");
-            handlePrepaid();
-          }}
-          className="hidden"
-        />
-        <span className="text-gray-800 font-medium">Prepaid</span>
-      </label>
-    </div>
+{/* Payment Method Selection */}
+<div className="mt-6">
+  <p className="text-lg font-medium mb-3">Select Payment Method:</p>
+  <div className="flex items-center space-x-6">
+    <label
+      className={`flex items-center justify-center w-1/2 cursor-pointer border-2 rounded-lg p-4 transition-colors duration-300 ${
+        paymentMethod === "COD"
+          ? "bg-[#A0214D] ring-1 ring-white shadow-lg"
+          : "border-gray-300"
+      }`}
+    >
+      <input
+        type="radio"
+        value="COD"
+        checked={paymentMethod === "COD"}
+        onChange={() => {
+          setPaymentMethod("COD");
+          handleCODcharges();
+        }}
+        className="hidden"
+      />
+      <span className={`${paymentMethod === "COD" ? "text-white" : "text-black"} font-semibold text-center`}>Cash on Delivery</span>
+    </label>
+    <label
+      className={`flex items-center justify-center w-1/2 cursor-pointer border-2 rounded-lg p-4 transition-colors duration-300 ${
+        paymentMethod === "Prepaid"
+          ? "bg-black ring-1 ring-black shadow-lg"
+          : "border-gray-300"
+      }`}
+    >
+      <input
+        type="radio"
+        value="Prepaid"
+        checked={paymentMethod === "Prepaid"}
+        onChange={() => {
+          setPaymentMethod("Prepaid");
+          handlePrepaid();
+        }}
+        className="hidden"
+      />
+      <span className={`${paymentMethod === "COD" ? "text-black" : "text-white"}  font-semibold text-center`}>Prepaid</span>
+    </label>
   </div>
+</div>
+
 
   {/* Finish Button */}
     <div className="mt-8">

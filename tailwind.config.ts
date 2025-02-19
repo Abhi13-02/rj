@@ -30,7 +30,7 @@ export default {
         },
       },
       animation: {
-        slide: "slide 25s infinite ease-in-out",
+        slide: "slide 15s infinite ease-in-out",
         pop: "pop 0.5s ease-out",
         "fade-in": "fadeIn 0.8s ease-in",
       },

@@ -14,7 +14,7 @@ const playFair = Playfair_Display({ subsets: ["latin"], weight: "400" });
 function Page() {
     const products = useProductStore((state) => state.products);
 
-    const vids : any= ["/1rj.mp4","/4rj.mp4","/3rj.mp4","/2rj.mp4"];
+    const vids : any= ["/rj1.webp","/rj2.webp","/rj4.webp"];
 
     useEffect(() => {
         const state = useProductStore.getState();
@@ -26,29 +26,28 @@ function Page() {
     return (
         <main className="relative w-full">
             {/* Image Slider Section */}
-            {/* <section className="relative w-full lg:h-screen md:h-[30%] overflow-hidden">
+            <section className="relative w-full lg:h-screen md:h-[30%] overflow-hidden">
                 <div className="flex animate-slide">
                     {[...vids, ...vids].map((src, index) => (
                         <div
                             key={index}
                             className="w-screen flex-shrink-0 relative"
                         >
-                            <video
+                            <Image
                                 src={src}
-                                autoPlay={true}
-                                muted={true}
-                                playsInline={true}
-                                loop={true}
+                                alt="slider"
+                                width={1920}
+                                height={1080}
                                 className="object-fill"
                                 onError={(e) => {
                                     console.error(`Failed to load video: ${src}`);
                                     console.error("Error event:", e);
                                 }}
-                            ></video>
+                            ></Image>
                         </div>
                     ))}
                 </div>
-            </section> */}
+            </section>
 
 
             {/* Shop By Category Section */}
@@ -137,7 +136,8 @@ function Page() {
             <section className="my-5 md:my-8">
                 <div className="w-full">
                     <Link href="/products">
-                       <video autoPlay={true} loop={true} muted={true} className="w-full" src="/2rj.mp4" />
+                       {/* <video autoPlay={true} loop={true} muted={true} className="w-full" src="/2rj.mp4" /> */}
+                       <Image src="/rj3.webp" alt="rj3" width={1920} height={1080} />
                     </Link>
                 </div>
             </section>

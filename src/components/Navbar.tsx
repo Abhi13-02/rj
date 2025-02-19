@@ -149,9 +149,9 @@ const Navbar = () => {
                   Your Orders
                 </Link>
                 <hr className="w-full bg-white" />
-                <Link onClick={() => setDropdownOpen(false)} href="/products" className="block w-4/5 rounded-md px-4 py-2 text-white bg-red-500 hover:bg-red-600">
+                <button onClick={() => setDropdownOpen(false)}  className="block w-4/5 rounded-md px-4 py-2 text-white bg-red-500 hover:bg-red-600">
                   <SignOut />
-                </Link>
+                </button>
               </div>
             )}
           </>

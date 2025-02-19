@@ -59,7 +59,7 @@ const AddressPage: React.FC = () => {
       console.log("Pincode data:", data);
       
       if (response.ok && data) {
-      const info = data[0]["PostOffice"][0];
+        const info = data[0]["PostOffice"][0];
         setBillingDetails((prev) => ({
           ...prev,
           state: info["State"],
@@ -83,12 +83,11 @@ const AddressPage: React.FC = () => {
       !billingDetails.pincode ||
       !billingDetails.state 
     ) {
-      setError(
-        "Please enter a valid PIN code ."
-      );
+      setError("Please enter a valid PIN code.");
       return;
     }
-    if ( !billingDetails.customer_name ||
+    if (
+      !billingDetails.customer_name ||
       !billingDetails.last_name ||
       !billingDetails.address ||
       !billingDetails.city ||
@@ -98,11 +97,17 @@ const AddressPage: React.FC = () => {
       !billingDetails.email ||
       !billingDetails.phone
     ) {
-      toast.error("Please fill in all the required fields.",{autoClose: 5000, closeOnClick: false});
+      toast.error("Please fill in all the required fields.", { autoClose: 5000, closeOnClick: false });
       return;
     }
-    if(billingDetails.phone.length !== 10){
-      toast.error("Please enter a valid phone number.",{autoClose: 5000, closeOnClick: false});
+    if (billingDetails.phone.length !== 10) {
+      toast.error("Please enter a valid phone number.", { autoClose: 5000, closeOnClick: false });
+      return;
+    }
+    // Added email validation check using a simple regex
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(billingDetails.email)) {
+      toast.error("Please enter a valid email address.", { autoClose: 5000, closeOnClick: false });
       return;
     }
     addAddress(billingDetails);
@@ -234,6 +239,7 @@ const AddressPage: React.FC = () => {
           <input
             name="email"
             placeholder="Email"
+            type="email"
             onChange={handleInputChange}
             className="w-full px-4 py-2 bg-gray-200 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           />

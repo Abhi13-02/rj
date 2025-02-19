@@ -4,13 +4,13 @@ import { useRouter } from "next/navigation";
  
 export default function SignOut() {
   
-  const router = useRouter();
+  const router = useRouter()
   let {data : session} = useSession();
 
   const handleSignOut = () => {
-    router.push("/");
-    signOut();
+    signOut({ callbackUrl: "/products" });
   };
+  
 
   return (
     <div>

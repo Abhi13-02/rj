@@ -31,7 +31,10 @@ export const metadata: Metadata = {
   description: "Weaving heritage into fashion",
   icons: {
     icon: "/logo.png",
-  }
+  },
+  other: {
+    "google-site-verification": "Y3k9jqKGmV-uMpePRE_DwS_WSs_0VLceCtAZWtxnVIQ",
+  },
 };
 
 export default function RootLayout({

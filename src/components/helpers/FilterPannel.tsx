@@ -168,7 +168,7 @@ const FilterPanel = ({
         </div>
         {expandedSections.sizes && (
           <div className="flex flex-wrap gap-3 mt-2">
-            {["S", "M", "L", "XL", "XXL", "FREE-SIZE"].map((size) => (
+            {["S", "M", "L", "XL", "XXL","XXXL", "FREE-SIZE"].map((size) => (
               <label key={size} className="flex items-center gap-2">
                 <input
                   type="checkbox"

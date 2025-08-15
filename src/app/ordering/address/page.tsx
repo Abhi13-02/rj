@@ -16,14 +16,43 @@ const AddressPage: React.FC = () => {
   );
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isValidating, setIsValidating] = useState(true);
 
   const { items, totalAmount } = useDBOrderStore((state) => state);
 
   useEffect(() => {
-    if (!orderInfo || !orderInfo.order_items?.length) {
+    // Enhanced navigation guard - check both order stores
+    const hasOrderItems = orderInfo?.order_items?.length > 0;
+    const hasDBItems = items?.length > 0;
+    const hasValidTotal = (orderInfo?.sub_total > 0) || (totalAmount > 0);
+
+    // Additional validation: Check if items have required properties
+    const hasValidOrderItemsStructure = orderInfo?.order_items?.every(item => 
+      item.name && item.selling_price && item.units > 0
+    );
+    const hasValidDBItemsStructure = items?.every(item => 
+      item.name && item.price > 0 && item.quantity > 0 && item.productId
+    );
+
+    if (!hasOrderItems || !hasDBItems || !hasValidTotal || 
+        !hasValidOrderItemsStructure || !hasValidDBItemsStructure) {
+      console.log("Address page navigation guard triggered - redirecting to products");
+      console.log("Order items:", hasOrderItems);
+      console.log("DB items:", hasDBItems); 
+      console.log("Valid total:", hasValidTotal);
+      console.log("Valid order structure:", hasValidOrderItemsStructure);
+      console.log("Valid DB structure:", hasValidDBItemsStructure);
+      
+      toast.error("No items found in your order. Please add items to cart first.", { 
+        autoClose: 3000 
+      });
       router.replace("/products");
+      return;
     }
-  }, [orderInfo, router]);
+    
+    // If validation passes, allow page to render
+    setIsValidating(false);
+  }, [orderInfo, items, totalAmount, router]);
 
   const [billingDetails, setBillingDetails] = useState<ShippingAddress>({
     customer_name: "",
@@ -114,6 +143,18 @@ const AddressPage: React.FC = () => {
     setShippingAddress(billingDetails);
     router.push("/ordering/payment");
   };
+
+  // Show loading while validating navigation
+  if (isValidating) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Validating order...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen max-w-screen-xl mx-auto bg-gray-100 text-black flex flex-col lg:flex-row">

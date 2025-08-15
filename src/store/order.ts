@@ -165,7 +165,7 @@ const useOrderStore = create<OrderStore>(
         set(() => ({
           userId: '',
           items: [],
-          totalAmount: 0,
+          sub_total: 0,
           shippingAddress: null,
           paymentMethod: null,
           shiprocketOrderId: null,

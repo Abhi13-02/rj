@@ -3,7 +3,7 @@
 ## 🚀 Highlights 
 - **Full-Stack MERN Project (Next.js + MongoDB + Node.js + TypeScript)**  
 - **Real-world Freelance Build** – Developed as part of a client project, demonstrating production-level work.  
-- **Key Features:** Product catalog, search/filtering, wishlist, cart, checkout, Google OAuth login, Razorpay payments, order tracking with Shiprocket.  
+- **Key Features:** Product catalog, search/filtering, cart, checkout, Google OAuth login, Razorpay payments, order tracking with Shiprocket.  
 - **Modern Tech Stack:** NextAuth, Zustand, React Query, Cloudflare R2 storage.  
 - **Scalable & Maintainable Design:** Clean architecture with environment-based configuration and modular code.  
 - **Responsive UI:** Optimized for mobile and desktop with Tailwind styling.  
